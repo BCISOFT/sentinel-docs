@@ -72,7 +72,7 @@ const config: Config = {
       logo: {
         alt: "Sentinel Logo",
         src: "img/logo.png",
-        // href defaults to baseUrl (homepage)
+        href: "/",
       },
       items: [
         {
@@ -89,7 +89,7 @@ const config: Config = {
           items: [
             {
               label: "Getting Started",
-              to: "/intro",
+              to: "/",
             },
             {
               label: "Installation",
