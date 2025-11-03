@@ -14,13 +14,19 @@ Avant d'installer Sentinel, assurez-vous que votre système répond à ces exige
 - PHP >= 7.2
 - Permissions d'écriture pour les répertoires `/modules` et `/var/logs`
 
+## Télécharger le module
+
+**[📦 Télécharger Sentinel (Dernière version)](https://github.com/bcisoft/sentinel-docs/releases/latest/download/sentinel.zip)**
+
+Ou parcourez toutes les versions sur la [page des releases](https://github.com/bcisoft/sentinel-docs/releases).
+
 ## Méthodes d'installation
 
 ### Méthode 1 : Installation depuis le back-office (Recommandé)
 
 1. **Télécharger le module**
 
-   Téléchargez la dernière version depuis le [dépôt GitHub](https://github.com/your-username/sentinel/releases).
+   Téléchargez la dernière version en utilisant le lien ci-dessus.
 
 2. **Installer le module**
 
@@ -36,7 +42,7 @@ Avant d'installer Sentinel, assurez-vous que votre système répond à ces exige
 
 1. **Télécharger le module**
 
-   Téléchargez la dernière version depuis le [dépôt GitHub](https://github.com/your-username/sentinel/releases).
+   Téléchargez la dernière version en utilisant le lien ci-dessus.
 
 2. **Extraire l'archive**
 
