@@ -1,0 +1,10 @@
+{
+  "version.label": {
+    "message": "Suivant",
+    "description": "The label for version current"
+  },
+  "sidebar.docsSidebar.category.Features": {
+    "message": "Fonctionnalités",
+    "description": "The label for category 'Features' in sidebar 'docsSidebar'"
+  }
+}
