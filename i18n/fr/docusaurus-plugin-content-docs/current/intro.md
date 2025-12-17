@@ -5,39 +5,59 @@ slug: /
 
 # Introduction à Sentinel
 
-Bienvenue dans **Sentinel**, un module de sécurité complet pour PrestaShop qui protège votre site e-commerce contre les attaques malveillantes.
+Bienvenue dans **Sentinel**, un module de sécurité complet pour PrestaShop qui protège votre site e-commerce des attaques malveillantes.
 
 ## Qu'est-ce que Sentinel ?
 
 Sentinel est un pare-feu applicatif web (WAF) spécialement conçu pour PrestaShop 1.7.7 à 8.2.3. Il agit comme un bouclier protecteur entre votre boutique et les attaquants potentiels en détectant et bloquant les requêtes malveillantes avant qu'elles n'atteignent votre application principale.
 
-## Fonctionnalités clés
+## Fonctionnalités principales
 
-- **Détection des menaces en temps réel** : Identifie les schémas malveillants dans les requêtes HTTP grâce à la détection par signatures
-- **Blocage automatique des requêtes** : Arrête immédiatement les menaces avec des réponses HTTP 403
-- **Journalisation complète** : Enregistre tous les événements de sécurité avec un contexte détaillé pour l'analyse forensique
-- **Configuration zéro** : Fonctionne immédiatement avec un grand nombre signatures de menaces préconfigurées
-- **Intégration PrestaShop** : S'intègre parfaitement et de manière transparante à PrestaShop
+- **Détection de menaces en temps réel** : Identifie les patterns malveillants dans les requêtes HTTP via détection par signatures
+- **Blocage automatique** : Stoppe immédiatement les menaces avec des réponses HTTP 403
+- **Logs complets** : Enregistre tous les événements de sécurité avec contexte détaillé pour analyse forensique
+- **Scanner de vulnérabilités** : Analyse manuelle des vulnérabilités connues dans les modules et le core PrestaShop
+- **Protection Auto Prepend File** : Protège contre les accès directs aux fichiers PHP contournant PrestaShop
+- **Log des échecs de connexion** : Détecte les tentatives de connexion échouées au back-office
+- **Log des requêtes POST/PUT/PATCH/DELETE** : Enregistre toutes les requêtes de modification avec leur payload
+- **Zéro configuration** : Fonctionne immédiatement après installation avec des signatures pré-configurées
+- **Intégration PrestaShop** : S'intègre de manière transparente avec PrestaShop
 
 ## Quelles menaces Sentinel détecte-t-il ?
 
 Sentinel protège contre un large éventail d'attaques web courantes :
 
 - **Injection SQL** : Y compris les techniques d'injection aveugle utilisant les fonctions SLEEP
-- **Opérations sur les fichiers** : Tentatives d'écriture de fichiers malveillants ou de téléchargement de code distant
+- **Opérations sur fichiers** : Tentatives d'écriture de fichiers malveillants ou de téléchargement de code distant
 - **Exécution de commandes** : Empêche les tentatives d'exécution de commandes à distance
 - **Exploits de modules** : Détecte les vulnérabilités dans les modules PrestaShop populaires
 - **Manipulation de paramètres** : Identifie la manipulation suspecte de paramètres
 
 ## Comment ça fonctionne
 
-1. **Interception précoce** : Sentinel s'accroche au cycle de vie des requêtes PrestaShop avant que le dispatcher ne traite les requêtes
-2. **Correspondance de motifs** : Chaque requête est analysée par rapport aux signatures de menaces préconfigurées
-3. **Réponse immédiate** : Les requêtes malveillantes sont bloquées instantanément avec une page d'erreur professionnelle
-4. **Journalisation détaillée** : Tous les événements de sécurité sont enregistrés avec le contexte complet (IP, URI, méthode, charge utile)
-5. **Rotation automatique** : Les journaux ont une rotation quotidienne et conservés pendant 7 jours
+### Protection en temps réel
 
-## Configuration requise
+1. **Interception précoce** : Sentinel se greffe au cycle de vie des requêtes PrestaShop avant le dispatcher
+2. **Pattern matching** : Chaque requête est analysée contre des signatures de menaces pré-configurées
+3. **Réponse immédiate** : Les requêtes malveillantes sont bloquées instantanément avec une page d'erreur professionnelle
+4. **Logs détaillés** : Tous les événements de sécurité sont enregistrés avec contexte complet (IP, URI, méthode, payload)
+5. **Rotation automatique** : Les logs sont rotationnés quotidiennement et conservés pendant 7 jours
+
+### Scanner de vulnérabilités
+
+1. **Collecte d'informations** : Sentinel collecte les informations de votre installation (version PS, modules installés)
+2. **Analyse via API** : Les données sont envoyées à l'API Sentinel qui compare avec sa base de vulnérabilités
+3. **Rapport détaillé** : Un rapport est généré avec les vulnérabilités trouvées, classées par criticité
+4. **Historique** : Tous les scans sont conservés pour suivre l'évolution de la sécurité
+
+### Protection Auto Prepend File
+
+1. **Configuration PHP** : Un fichier Sentinel est exécuté avant tout autre fichier PHP
+2. **Log complet** : Tous les accès directs aux fichiers PHP sont enregistrés
+3. **Détection d'exploitation** : Les tentatives d'accès à des fichiers vulnérables sont loguées
+4. **Analyse forensique** : En cas d'incident, les logs permettent de reconstituer l'attaque
+
+## Prérequis système
 
 - PrestaShop 1.7.7.x - 8.2.3
 - PHP >= 7.2
@@ -50,8 +70,22 @@ Commencez avec Sentinel en quelques étapes :
 1. [Installez le module](./installation.md)
 2. Activez-le depuis votre panneau d'administration PrestaShop
 3. Votre boutique est maintenant protégée !
+4. (Optionnel mais recommandé) [Activez la protection Auto Prepend File](./features/auto-prepend-protection.md)
+5. (Recommandé) [Lancez un scan de vulnérabilités](./features/vulnerability-scanner.md)
 
-Aucune configuration supplémentaire n'est requise - Sentinel fonctionne immédiatement après l'installation.
+Aucune configuration supplémentaire requise - Sentinel fonctionne immédiatement après installation.
+
+## Couches de protection
+
+Sentinel offre plusieurs couches de protection complémentaires :
+
+| Couche | Protection | Activation |
+|--------|-----------|------------|
+| **Détection de signatures URI** | Bloque les patterns malveillants dans les requêtes | ✓ Automatique |
+| **Log des échecs de connexion** | Détecte les tentatives de force brute | ✓ Automatique |
+| **Log des requêtes POST/PUT/PATCH/DELETE** | Enregistre toutes les modifications | ✓ Automatique |
+| **Scanner de vulnérabilités** | Détecte les modules/core vulnérables | Manuel via BO |
+| **Protection Auto Prepend File** | Protège contre accès directs aux fichiers PHP | Configuration requise |
 
 ---
 

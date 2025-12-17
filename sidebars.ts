@@ -9,6 +9,8 @@ const sidebars: SidebarsConfig = {
       label: 'Features',
       items: [
         'features/threat-detection',
+        'features/vulnerability-scanner',
+        'features/auto-prepend-protection',
         'features/security-logs',
       ],
     },

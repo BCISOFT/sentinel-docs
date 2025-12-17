@@ -114,9 +114,35 @@ If the module fails to activate:
 2. Verify PrestaShop version compatibility
 3. Check file permissions
 
+## Post-installation Configuration
+
+### 1. Enable Auto Prepend File Protection (Recommended)
+
+For complete protection, enable Auto Prepend File protection:
+
+1. Go to **Modules > Sentinel > Configuration**
+2. Click **Install Auto Prepend File**
+3. If automatic installation fails, follow the [manual instructions](./features/auto-prepend-protection.md)
+
+### 2. Run a Vulnerability Scan
+
+Check if your installation contains known vulnerabilities:
+
+1. Go to **Modules > Sentinel > Security Scanner**
+2. Click **Run Scan**
+3. Review the report and fix detected vulnerabilities
+
+### 3. Monitor Logs
+
+Logs are automatically created in `/var/logs/sentinel-YYYY-MM-DD.log`
+
+See the [Security Logs](./features/security-logs.md) guide to learn how to analyze them.
+
 ## Next Steps
 
-Now that Sentinel is installed, learn about:
+Now that Sentinel is installed, learn more about:
 
 - [Threat Detection](./features/threat-detection.md)
+- [Vulnerability Scanner](./features/vulnerability-scanner.md)
+- [Auto Prepend File Protection](./features/auto-prepend-protection.md)
 - [Security Logs](./features/security-logs.md)

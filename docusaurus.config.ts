@@ -99,6 +99,18 @@ const config: Config = {
               label: "Threat Detection",
               to: "/features/threat-detection",
             },
+            {
+              label: "Vulnerability Scanner",
+              to: "/features/vulnerability-scanner",
+            },
+            {
+              label: "Auto Prepend Protection",
+              to: "/features/auto-prepend-protection",
+            },
+            {
+              label: "Security Logs",
+              to: "/features/security-logs",
+            },
           ],
         },
         {

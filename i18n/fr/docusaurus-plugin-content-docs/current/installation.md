@@ -36,7 +36,7 @@ Ou parcourez toutes les versions sur la [page des releases](https://github.com/b
 
    Cliquez sur le bouton **Installer un module**
 
-   Sélectionnez le zip du module sentinel
+   Sélectionnez le fichier zip du module sentinel
 
 ### Méthode 2 : Installation manuelle
 
@@ -72,7 +72,7 @@ Après l'installation, vérifiez que Sentinel fonctionne correctement :
 
 ### Vérifier les permissions
 
-Assurez-vous que le répertoire des journaux a les permissions d'écriture :
+Assurez-vous que le répertoire des logs a les permissions d'écriture :
 
 ```bash
 chmod 755 /chemin/vers/prestashop/var/logs
@@ -110,13 +110,39 @@ sudo chmod -R 755 /chemin/vers/prestashop/modules/sentinel
 
 Si le module ne parvient pas à s'activer :
 
-1. Vérifiez les journaux d'erreurs PHP : `/var/log/apache2/error.log` ou `/var/log/php-fpm/error.log`
+1. Vérifiez les logs d'erreurs PHP : `/var/log/apache2/error.log` ou `/var/log/php-fpm/error.log`
 2. Vérifiez la compatibilité de la version PrestaShop
 3. Vérifiez les permissions des fichiers
 
+## Configuration post-installation
+
+### 1. Activer la protection Auto Prepend File (Recommandé)
+
+Pour une protection complète, activez la protection Auto Prepend File :
+
+1. Allez dans **Modules > Sentinel > Configuration**
+2. Cliquez sur **Installer Auto Prepend File**
+3. Si l'installation automatique échoue, suivez les [instructions manuelles](./features/auto-prepend-protection.md)
+
+### 2. Lancer un scan de vulnérabilités
+
+Vérifiez si votre installation contient des vulnérabilités connues :
+
+1. Allez dans **Modules > Sentinel > Security Scanner**
+2. Cliquez sur **Lancer un scan**
+3. Consultez le rapport et corrigez les vulnérabilités détectées
+
+### 3. Surveiller les logs
+
+Les logs sont automatiquement créés dans `/var/logs/sentinel-YYYY-MM-DD.log`
+
+Consultez le guide [Logs de sécurité](./features/security-logs.md) pour apprendre à les analyser.
+
 ## Prochaines étapes
 
-Maintenant que Sentinel est installé, découvrez :
+Maintenant que Sentinel est installé, apprenez-en plus sur :
 
-- [Détection des menaces](./features/threat-detection.md)
-- [Journaux de sécurité](./features/security-logs.md)
+- [Détection de menaces](./features/threat-detection.md)
+- [Scanner de vulnérabilités](./features/vulnerability-scanner.md)
+- [Protection Auto Prepend File](./features/auto-prepend-protection.md)
+- [Logs de sécurité](./features/security-logs.md)

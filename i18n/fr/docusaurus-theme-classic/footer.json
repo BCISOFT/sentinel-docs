@@ -15,9 +15,21 @@
     "message": "Installation",
     "description": "The label of footer link with label=Installation linking to /docs/installation"
   },
-  "link.item.label.Configuration": {
-    "message": "Configuration",
-    "description": "The label of footer link with label=Configuration linking to /docs/configuration"
+  "link.item.label.Threat Detection": {
+    "message": "Détection de menaces",
+    "description": "The label of footer link with label=Threat Detection linking to /features/threat-detection"
+  },
+  "link.item.label.Vulnerability Scanner": {
+    "message": "Scanner de vulnérabilités",
+    "description": "The label of footer link with label=Vulnerability Scanner linking to /features/vulnerability-scanner"
+  },
+  "link.item.label.Auto Prepend Protection": {
+    "message": "Protection Auto Prepend",
+    "description": "The label of footer link with label=Auto Prepend Protection linking to /features/auto-prepend-protection"
+  },
+  "link.item.label.Security Logs": {
+    "message": "Logs de sécurité",
+    "description": "The label of footer link with label=Security Logs linking to /features/security-logs"
   },
   "copyright.html": {
     "message": "© BCI Soft. Créé avec Docusaurus.",
@@ -32,7 +44,7 @@
     "description": "The label of footer link with label=PrestaShop linking to https://www.prestashop.com"
   },
   "copyright": {
-    "message": "Copyright © 2025 BCI Soft. Built with Docusaurus.",
+    "message": "Copyright © 2025 BCI Soft. Créé avec Docusaurus.",
     "description": "The footer copyright"
   }
 }
