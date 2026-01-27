@@ -17,6 +17,7 @@ Sentinel is a web application firewall (WAF) specifically designed for PrestaSho
 - **Automatic request blocking**: Immediately stops threats with HTTP 403 responses
 - **Comprehensive logging**: Records all security events with detailed context for forensic analysis
 - **Vulnerability scanner**: Manual scanning for known vulnerabilities in modules and PrestaShop core
+- **File integrity check**: Verifies that PrestaShop core and module files have not been tampered with
 - **Auto Prepend File protection**: Protects against direct access to PHP files bypassing PrestaShop
 - **Failed login logging**: Detects failed back-office login attempts
 - **POST/PUT/PATCH/DELETE request logging**: Records all modification requests with their payload
@@ -50,6 +51,12 @@ Sentinel protects against a wide range of common web attacks:
 3. **Detailed report**: A report is generated with found vulnerabilities, classified by criticality
 4. **History**: All scans are kept to track security evolution
 
+### File Integrity Check
+
+1. **File scanning**: All core and module files are scanned and hashed
+2. **Official comparison**: Hashes are compared against official PrestaShop and module versions
+3. **Modification detection**: Any tampered, added, or missing files are flagged
+
 ### Auto Prepend File Protection
 
 1. **PHP configuration**: A Sentinel file is executed before any other PHP file
@@ -79,13 +86,14 @@ No additional configuration required - Sentinel works immediately after installa
 
 Sentinel offers several complementary protection layers:
 
-| Layer | Protection | Activation |
-|--------|-----------|------------|
-| **URI Signature Detection** | Blocks malicious patterns in requests | ✓ Automatic |
-| **Failed Login Logging** | Detects brute force attempts | ✓ Automatic |
-| **POST/PUT/PATCH/DELETE Logging** | Records all modifications | ✓ Automatic |
-| **Vulnerability Scanner** | Detects vulnerable modules/core | Manual via BO |
-| **Auto Prepend File Protection** | Protects against direct PHP file access | Configuration required |
+| Layer                                                     | Protection                              | Activation             |
+| --------------------------------------------------------- | --------------------------------------- | ---------------------- |
+| **URI Signature Detection**                               | Blocks malicious patterns in requests   | ✓ Automatic            |
+| **Failed Login Logging**                                  | Detects brute force attempts            | ✓ Automatic            |
+| **POST/PUT/PATCH/DELETE Logging**                         | Records all modifications               | ✓ Automatic            |
+| **Vulnerability Scanner**                                 | Detects vulnerable modules/core         | Manual via BO          |
+| **[File Integrity Check](./features/integrity-check.md)** | Detects tampered files                  | Manual via BO (Pro)    |
+| **Auto Prepend File Protection**                          | Protects against direct PHP file access | Configuration required |
 
 ---
 

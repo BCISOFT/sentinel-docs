@@ -17,6 +17,7 @@ Sentinel est un pare-feu applicatif web (WAF) spécialement conçu pour PrestaSh
 - **Blocage automatique** : Stoppe immédiatement les menaces avec des réponses HTTP 403
 - **Logs complets** : Enregistre tous les événements de sécurité avec contexte détaillé pour analyse forensique
 - **Scanner de vulnérabilités** : Analyse manuelle des vulnérabilités connues dans les modules et le core PrestaShop
+- **Vérification d'intégrité des fichiers** : Vérifie que les fichiers du core PrestaShop et des modules n'ont pas été altérés
 - **Protection Auto Prepend File** : Protège contre les accès directs aux fichiers PHP contournant PrestaShop
 - **Log des échecs de connexion** : Détecte les tentatives de connexion échouées au back-office
 - **Log des requêtes POST/PUT/PATCH/DELETE** : Enregistre toutes les requêtes de modification avec leur payload
@@ -50,6 +51,12 @@ Sentinel protège contre un large éventail d'attaques web courantes :
 3. **Rapport détaillé** : Un rapport est généré avec les vulnérabilités trouvées, classées par criticité
 4. **Historique** : Tous les scans sont conservés pour suivre l'évolution de la sécurité
 
+### Vérification d'intégrité des fichiers
+
+1. **Scan des fichiers** : Tous les fichiers du core et des modules sont scannés et hashés
+2. **Comparaison officielle** : Les empreintes sont comparées aux versions officielles PrestaShop et des modules
+3. **Détection des modifications** : Tout fichier altéré, ajouté ou manquant est signalé
+
 ### Protection Auto Prepend File
 
 1. **Configuration PHP** : Un fichier Sentinel est exécuté avant tout autre fichier PHP
@@ -79,13 +86,14 @@ Aucune configuration supplémentaire requise - Sentinel fonctionne immédiatemen
 
 Sentinel offre plusieurs couches de protection complémentaires :
 
-| Couche | Protection | Activation |
-|--------|-----------|------------|
-| **Détection de signatures URI** | Bloque les patterns malveillants dans les requêtes | ✓ Automatique |
-| **Log des échecs de connexion** | Détecte les tentatives de force brute | ✓ Automatique |
-| **Log des requêtes POST/PUT/PATCH/DELETE** | Enregistre toutes les modifications | ✓ Automatique |
-| **Scanner de vulnérabilités** | Détecte les modules/core vulnérables | Manuel via BO |
-| **Protection Auto Prepend File** | Protège contre accès directs aux fichiers PHP | Configuration requise |
+| Couche                                                        | Protection                                         | Activation            |
+| ------------------------------------------------------------- | -------------------------------------------------- | --------------------- |
+| **Détection de signatures URI**                               | Bloque les patterns malveillants dans les requêtes | ✓ Automatique         |
+| **Log des échecs de connexion**                               | Détecte les tentatives de force brute              | ✓ Automatique         |
+| **Log des requêtes POST/PUT/PATCH/DELETE**                    | Enregistre toutes les modifications                | ✓ Automatique         |
+| **Scanner de vulnérabilités**                                 | Détecte les modules/core vulnérables               | Manuel via BO         |
+| **[Vérification d'intégrité](./features/integrity-check.md)** | Détecte les fichiers altérés                       | Manuel via BO (Pro)   |
+| **Protection Auto Prepend File**                              | Protège contre accès directs aux fichiers PHP      | Configuration requise |
 
 ---
 

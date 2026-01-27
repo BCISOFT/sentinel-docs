@@ -10,6 +10,12 @@ const sidebars: SidebarsConfig = {
       items: [
         'features/threat-detection',
         'features/vulnerability-scanner',
+        {
+          type: 'doc',
+          id: 'features/integrity-check',
+          label: 'File Integrity Check',
+          className: 'menu-item-pro',
+        },
         'features/auto-prepend-protection',
         'features/security-logs',
       ],
