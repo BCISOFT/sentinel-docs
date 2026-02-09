@@ -119,7 +119,70 @@ Accès directs aux fichiers PHP (voir [Protection Auto Prepend](./auto-prepend-p
 
 ## Visualiser les logs
 
-### Via ligne de commande
+### Via le Back-Office
+
+Pour visualiser les logs de sécurité depuis le back-office :
+
+1. Connectez-vous à votre back-office PrestaShop
+2. Allez dans **Modules > Sentinel > Security Logs**
+3. Utilisez les filtres pour rechercher par date, IP, type ou sévérité
+
+### Via la commande Sentinel
+
+Sentinel fournit une commande dédiée pour visualiser et gérer les logs :
+
+**Voir les logs récents :**
+
+```bash
+php bin/console sentinel:logs
+```
+
+**Filtrer par type :**
+
+```bash
+php bin/console sentinel:logs --type=attack
+php bin/console sentinel:logs --type=login_failed
+php bin/console sentinel:logs --type=post_request
+```
+
+**Filtrer par sévérité :**
+
+```bash
+php bin/console sentinel:logs --severity=warning
+php bin/console sentinel:logs --severity=critical
+```
+
+**Filtrer par adresse IP :**
+
+```bash
+php bin/console sentinel:logs --ip=192.168.1.100
+```
+
+**Filtrer par plage de dates :**
+
+```bash
+php bin/console sentinel:logs --from="2025-01-01" --to="2025-01-31"
+```
+
+**Limiter les résultats :**
+
+```bash
+php bin/console sentinel:logs --limit=50
+```
+
+**Sortie en JSON :**
+
+```bash
+php bin/console sentinel:logs --json
+```
+
+**Supprimer tous les logs :**
+
+```bash
+php bin/console sentinel:logs --clear
+```
+
+### Via ligne de commande système
 
 **Voir les événements du jour :**
 
@@ -213,7 +276,7 @@ Loggé : username=admin&password=********&api_key=********
 1. **Identifier la menace** : Quel pattern a été matché ?
 2. **Vérifier l'IP** : Est-ce un récidiviste ?
 3. **Agir** :
-   - Bloquer l'IP au niveau du firewall
+   - Bloquer l'IP au niveau du serveur
    - Signaler au fournisseur d'hébergement
    - Surveiller les patterns similaires
 

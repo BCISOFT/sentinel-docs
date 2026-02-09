@@ -30,11 +30,47 @@ Des vérifications d'intégrité régulières permettent de détecter ces compro
 
 ## Accéder à la vérification d'intégrité
 
-Pour lancer une vérification d'intégrité :
+### Via le Back-Office
+
+Pour lancer une vérification d'intégrité depuis le back-office :
 
 1. Connectez-vous à votre back-office PrestaShop
 2. Allez dans **Modules > Sentinel > Vérification d'intégrité**
 3. Cliquez sur le bouton **Lancer la vérification**
+
+### Via la ligne de commande
+
+Vous pouvez également lancer des vérifications d'intégrité depuis la ligne de commande, ce qui est utile pour l'automatisation ou lorsque le back-office n'est pas disponible.
+
+**Vérifier tous les fichiers (core + modules) :**
+
+```bash
+php bin/console sentinel:integrity
+```
+
+**Vérifier uniquement les fichiers du core :**
+
+```bash
+php bin/console sentinel:integrity --type=core
+```
+
+**Vérifier uniquement les modules :**
+
+```bash
+php bin/console sentinel:integrity --type=modules
+```
+
+**Sortie en JSON (pour l'automatisation) :**
+
+```bash
+php bin/console sentinel:integrity --json
+```
+
+La commande affiche les résultats dans un format similaire au back-office :
+
+- **Core Files** : Affiche les problèmes avec les fichiers du core PrestaShop
+- **Modules Files** : Affiche les problèmes avec les fichiers des modules
+- **Unchecked Modules** : Liste les modules tiers qui ne peuvent pas être vérifiés
 
 ## Ce qui est vérifié
 

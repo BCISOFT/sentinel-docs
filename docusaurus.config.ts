@@ -6,7 +6,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
   title: "Sentinel",
-  tagline: "PrestaShop Security Module - Protect your e-commerce site from threats",
+  tagline: "PrestaShop Security Module - Monitor, detect and analyze threats and vulnerabilities",
   favicon: "img/favicon.ico",
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future

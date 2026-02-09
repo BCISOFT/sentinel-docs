@@ -30,11 +30,47 @@ Regular integrity checks help detect these compromises before they cause damage.
 
 ## Access the Integrity Checker
 
-To run an integrity check:
+### Via Back-Office
+
+To run an integrity check from the back-office:
 
 1. Log in to your PrestaShop back-office
 2. Go to **Modules > Sentinel > Integrity Check**
 3. Click the **Run Check** button
+
+### Via Command Line
+
+You can also run integrity checks from the command line, which is useful for automation or when the back-office is unavailable.
+
+**Check all files (core + modules):**
+
+```bash
+php bin/console sentinel:integrity
+```
+
+**Check core files only:**
+
+```bash
+php bin/console sentinel:integrity --type=core
+```
+
+**Check modules only:**
+
+```bash
+php bin/console sentinel:integrity --type=modules
+```
+
+**Output as JSON (for automation):**
+
+```bash
+php bin/console sentinel:integrity --json
+```
+
+The command displays results in a format similar to the back-office:
+
+- **Core Files**: Shows issues with PrestaShop core files
+- **Modules Files**: Shows issues with module files
+- **Unchecked Modules**: Lists third-party modules that cannot be verified
 
 ## What is checked
 

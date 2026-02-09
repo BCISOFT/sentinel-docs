@@ -119,7 +119,70 @@ Direct PHP file access (see [Auto Prepend Protection](./auto-prepend-protection.
 
 ## Viewing Logs
 
-### Via Command Line
+### Via Back-Office
+
+To view security logs from the back-office:
+
+1. Log in to your PrestaShop back-office
+2. Go to **Modules > Sentinel > Security Logs**
+3. Use filters to search by date, IP, type, or severity
+
+### Via Sentinel Command
+
+Sentinel provides a dedicated command to view and manage logs:
+
+**View recent logs:**
+
+```bash
+php bin/console sentinel:logs
+```
+
+**Filter by type:**
+
+```bash
+php bin/console sentinel:logs --type=attack
+php bin/console sentinel:logs --type=login_failed
+php bin/console sentinel:logs --type=post_request
+```
+
+**Filter by severity:**
+
+```bash
+php bin/console sentinel:logs --severity=warning
+php bin/console sentinel:logs --severity=critical
+```
+
+**Filter by IP address:**
+
+```bash
+php bin/console sentinel:logs --ip=192.168.1.100
+```
+
+**Filter by date range:**
+
+```bash
+php bin/console sentinel:logs --from="2025-01-01" --to="2025-01-31"
+```
+
+**Limit results:**
+
+```bash
+php bin/console sentinel:logs --limit=50
+```
+
+**Output as JSON:**
+
+```bash
+php bin/console sentinel:logs --json
+```
+
+**Clear all logs:**
+
+```bash
+php bin/console sentinel:logs --clear
+```
+
+### Via System Command Line
 
 **View today's events:**
 
@@ -213,7 +276,7 @@ Logged: username=admin&password=********&api_key=********
 1. **Identify the threat**: What pattern was matched?
 2. **Check the IP**: Is it a repeat offender?
 3. **Take action**:
-   - Block the IP at firewall level
+   - Block the IP at server level
    - Report to hosting provider
    - Monitor for similar patterns
 

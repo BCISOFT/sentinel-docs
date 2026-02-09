@@ -5,11 +5,11 @@ slug: /
 
 # Introduction à Sentinel
 
-Bienvenue dans **Sentinel**, un module de sécurité complet pour PrestaShop qui protège votre site e-commerce des attaques malveillantes.
+Bienvenue dans **Sentinel**, un module de sécurité complet pour PrestaShop qui surveille et sécurise votre site e-commerce contre les menaces et vulnérabilités.
 
 ## Qu'est-ce que Sentinel ?
 
-Sentinel est un pare-feu applicatif web (WAF) spécialement conçu pour PrestaShop 1.7.7 à 8.2.3. Il agit comme un bouclier protecteur entre votre boutique et les attaquants potentiels en détectant et bloquant les requêtes malveillantes avant qu'elles n'atteignent votre application principale.
+Sentinel est un outil de surveillance, détection et analyse des menaces et vulnérabilités spécialement conçu pour PrestaShop 1.7.7 à 8.2.3. Il surveille en continu l'activité de votre boutique, détecte les requêtes malveillantes par analyse de signatures, et vous aide à identifier les vulnérabilités avant qu'elles ne puissent être exploitées.
 
 ## Fonctionnalités principales
 

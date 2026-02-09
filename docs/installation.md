@@ -16,9 +16,7 @@ Before installing Sentinel, ensure your system meets these requirements:
 
 ## Download the Module
 
-**[📦 Download Sentinel (Latest Version)](https://github.com/bcisoft/sentinel-docs/releases/latest/download/sentinel.zip)**
-
-Or browse all versions on the [releases page](https://github.com/bcisoft/sentinel-docs/releases).
+Browse all versions on the [releases page](https://github.com/bcisoft/sentinel-docs/releases).
 
 ## Installation Methods
 
