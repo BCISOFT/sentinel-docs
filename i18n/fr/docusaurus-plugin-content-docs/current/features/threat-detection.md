@@ -9,9 +9,19 @@ Sentinel détecte et bloque automatiquement les requêtes malveillantes en utili
 ## Comment ça fonctionne
 
 1. **Analyse des requêtes** : Chaque requête HTTP est analysée avant d'atteindre PrestaShop
-2. **Correspondance de motifs** : La requête est comparée à de nombreuses signatures de menaces préconfigurées
+2. **Correspondance de motifs** : La requête est comparée aux signatures de menaces connues téléchargées depuis l'API Sentinel
 3. **Blocage instantané** : Si un motif malveillant est détecté, la requête est bloquée avec HTTP 403
 4. **Journalisation** : Toutes les attaques détectées sont enregistrées avec les détails (IP, URI, motif correspondant)
+
+## Mise à jour des signatures
+
+Les signatures de détection sont gérées à distance sur l'API Sentinel et synchronisées automatiquement :
+
+- **À l'installation** : Les signatures sont téléchargées lors de l'installation du module
+- **Synchronisation quotidienne** : Le back-office vérifie automatiquement les signatures mises à jour toutes les 24 heures
+- **Téléchargement manuel** : Si les signatures sont absentes, la page de configuration du module affiche un avertissement avec un bouton pour les télécharger manuellement
+
+Cette approche garantit que votre boutique est toujours protégée avec les dernières signatures de menaces sans nécessiter de mise à jour du module.
 
 ## Menaces protégées
 
@@ -58,6 +68,14 @@ Détecte les vulnérabilités connues dans les modules PrestaShop populaires :
 - Module Product Search
 - Modules de blog (CSBlog, SmartBlog, etc.)
 - Modules de paiement
+
+### En-têtes HTTP suspects
+
+Détecte les en-têtes HTTP malveillants ou suspects :
+
+- **Scanners de sécurité** : Bloque les requêtes provenant d'outils de scan connus (sqlmap, nikto, nmap, dirbuster, etc.)
+- **User-Agent vide** : Bloque les requêtes sans en-tête User-Agent (fréquent dans les attaques automatisées)
+- **Log4Shell** : Détecte les tentatives d'injection JNDI dans les en-têtes HTTP
 
 ## Quand une attaque est détectée
 

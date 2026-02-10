@@ -9,9 +9,19 @@ Sentinel detects and blocks malicious requests automatically using signature-bas
 ## How it works
 
 1. **Request Analysis**: Every HTTP request is analyzed before reaching PrestaShop
-2. **Pattern Matching**: The request is compared against many pre-configured threat signatures
+2. **Pattern Matching**: The request is compared against known threat signatures downloaded from the Sentinel API
 3. **Instant Blocking**: If a malicious pattern is detected, the request is blocked with HTTP 403
 4. **Logging**: All detected attacks are logged with details (IP, URI, pattern matched)
+
+## Signature Updates
+
+Threat detection signatures are managed remotely on the Sentinel API and synchronized automatically:
+
+- **At installation**: Signatures are downloaded when the module is installed
+- **Daily sync**: The back-office automatically checks for updated signatures once every 24 hours
+- **Manual download**: If signatures are missing, the module configuration page displays a warning with a button to download them manually
+
+This approach ensures your store is always protected with the latest threat signatures without requiring a module update.
 
 ## Protected Threats
 
@@ -58,6 +68,14 @@ Detects known vulnerabilities in popular PrestaShop modules:
 - Product Search module
 - Blog modules (CSBlog, SmartBlog, etc.)
 - Payment modules
+
+### Suspicious HTTP Headers
+
+Detects malicious or suspicious HTTP headers:
+
+- **Security scanners**: Blocks requests from known scanning tools (sqlmap, nikto, nmap, dirbuster, etc.)
+- **Empty User-Agent**: Blocks requests with no User-Agent header (common in automated attacks)
+- **Log4Shell**: Detects JNDI injection attempts in HTTP headers
 
 ## When an attack is detected
 
