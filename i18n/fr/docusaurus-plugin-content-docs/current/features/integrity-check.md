@@ -13,9 +13,34 @@ La vérification d'intégrité de Sentinel vérifie que vos fichiers PrestaShop 
 ## Comment ça fonctionne
 
 1. **Scan des fichiers** : Sentinel analyse tous les fichiers de votre installation PrestaShop et des modules installés
-2. **Comparaison des hash** : Les empreintes des fichiers sont comparées aux versions officielles via l'API Sentinel
-3. **Détection des différences** : Tout fichier modifié, ajouté ou supprimé est identifié
-4. **Rapport détaillé** : Un rapport affiche toutes les anomalies avec leur niveau de criticité
+2. **Normalisation du contenu** : Avant le calcul du hash, le contenu de chaque fichier est normalisé pour éliminer les différences de whitespace non significatives (BOM UTF-8, fins de ligne, indentation). Cela évite les faux positifs causés par des différences entre vos fichiers installés et les sources de référence.
+3. **Comparaison des hash** : Les empreintes normalisées des fichiers (MD5) sont comparées aux versions officielles via l'API Sentinel
+4. **Détection des différences** : Tout fichier modifié, ajouté ou supprimé est identifié
+5. **Rapport détaillé** : Un rapport affiche toutes les anomalies avec leur niveau de criticité
+
+### Normalisation du contenu
+
+Pour éviter les faux positifs liés à des différences de whitespace inoffensives, Sentinel normalise le contenu des **fichiers texte** avant de calculer les hash. Les étapes de normalisation sont :
+
+1. **Suppression du BOM UTF-8** : Supprime les octets BOM (`\xEF\xBB\xBF`) s'ils sont présents au début du fichier
+2. **Normalisation des fins de ligne** : Convertit tous les `\r\n` (Windows) et `\r` (ancien Mac) en `\n` (Unix)
+3. **Trim de chaque ligne** : Supprime le whitespace en début et en fin de chaque ligne
+
+Cela garantit que les fichiers texte avec différents styles d'indentation (tabulations vs espaces), différentes fins de ligne, ou un BOM UTF-8 produiront le même hash que les fichiers de référence. L'API Sentinel applique exactement la même normalisation lors de la génération des manifestes de référence.
+
+#### Détection texte vs binaire
+
+La normalisation n'est appliquée qu'aux **fichiers texte** (détectés par extension de fichier). Les fichiers binaires (images, polices, archives, etc.) sont hashés tels quels sans aucune modification pour éviter de corrompre leur contenu.
+
+**Extensions texte** (normalisées) : `php`, `inc`, `tpl`, `html`, `htm`, `xml`, `xsd`, `js`, `ts`, `jsx`, `tsx`, `mjs`, `cjs`, `css`, `scss`, `sass`, `less`, `json`, `yml`, `yaml`, `toml`, `ini`, `cfg`, `conf`, `sql`, `md`, `txt`, `csv`, `tsv`, `log`, `sh`, `bash`, `zsh`, `twig`, `smarty`, `mustache`, `htaccess`, `env`, `lock`, `map`, `svg`.
+
+**Fichiers sans extension** (ex : `Makefile`, `Dockerfile`) sont également traités comme du texte.
+
+**Toutes les autres extensions** (ex : `png`, `jpg`, `gif`, `woff`, `pdf`, `zip`) sont traitées comme binaires et hashées sans normalisation.
+
+:::note Sécurité
+Cette normalisation ne touche qu'aux caractères de whitespace des fichiers texte. Toute injection de code réel (mots-clés PHP, variables, opérateurs) ajoute des caractères non-whitespace et sera toujours détectée. Les fichiers binaires ne sont jamais modifiés.
+:::
 
 ## Pourquoi c'est important ?
 

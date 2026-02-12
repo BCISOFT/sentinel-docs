@@ -13,9 +13,34 @@ Sentinel's file integrity check verifies that your PrestaShop core files and mod
 ## How it works
 
 1. **File scanning**: Sentinel scans all files in your PrestaShop installation and installed modules
-2. **Hash comparison**: File hashes are compared against official versions via the Sentinel API
-3. **Difference detection**: Any modified, added, or deleted files are identified
-4. **Detailed report**: A report shows all discrepancies with their severity level
+2. **Content normalization**: Before hashing, each file's content is normalized to eliminate non-significant whitespace differences (UTF-8 BOM, line endings, indentation). This prevents false positives caused by differences between your installed files and the reference sources.
+3. **Hash comparison**: Normalized file hashes (MD5) are compared against official versions via the Sentinel API
+4. **Difference detection**: Any modified, added, or deleted files are identified
+5. **Detailed report**: A report shows all discrepancies with their severity level
+
+### Content Normalization
+
+To avoid false positives from harmless whitespace differences, Sentinel normalizes **text file** content before computing hashes. The normalization steps are:
+
+1. **UTF-8 BOM removal**: Strips the BOM bytes (`\xEF\xBB\xBF`) if present at the start of the file
+2. **Line ending normalization**: Converts all `\r\n` (Windows) and `\r` (old Mac) to `\n` (Unix)
+3. **Line trimming**: Removes leading and trailing whitespace from each line
+
+This ensures that text files with different indentation styles (tabs vs spaces), different line endings, or a UTF-8 BOM will produce the same hash as the reference files. The Sentinel API applies the exact same normalization when generating reference manifests.
+
+#### Text vs Binary detection
+
+Normalization is only applied to **text files** (detected by file extension). Binary files (images, fonts, archives, etc.) are hashed as-is with no modification to avoid corrupting their content.
+
+**Text extensions** (normalized): `php`, `inc`, `tpl`, `html`, `htm`, `xml`, `xsd`, `js`, `ts`, `jsx`, `tsx`, `mjs`, `cjs`, `css`, `scss`, `sass`, `less`, `json`, `yml`, `yaml`, `toml`, `ini`, `cfg`, `conf`, `sql`, `md`, `txt`, `csv`, `tsv`, `log`, `sh`, `bash`, `zsh`, `twig`, `smarty`, `mustache`, `htaccess`, `env`, `lock`, `map`, `svg`.
+
+**Files without extension** (e.g. `Makefile`, `Dockerfile`) are also treated as text.
+
+**All other extensions** (e.g. `png`, `jpg`, `gif`, `woff`, `pdf`, `zip`) are treated as binary and hashed without normalization.
+
+:::note Security
+This normalization only affects whitespace characters in text files. Any actual code injection (PHP keywords, variables, operators) adds non-whitespace characters and will always be detected. Binary files are never modified.
+:::
 
 ## Why is this important?
 
