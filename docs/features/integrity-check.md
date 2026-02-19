@@ -125,6 +125,82 @@ Modules without a version number in their configuration are also checked. Sentin
 | 🆕 **Unknown**  | File doesn't exist in official version | Verify if legitimate |
 | ❌ **Missing**  | Official file is missing               | Reinstall file       |
 
+## Diff Viewer
+
+When integrity check results show modified, missing, or unknown files, you can view the file differences directly from the results.
+
+### Viewing Differences
+
+Each file in the results has a **View Diff** or **View File** button:
+
+- **Modified files** (View Diff): Shows a unified diff comparing the original file with your local version, with added lines highlighted in green and removed lines in red — similar to GitHub's diff view.
+- **Missing files** (View File): Shows the original file content from the official sources, with all lines highlighted in red (deleted file).
+- **Unknown files** (View File): Shows your local file content, with all lines highlighted in green (new file).
+
+### How It Works
+
+1. Click the **View Diff** / **View File** button on any mismatch row
+2. Sentinel fetches the original file from the Sentinel API (for modified and missing files) and reads the local file (for modified and unknown files)
+3. For modified files, a diff is computed and displayed with GitHub-style line highlighting
+4. The diff viewer shows line numbers, hunk headers (`@@ ... @@`), and statistics (lines added/removed)
+
+:::note
+The diff viewer works for text files only. Binary files (images, fonts, etc.) will show a "Binary file" message instead of a diff.
+:::
+
+### ZIP Fallback for Modules
+
+When viewing a diff for a module file and the Sentinel API does not have the original sources (e.g., paid or third-party modules where only hashes are available), the diff viewer displays an error message along with an **inline ZIP upload area**.
+
+You can upload the official ZIP of the module directly in the diff viewer:
+
+1. Click **View Diff** on a module file mismatch
+2. If sources are unavailable, the error message is shown with a "Compare using a ZIP file" upload zone
+3. Drop or select the official ZIP of the module
+4. Sentinel extracts the file from the ZIP, reads your local file, and displays the diff
+
+This allows you to view diffs for **any module** — whether it's verified by Sentinel (known hashes, but no sources) or unchecked (not in the repository at all).
+
+## Compare with ZIP
+
+For third-party or paid modules where Sentinel does not have the original source files, you can compare your installed module against an official ZIP archive.
+
+### How to Use
+
+1. Run an integrity check — modules not in the Sentinel repository appear in the **Unchecked Modules** section
+2. Click the **Compare with ZIP** button next to the module you want to verify
+3. A modal opens showing the module name and the expected version
+4. Upload (or drag and drop) the official ZIP file of the module
+5. Sentinel extracts the ZIP, hashes all files, and compares them with your installed version
+6. Results show any mismatches (modified, missing, or unknown files)
+7. Click **View Diff** on any mismatch to see the line-by-line differences
+
+:::tip
+The JavaScript keeps a reference to the uploaded ZIP file in memory, so you don't need to re-upload when viewing individual file diffs.
+:::
+
+## Export Results
+
+You can export integrity check results in three formats: **CSV**, **JSON**, and **TXT**.
+
+### From the Back-Office
+
+After completing an integrity check or viewing a check from history, an **Export Results** dropdown button appears in the results area. Click it and select the desired format:
+
+- **CSV**: Semicolon-separated file with columns for Section, Path, Status, and Details. Includes core mismatches, module mismatches, and unchecked modules.
+- **JSON**: Structured data including check metadata, core results, and module results with all mismatches and unchecked modules.
+- **TXT**: Human-readable text report organized by section (Core Files, Modules Files, Unchecked Modules).
+
+The file is downloaded immediately by your browser.
+
+### From the Command Line
+
+Use the `--json` option to output results in JSON format, which you can redirect to a file:
+
+```bash
+php bin/console sentinel:integrity --json > integrity-report.json
+```
+
 ## Troubleshooting
 
 ### Check takes too long

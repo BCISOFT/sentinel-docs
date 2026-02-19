@@ -125,6 +125,82 @@ Les modules sans numéro de version dans leur configuration sont également vér
 | 🆕 **Inconnu**  | Le fichier n'existe pas dans la version officielle | Vérifier si légitime       |
 | ❌ **Manquant** | Un fichier officiel est manquant                   | Réinstaller le fichier     |
 
+## Visualiseur de diff
+
+Lorsque les résultats de la vérification d'intégrité affichent des fichiers modifiés, manquants ou inconnus, vous pouvez visualiser les différences directement depuis les résultats.
+
+### Visualiser les différences
+
+Chaque fichier dans les résultats dispose d'un bouton **Voir le diff** ou **Voir le fichier** :
+
+- **Fichiers modifiés** (Voir le diff) : Affiche un diff unifié comparant le fichier original avec votre version locale, avec les lignes ajoutées surlignées en vert et les lignes supprimées en rouge — similaire à la vue diff de GitHub.
+- **Fichiers manquants** (Voir le fichier) : Affiche le contenu du fichier original depuis les sources officielles, avec toutes les lignes surlignées en rouge (fichier supprimé).
+- **Fichiers inconnus** (Voir le fichier) : Affiche le contenu de votre fichier local, avec toutes les lignes surlignées en vert (nouveau fichier).
+
+### Comment ça fonctionne
+
+1. Cliquez sur le bouton **Voir le diff** / **Voir le fichier** sur n'importe quelle ligne de résultat
+2. Sentinel récupère le fichier original depuis l'API Sentinel (pour les fichiers modifiés et manquants) et lit le fichier local (pour les fichiers modifiés et inconnus)
+3. Pour les fichiers modifiés, un diff est calculé et affiché avec un surlignage de lignes style GitHub
+4. Le visualiseur de diff affiche les numéros de ligne, les en-têtes de hunk (`@@ ... @@`), et les statistiques (lignes ajoutées/supprimées)
+
+:::note
+Le visualiseur de diff ne fonctionne que pour les fichiers texte. Les fichiers binaires (images, polices, etc.) afficheront un message "Fichier binaire" au lieu d'un diff.
+:::
+
+### Fallback ZIP pour les modules
+
+Lorsque vous consultez le diff d'un fichier de module et que l'API Sentinel ne dispose pas des sources originales (par exemple, modules payants ou tiers dont seuls les hash sont disponibles), le visualiseur de diff affiche un message d'erreur accompagné d'une **zone d'upload ZIP intégrée**.
+
+Vous pouvez uploader le ZIP officiel du module directement dans le visualiseur de diff :
+
+1. Cliquez sur **Voir le Diff** sur un fichier de module avec une différence
+2. Si les sources ne sont pas disponibles, le message d'erreur s'affiche avec une zone "Comparer à partir d'un fichier ZIP"
+3. Déposez ou sélectionnez le ZIP officiel du module
+4. Sentinel extrait le fichier du ZIP, lit votre fichier local, et affiche le diff
+
+Cela vous permet de visualiser les diffs pour **n'importe quel module** — qu'il soit vérifié par Sentinel (hash connus, mais pas de sources) ou non vérifié (absent du référentiel).
+
+## Comparer avec un ZIP
+
+Pour les modules tiers ou payants dont Sentinel ne dispose pas des fichiers sources originaux, vous pouvez comparer votre module installé avec une archive ZIP officielle.
+
+### Comment utiliser
+
+1. Lancez une vérification d'intégrité — les modules non référencés apparaissent dans la section **Modules non vérifiés**
+2. Cliquez sur le bouton **Comparer avec un ZIP** à côté du module à vérifier
+3. Une modale s'ouvre affichant le nom du module et la version attendue
+4. Uploadez (ou glissez-déposez) le fichier ZIP officiel du module
+5. Sentinel extrait le ZIP, calcule les hash de tous les fichiers, et les compare avec votre version installée
+6. Les résultats affichent les différences (fichiers modifiés, manquants ou inconnus)
+7. Cliquez sur **Voir le diff** sur n'importe quelle différence pour voir les modifications ligne par ligne
+
+:::tip
+Le JavaScript garde une référence au fichier ZIP uploadé en mémoire, vous n'avez donc pas besoin de re-uploader lors de la consultation des diffs fichier par fichier.
+:::
+
+## Exporter les résultats
+
+Vous pouvez exporter les résultats d'une vérification d'intégrité dans trois formats : **CSV**, **JSON** et **TXT**.
+
+### Depuis le Back-Office
+
+Après avoir effectué une vérification d'intégrité ou consulté une vérification depuis l'historique, un bouton déroulant **Exporter les résultats** apparaît dans la zone des résultats. Cliquez dessus et sélectionnez le format souhaité :
+
+- **CSV** : Fichier séparé par des points-virgules avec les colonnes Section, Chemin, Statut et Détails. Inclut les anomalies core, les anomalies modules et les modules non vérifiés.
+- **JSON** : Données structurées incluant les métadonnées de la vérification, les résultats core et les résultats modules avec toutes les anomalies et les modules non vérifiés.
+- **TXT** : Rapport texte lisible organisé par section (Fichiers Core, Fichiers Modules, Modules non vérifiés).
+
+Le fichier est téléchargé immédiatement par votre navigateur.
+
+### Depuis la ligne de commande
+
+Utilisez l'option `--json` pour obtenir les résultats au format JSON, que vous pouvez rediriger vers un fichier :
+
+```bash
+php bin/console sentinel:integrity --json > integrity-report.json
+```
+
 ## Résolution des problèmes
 
 ### La vérification prend trop de temps
