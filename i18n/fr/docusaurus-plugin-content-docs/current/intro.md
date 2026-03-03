@@ -21,6 +21,7 @@ Sentinel est un outil de surveillance, détection et analyse des menaces et vuln
 - **Protection Auto Prepend File** : Protège contre les accès directs aux fichiers PHP contournant PrestaShop
 - **Log des échecs de connexion** : Détecte les tentatives de connexion échouées au back-office
 - **Log des requêtes POST/PUT/PATCH/DELETE** : Enregistre toutes les requêtes de modification avec leur payload
+- **Vérification des prérequis** : Vérifie la configuration PHP, les extensions et les permissions des répertoires selon les exigences spécifiques à la version
 - **Zéro configuration** : Fonctionne immédiatement après installation avec des signatures pré-configurées
 - **Intégration PrestaShop** : S'intègre de manière transparente avec PrestaShop
 
