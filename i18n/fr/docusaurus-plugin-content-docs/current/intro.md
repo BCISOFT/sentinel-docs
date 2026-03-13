@@ -13,16 +13,16 @@ Sentinel est un outil de surveillance, détection et analyse des menaces et vuln
 
 ## Fonctionnalités principales
 
-- **Détection de menaces en temps réel** : Identifie les patterns malveillants dans les requêtes HTTP via détection par signatures
-- **Blocage automatique** : Stoppe immédiatement les menaces avec des réponses HTTP 403
+- **Détection de menaces en temps réel** *(Pro)* : Identifie les patterns malveillants dans les requêtes HTTP via détection par signatures
+- **Blocage automatique** *(Pro)* : Stoppe immédiatement les menaces avec des réponses HTTP 403
 - **Logs complets** : Enregistre tous les événements de sécurité avec contexte détaillé pour analyse forensique
 - **Scanner de vulnérabilités** : Analyse manuelle des vulnérabilités connues dans les modules et le core PrestaShop
-- **Vérification d'intégrité des fichiers** : Vérifie que les fichiers du core PrestaShop et des modules n'ont pas été altérés
-- **Protection Auto Prepend File** : Protège contre les accès directs aux fichiers PHP contournant PrestaShop
+- **Vérification d'intégrité des fichiers** *(Pro)* : Vérifie que les fichiers du core PrestaShop et des modules n'ont pas été altérés
+- **Protection Auto Prepend File** *(Pro)* : Protège contre les accès directs aux fichiers PHP contournant PrestaShop
 - **Log des échecs de connexion** : Détecte les tentatives de connexion échouées au back-office
 - **Log des requêtes POST/PUT/PATCH/DELETE** : Enregistre toutes les requêtes de modification avec leur payload
 - **Vérification des prérequis** : Vérifie la configuration PHP, les extensions et les permissions des répertoires selon les exigences spécifiques à la version
-- **Zéro configuration** : Fonctionne immédiatement après installation avec des signatures pré-configurées
+- **Zéro configuration** : Fonctionne immédiatement après installation
 - **Intégration PrestaShop** : S'intègre de manière transparente avec PrestaShop
 
 ## Quelles menaces Sentinel détecte-t-il ?
@@ -78,7 +78,7 @@ Commencez avec Sentinel en quelques étapes :
 1. [Installez le module](./installation.md)
 2. Activez-le depuis votre panneau d'administration PrestaShop
 3. Votre boutique est maintenant protégée !
-4. (Optionnel mais recommandé) [Activez la protection Auto Prepend File](./features/auto-prepend-protection.md)
+4. (Pro) [Activez la protection Auto Prepend File](./features/auto-prepend-protection.md)
 5. (Recommandé) [Lancez un scan de vulnérabilités](./features/vulnerability-scanner.md)
 
 Aucune configuration supplémentaire requise - Sentinel fonctionne immédiatement après installation.
@@ -89,12 +89,12 @@ Sentinel offre plusieurs couches de protection complémentaires :
 
 | Couche                                                        | Protection                                         | Activation            |
 | ------------------------------------------------------------- | -------------------------------------------------- | --------------------- |
-| **Détection de signatures URI**                               | Bloque les patterns malveillants dans les requêtes | ✓ Automatique         |
-| **Log des échecs de connexion**                               | Détecte les tentatives de force brute              | ✓ Automatique         |
-| **Log des requêtes POST/PUT/PATCH/DELETE**                    | Enregistre toutes les modifications                | ✓ Automatique         |
-| **Scanner de vulnérabilités**                                 | Détecte les modules/core vulnérables               | Manuel via BO         |
+| **[Log des échecs de connexion](./features/security-logs.md)** | Détecte les tentatives de force brute            | ✓ Automatique         |
+| **[Log des requêtes POST/PUT/PATCH/DELETE](./features/security-logs.md)** | Enregistre toutes les modifications   | ✓ Automatique         |
+| **[Scanner de vulnérabilités](./features/vulnerability-scanner.md)** | Détecte les modules/core vulnérables        | Manuel via BO         |
+| **[Détection de signatures URI](./features/threat-detection.md)** | Bloque les patterns malveillants dans les requêtes | Automatique (Pro) |
 | **[Vérification d'intégrité](./features/integrity-check.md)** | Détecte les fichiers altérés                       | Manuel via BO (Pro)   |
-| **Protection Auto Prepend File**                              | Protège contre accès directs aux fichiers PHP      | Configuration requise |
+| **[Protection Auto Prepend File](./features/auto-prepend-protection.md)** | Protège contre accès directs aux fichiers PHP | Configuration (Pro) |
 
 ---
 

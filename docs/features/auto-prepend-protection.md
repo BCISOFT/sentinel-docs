@@ -4,6 +4,10 @@ sidebar_position: 4
 
 # Auto Prepend File Protection
 
+:::tip Pro Feature
+Auto Prepend File protection is available with the **Pro license**. [Get your Pro license](https://bcisoft.fr/securite) to access this feature.
+:::
+
 The **Auto Prepend File** protection is an additional security layer that protects your site against direct access to PHP files, bypassing PrestaShop security.
 
 ## Why is it important?

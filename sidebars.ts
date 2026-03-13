@@ -6,9 +6,26 @@ const sidebars: SidebarsConfig = {
     'installation',
     {
       type: 'category',
-      label: 'Features',
+      label: 'Protection',
       items: [
-        'features/threat-detection',
+        {
+          type: 'doc',
+          id: 'features/threat-detection',
+          label: 'Threat Detection',
+          className: 'menu-item-pro',
+        },
+        {
+          type: 'doc',
+          id: 'features/auto-prepend-protection',
+          label: 'Auto Prepend File',
+          className: 'menu-item-pro',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Analysis',
+      items: [
         'features/vulnerability-scanner',
         {
           type: 'doc',
@@ -16,7 +33,12 @@ const sidebars: SidebarsConfig = {
           label: 'File Integrity Check',
           className: 'menu-item-pro',
         },
-        'features/auto-prepend-protection',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Monitoring',
+      items: [
         'features/security-logs',
       ],
     },

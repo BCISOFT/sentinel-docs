@@ -13,16 +13,16 @@ Sentinel is a security surveillance, threat detection, and vulnerability analysi
 
 ## Key Features
 
-- **Real-time threat detection**: Identifies malicious patterns in HTTP requests through signature-based detection
-- **Automatic request blocking**: Immediately stops threats with HTTP 403 responses
+- **Real-time threat detection** *(Pro)*: Identifies malicious patterns in HTTP requests through signature-based detection
+- **Automatic request blocking** *(Pro)*: Immediately stops threats with HTTP 403 responses
 - **Comprehensive logging**: Records all security events with detailed context for forensic analysis
 - **Vulnerability scanner**: Manual scanning for known vulnerabilities in modules and PrestaShop core
-- **File integrity check**: Verifies that PrestaShop core and module files have not been tampered with
-- **Auto Prepend File protection**: Protects against direct access to PHP files bypassing PrestaShop
+- **File integrity check** *(Pro)*: Verifies that PrestaShop core and module files have not been tampered with
+- **Auto Prepend File protection** *(Pro)*: Protects against direct access to PHP files bypassing PrestaShop
 - **Failed login logging**: Detects failed back-office login attempts
 - **POST/PUT/PATCH/DELETE request logging**: Records all modification requests with their payload
 - **Prerequisites check**: Verifies PHP configuration, extensions, and directory permissions against version-specific requirements
-- **Zero configuration**: Works out of the box with pre-configured threat signatures
+- **Zero configuration**: Works out of the box
 - **PrestaShop integration**: Seamlessly and transparently integrates with PrestaShop
 
 ## What threats does Sentinel detect?
@@ -78,7 +78,7 @@ Get started with Sentinel in a few steps:
 1. [Install the module](./installation.md)
 2. Activate it from your PrestaShop admin panel
 3. Your store is now protected!
-4. (Optional but recommended) [Enable Auto Prepend File protection](./features/auto-prepend-protection.md)
+4. (Pro) [Enable Auto Prepend File protection](./features/auto-prepend-protection.md)
 5. (Recommended) [Run a vulnerability scan](./features/vulnerability-scanner.md)
 
 No additional configuration required - Sentinel works immediately after installation.
@@ -89,12 +89,12 @@ Sentinel offers several complementary protection layers:
 
 | Layer                                                     | Protection                              | Activation             |
 | --------------------------------------------------------- | --------------------------------------- | ---------------------- |
-| **URI Signature Detection**                               | Blocks malicious patterns in requests   | ✓ Automatic            |
-| **Failed Login Logging**                                  | Detects brute force attempts            | ✓ Automatic            |
-| **POST/PUT/PATCH/DELETE Logging**                         | Records all modifications               | ✓ Automatic            |
-| **Vulnerability Scanner**                                 | Detects vulnerable modules/core         | Manual via BO          |
+| **[Failed Login Logging](./features/security-logs.md)**   | Detects brute force attempts            | ✓ Automatic            |
+| **[POST/PUT/PATCH/DELETE Logging](./features/security-logs.md)** | Records all modifications          | ✓ Automatic            |
+| **[Vulnerability Scanner](./features/vulnerability-scanner.md)** | Detects vulnerable modules/core   | Manual via BO          |
+| **[URI Signature Detection](./features/threat-detection.md)** | Blocks malicious patterns in requests | Automatic (Pro)    |
 | **[File Integrity Check](./features/integrity-check.md)** | Detects tampered files                  | Manual via BO (Pro)    |
-| **Auto Prepend File Protection**                          | Protects against direct PHP file access | Configuration required |
+| **[Auto Prepend File Protection](./features/auto-prepend-protection.md)** | Protects against direct PHP file access | Configuration (Pro) |
 
 ---
 

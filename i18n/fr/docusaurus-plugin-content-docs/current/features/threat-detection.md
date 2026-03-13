@@ -4,6 +4,10 @@ sidebar_position: 1
 
 # Détection des menaces
 
+:::tip Fonctionnalité Pro
+La détection de menaces et le blocage automatique sont disponibles avec la **licence Pro**. [Obtenez votre licence Pro](https://bcisoft.fr/securite) pour accéder à cette fonctionnalité.
+:::
+
 Sentinel détecte et bloque automatiquement les requêtes malveillantes en utilisant une correspondance de motifs basée sur des signatures.
 
 ## Comment ça fonctionne

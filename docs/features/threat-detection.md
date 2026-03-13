@@ -4,6 +4,10 @@ sidebar_position: 1
 
 # Threat Detection
 
+:::tip Pro Feature
+Threat detection and automatic blocking are available with the **Pro license**. [Get your Pro license](https://bcisoft.fr/securite) to access this feature.
+:::
+
 Sentinel detects and blocks malicious requests automatically using signature-based pattern matching.
 
 ## How it works

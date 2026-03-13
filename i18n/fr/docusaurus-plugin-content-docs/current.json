@@ -3,8 +3,28 @@
     "message": "Suivant",
     "description": "The label for version current"
   },
-  "sidebar.docsSidebar.category.Features": {
-    "message": "Fonctionnalités",
-    "description": "The label for category 'Features' in sidebar 'docsSidebar'"
+  "sidebar.docsSidebar.category.Protection": {
+    "message": "Protection",
+    "description": "The label for category 'Protection' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Analysis": {
+    "message": "Analyse",
+    "description": "The label for category 'Analysis' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Monitoring": {
+    "message": "Surveillance",
+    "description": "The label for category 'Monitoring' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.doc.Threat Detection": {
+    "message": "Détection des menaces",
+    "description": "The label for the doc item 'Threat Detection' in sidebar 'docsSidebar', linking to the doc features/threat-detection"
+  },
+  "sidebar.docsSidebar.doc.Auto Prepend File": {
+    "message": "Protection Auto Prepend File",
+    "description": "The label for the doc item 'Auto Prepend File' in sidebar 'docsSidebar', linking to the doc features/auto-prepend-protection"
+  },
+  "sidebar.docsSidebar.doc.File Integrity Check": {
+    "message": "Vérification d'intégrité des fichiers",
+    "description": "The label for the doc item 'File Integrity Check' in sidebar 'docsSidebar', linking to the doc features/integrity-check"
   }
 }
