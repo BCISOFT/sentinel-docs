@@ -201,6 +201,37 @@ Use the `--json` option to output results in JSON format, which you can redirect
 php bin/console sentinel:integrity --json > integrity-report.json
 ```
 
+## Excluding files with `.sentinelignore`
+
+Some directories in your PrestaShop installation are not part of the official distribution and should not be checked — for example version control folders (`.git/`, `.svn/`), editor metadata (`.idea/`, `.vscode/`), or local tooling (`node_modules/`). Without exclusions, they appear in the report as **Unknown** files.
+
+Sentinel uses a `.sentinelignore` file located at the **module root** (`modules/sentinel/.sentinelignore`) to let you define your own exclusion rules.
+
+### Editing rules
+
+You can edit `.sentinelignore` in two ways:
+
+- **From the back-office**: go to **Modules > Sentinel**, find the **Integrity Check — Exclusions** card, edit the textarea, and click **Save ignore rules**.
+- **Directly on the server**: open `modules/sentinel/.sentinelignore` over SSH/FTP and edit it like any text file.
+
+### Syntax (gitignore-like)
+
+The file follows the same conventions as `.gitignore`:
+
+- Blank lines and lines starting with `#` are ignored
+- `.git/` — ignore a directory named `.git` at any depth
+- `*.log` — ignore any file ending with `.log`
+- `**/cache` — ignore any `cache` directory at any depth
+- `/foo` — anchored to the scan root (only matches the top-level `foo`)
+- `!keep.log` — re-include a previously ignored file
+- A trailing `/` restricts the rule to directories
+
+Rules are evaluated in order; the last matching rule wins. The `.sentinelignore` rules apply to both **core** and **module** integrity scans.
+
+### Default rules
+
+When the module is installed, Sentinel creates a default `.sentinelignore` that already excludes the most common non-PrestaShop directories (`.git/`, `.svn/`, `.idea/`, `.vscode/`, `node_modules/`, …).
+
 ## Troubleshooting
 
 ### Check takes too long

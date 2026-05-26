@@ -201,6 +201,37 @@ Utilisez l'option `--json` pour obtenir les résultats au format JSON, que vous 
 php bin/console sentinel:integrity --json > integrity-report.json
 ```
 
+## Exclure des fichiers avec `.sentinelignore`
+
+Certains répertoires de votre installation PrestaShop ne font pas partie de la distribution officielle et ne devraient pas être vérifiés — par exemple les dossiers de contrôle de version (`.git/`, `.svn/`), les métadonnées d'éditeur (`.idea/`, `.vscode/`) ou l'outillage local (`node_modules/`). Sans exclusions, ils apparaissent dans le rapport comme fichiers **Inconnus**.
+
+Sentinel utilise un fichier `.sentinelignore` situé à la **racine du module** (`modules/sentinel/.sentinelignore`) pour vous permettre de définir vos propres règles d'exclusion.
+
+### Modifier les règles
+
+Vous pouvez éditer `.sentinelignore` de deux façons :
+
+- **Depuis le back-office** : allez dans **Modules > Sentinel**, repérez la carte **Vérification d'intégrité — Exclusions**, modifiez la zone de texte et cliquez sur **Enregistrer les règles d'exclusion**.
+- **Directement sur le serveur** : ouvrez `modules/sentinel/.sentinelignore` en SSH/FTP et éditez-le comme un fichier texte classique.
+
+### Syntaxe (de type gitignore)
+
+Le fichier respecte les mêmes conventions que `.gitignore` :
+
+- Les lignes vides et celles commençant par `#` sont ignorées
+- `.git/` — ignore un répertoire nommé `.git` à n'importe quelle profondeur
+- `*.log` — ignore tout fichier se terminant par `.log`
+- `**/cache` — ignore tout répertoire `cache` à n'importe quelle profondeur
+- `/foo` — ancré à la racine du scan (ne matche que le `foo` de premier niveau)
+- `!keep.log` — réintègre un fichier précédemment ignoré
+- Un `/` final restreint la règle aux répertoires
+
+Les règles sont évaluées dans l'ordre ; la dernière règle correspondante l'emporte. Les règles de `.sentinelignore` s'appliquent aux scans **core** ET **modules**.
+
+### Règles par défaut
+
+Lors de l'installation du module, Sentinel crée un `.sentinelignore` par défaut qui exclut déjà les répertoires non-PrestaShop les plus courants (`.git/`, `.svn/`, `.idea/`, `.vscode/`, `node_modules/`, …).
+
 ## Résolution des problèmes
 
 ### La vérification prend trop de temps
