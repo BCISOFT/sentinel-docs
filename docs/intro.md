@@ -65,6 +65,18 @@ Sentinel protects against a wide range of common web attacks:
 3. **Exploitation detection**: Attempts to access vulnerable files are logged
 4. **Forensic analysis**: In case of incident, logs allow reconstructing the attack
 
+### Resilience: zero impact on the back-office
+
+Sentinel relies on a remote API for some data, but the API is never on the critical
+path of back-office rendering:
+
+1. **Bounded requests**: background calls made during page load use short timeouts, so a slow API can never hang a page.
+2. **Circuit breaker**: after a network failure, Sentinel stops calling the API for a short cooldown period and serves cached or degraded data instantly — subsequent pages load without any delay.
+3. **Asynchronous widget**: the home dashboard widget renders immediately and loads its API-backed data in the background.
+
+If the Sentinel API is slow or unreachable, the PrestaShop back-office keeps working
+normally; only the API-backed sections show a temporary degraded state.
+
 ## System Requirements
 
 - PrestaShop 1.7.7 - 9.0.x
