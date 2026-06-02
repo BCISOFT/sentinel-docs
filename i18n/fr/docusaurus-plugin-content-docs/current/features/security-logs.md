@@ -125,7 +125,18 @@ Pour visualiser les logs de sécurité depuis le back-office :
 
 1. Connectez-vous à votre back-office PrestaShop
 2. Allez dans **Modules > Sentinel > Security Logs**
-3. Utilisez les filtres pour rechercher par date, IP, type ou sévérité
+3. Utilisez les filtres pour rechercher par date, IP, type, sévérité ou statut de blocage
+
+Le tableau des logs comporte une colonne **Statut** qui indique explicitement si
+chaque événement a été bloqué :
+
+- **Bloqué** : la requête a été stoppée par Sentinel (HTTP 403). Les attaques
+  détectées sont toujours bloquées.
+- **Non bloqué** : l'événement a uniquement été enregistré (par exemple les
+  échecs de connexion ou les requêtes POST/PUT/PATCH/DELETE journalisées), la
+  requête a été autorisée à poursuivre.
+
+Le même statut est affiché dans la fenêtre de détails de l'événement.
 
 ### Via la commande Sentinel
 
