@@ -16,6 +16,12 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'features/brute-force-protection',
+          label: 'Brute-force Protection',
+          className: 'menu-item-pro',
+        },
+        {
+          type: 'doc',
           id: 'features/auto-prepend-protection',
           label: 'Auto Prepend File',
           className: 'menu-item-pro',

@@ -15,6 +15,7 @@ Sentinel est un outil de surveillance, détection et analyse des menaces et vuln
 
 - **Détection de menaces en temps réel** *(Pro)* : Identifie les patterns malveillants dans les requêtes HTTP via détection par signatures
 - **Blocage automatique** *(Pro)* : Stoppe immédiatement les menaces avec des réponses HTTP 403
+- **Protection brute-force** *(Pro)* : Détecte les connexions au back-office échouées répétées et bannit automatiquement les adresses IP fautives
 - **Logs complets** : Enregistre tous les événements de sécurité avec contexte détaillé pour analyse forensique
 - **Scanner de vulnérabilités** : Analyse manuelle des vulnérabilités connues dans les modules et le core PrestaShop
 - **Vérification d'intégrité des fichiers** *(Pro)* : Vérifie que les fichiers du core PrestaShop et des modules n'ont pas été altérés
