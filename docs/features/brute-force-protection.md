@@ -29,22 +29,36 @@ The settings are available in the back-office under **Sentinel → Brute-force P
 | Maximum attempts | 5 | Number of failed logins before a ban |
 | Time window | 900 s (15 min) | Period over which attempts are counted |
 | Ban duration | 3600 s (1 h) | How long an automatic ban lasts |
-| IP whitelist | empty | IP addresses that are never banned |
-| Whitelist maintenance IPs | On | Also protect the PrestaShop maintenance IPs (`PS_MAINTENANCE_IP`) |
-| Trust X-Forwarded-For | Off | Use the `X-Forwarded-For` header to resolve the client IP (only behind a trusted proxy) |
 
-## Whitelist and blacklist
+## Trusted IPs
 
-- **Whitelist**: combines the PrestaShop maintenance IPs with any IP you add manually. A whitelisted IP is never counted, banned, or blocked — this is the safeguard that prevents an administrator from locking themselves out. Make sure your own IP is whitelisted.
-- **Manual blacklist**: you can permanently ban an IP from the back-office page. Permanent bans never expire and must be removed manually.
+The **Trusted IPs** card manages the shared whitelist used by every protection (brute-force and DDoS): a trusted address is never counted, banned or blocked. Each entry can carry a free-text comment ("Office", "Monitoring probe", …) so the list stays understandable over time, and an **Add my current IP** button adds the address you are browsing from in one click — the safeguard that prevents an administrator from locking themselves out. Entries accept exact addresses and CIDR ranges. A toggle also trusts the PrestaShop maintenance IPs (`PS_MAINTENANCE_IP`).
+
+The same card appears on the DDoS Protection page and edits the same list.
+
+## Behind a proxy or a CDN
+
+The **Behind a proxy or a CDN?** card configures how Sentinel resolves the real visitor IP. Without it, a store behind Cloudflare or a reverse proxy sees all its visitors under the proxy's address, and the protections cannot tell them apart.
+
+- Sentinel inspects the request you are making from the back-office and, when it detects Cloudflare or a reverse proxy that is not trusted yet, offers a **one-click** fix.
+- The **Cloudflare** toggle trusts Cloudflare's published ranges without pasting a single CIDR.
+- **Other reverse proxies** accepts your own proxy addresses or CIDR ranges.
+
+Forwarded headers are only honoured when the request genuinely comes from a declared proxy, so a visitor cannot forge their IP.
+
+## Blacklist
+
+The **Manual blacklist** form permanently bans an IP, with an optional comment stored as the ban's reason so you remember why it is there. Permanent bans never expire and must be removed manually.
 
 ## Managing bans
 
-The Brute-force Protection page lists all active bans (IP, type, reason, ban date, expiry, attempt count) and lets you unban any IP with a single click. Clicking the attempt count opens a modal listing the email addresses that were tried from that IP (sourced from the failed-login security logs).
+The Brute-force Protection page lists all active bans (IP, type, reason, ban date, expiry, attempt count) and lets you unban any IP with a single click. Clicking the attempt count opens a modal listing the email addresses that were tried from that IP (sourced from the failed-login security logs). A ban whose address is also in the trusted IPs list is flagged with a **Trusted** badge: that address is no longer blocked.
 
 ## Dashboard overview
 
-The Sentinel dashboard and the PrestaShop home widget display a brute-force summary: number of active bans, total banned IPs, failed attempts over the last 24 hours, and the most recent bans. The summary is only shown with a Pro subscription; otherwise an upgrade prompt is displayed. The dashboard also shows, next to it, the top email addresses tried in failed back-office logins.
+The Sentinel dashboard displays a brute-force summary: number of active bans, total banned IPs, failed attempts over the last 24 hours, and the most recent bans. The summary is only shown with a Pro subscription; otherwise an upgrade prompt is displayed. The dashboard also shows, next to it, the top email addresses tried in failed back-office logins.
+
+The PrestaShop home widget shows an **Active Protection** section with one card per licensed protection (brute force and DDoS), each displaying the active bans with the last-24-hours count in parentheses — e.g. "15 (3)". Each card links to its management page.
 
 ## Command line
 
@@ -75,8 +89,9 @@ The `unban` command is the recommended recovery path if an administrator is ever
 ## Notes on IP resolution
 
 - **IPv6** addresses are supported and normalized before storage and comparison.
-- **Proxies**: by default the client IP is read from `REMOTE_ADDR`. The `X-Forwarded-For` header is spoofable, so it is only trusted when you explicitly enable the corresponding setting and your store sits behind a controlled reverse proxy.
-- Whitelist entries are matched by exact IP address (CIDR ranges are not supported).
+- **Proxies**: by default the client IP is read from `REMOTE_ADDR`. Forwarded headers are spoofable, so `X-Forwarded-For` is only read when the request reaches you from a declared proxy (the Cloudflare preset or **Other reverse proxies**), and the chain is walked from right to left so that entries an attacker prepended are ignored. `CF-Connecting-IP` is additionally only trusted when the request originates from a published Cloudflare range.
+- Declaring a proxy is what enables this hardened behaviour. Until you do, installations upgraded from an earlier version keep the previous handling of the legacy *Trust X-Forwarded-For* setting, so bans and logs stay keyed by the same address as before.
+- **Trusted IP entries** accept exact addresses and CIDR ranges (`203.0.113.0/24`, `2001:db8::/32`). IPv4-mapped IPv6 addresses match their IPv4 form.
 
 ---
 

@@ -22,6 +22,12 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'features/ddos-protection',
+          label: 'DDoS Protection',
+          className: 'menu-item-pro',
+        },
+        {
+          type: 'doc',
           id: 'features/auto-prepend-protection',
           label: 'Auto Prepend File',
           className: 'menu-item-pro',

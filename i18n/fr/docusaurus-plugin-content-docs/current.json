@@ -19,6 +19,14 @@
     "message": "Détection des menaces",
     "description": "The label for the doc item 'Threat Detection' in sidebar 'docsSidebar', linking to the doc features/threat-detection"
   },
+  "sidebar.docsSidebar.doc.Brute-force Protection": {
+    "message": "Protection brute-force",
+    "description": "The label for the doc item 'Brute-force Protection' in sidebar 'docsSidebar', linking to the doc features/brute-force-protection"
+  },
+  "sidebar.docsSidebar.doc.DDoS Protection": {
+    "message": "Protection DDoS",
+    "description": "The label for the doc item 'DDoS Protection' in sidebar 'docsSidebar', linking to the doc features/ddos-protection"
+  },
   "sidebar.docsSidebar.doc.Auto Prepend File": {
     "message": "Protection Auto Prepend File",
     "description": "The label for the doc item 'Auto Prepend File' in sidebar 'docsSidebar', linking to the doc features/auto-prepend-protection"
