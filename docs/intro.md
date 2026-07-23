@@ -16,6 +16,7 @@ Sentinel is a security surveillance, threat detection, and vulnerability analysi
 - **Real-time threat detection** *(Pro)*: Identifies malicious patterns in HTTP requests through signature-based detection
 - **Automatic request blocking** *(Pro)*: Immediately stops threats with HTTP 403 responses
 - **Brute-force protection** *(Pro)*: Detects repeated failed back-office logins and automatically bans the offending IP addresses
+- **Access control**: Restricts back-office access to a whitelist of IP addresses
 - **Comprehensive logging**: Records all security events with detailed context for forensic analysis
 - **Vulnerability scanner**: Manual scanning for known vulnerabilities in modules and PrestaShop core
 - **File integrity check** *(Pro)*: Verifies that PrestaShop core and module files have not been tampered with
@@ -108,6 +109,7 @@ Sentinel offers several complementary protection layers:
 | **[URI Signature Detection](./features/threat-detection.md)** | Blocks malicious patterns in requests | Automatic (Pro)    |
 | **[File Integrity Check](./features/integrity-check.md)** | Detects tampered files                  | Manual via BO (Pro)    |
 | **[Auto Prepend File Protection](./features/auto-prepend-protection.md)** | Protects against direct PHP file access | Configuration (Pro) |
+| **[Access Control](./features/access-control.md)** | Restricts back-office access to whitelisted IPs | Configuration |
 
 ---
 

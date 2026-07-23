@@ -32,6 +32,7 @@ const sidebars: SidebarsConfig = {
           label: 'Auto Prepend File',
           className: 'menu-item-pro',
         },
+        'features/access-control',
       ],
     },
     {
