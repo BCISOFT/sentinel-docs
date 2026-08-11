@@ -40,7 +40,7 @@ En mode **Surveillance**, Sentinel compte et rapporte sans rien bloquer. Les sta
 - **Les employés connectés** : le travail en back-office génère des rafales pour lesquelles les seuils du front-office ne sont pas dimensionnés.
 - **Les robots d'indexation vérifiés** : Googlebot, Bingbot et d'autres sont confirmés par résolution DNS inverse *puis* directe, de sorte qu'un user-agent falsifié n'obtient pas l'exemption.
 - **Les URLs exclues**, pré-remplies avec les chemins habituels de callback de paiement. Conservez-y vos URLs de notification de paiement : une notification rejetée ne devient jamais une commande.
-- **Les ressources statiques** et l'exécution en ligne de commande.
+- **Les ressources statiques réellement servies par PHP**, ainsi que l'exécution en ligne de commande. Une URL qui *ressemble* à une ressource statique n'est pas exemptée : PrestaShop réécrit vers `index.php` tout chemin ne correspondant pas à un fichier existant, si bien qu'une requête vers un `.css` inexistant démarre la boutique en entier et est comptée comme n'importe quelle autre.
 
 ## Le seuil de sécurité
 

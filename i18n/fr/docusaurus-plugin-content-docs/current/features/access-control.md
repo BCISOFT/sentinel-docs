@@ -12,6 +12,7 @@ Cette fonctionnalité est **gratuite** et disponible pour tous les utilisateurs 
 
 1. **Vérification de la liste blanche** : à chaque requête vers le back office, Sentinel résout l'adresse IP réelle du visiteur (compatible proxy et CDN, partagé avec les autres protections) et la compare à la liste blanche.
 2. **Blocage furtif** : si l'adresse ne correspond à aucune entrée, le visiteur est redirigé vers la page 404 de la boutique. Pas de formulaire de connexion, pas de message d'erreur — rien ne révèle qu'un back office existe à cette URL.
+3. **Vérifié avant toute exécution** : l'adresse est contrôlée à chaque requête du back-office, avant l'exécution du moindre contrôleur. Des identifiants soumis depuis une adresse bloquée ne sont même jamais vérifiés, et les routes qui répondent en JSON ou par une redirection sont filtrées elles aussi.
 3. **Journalisation** : chaque tentative bloquée est enregistrée dans les [journaux de sécurité](./security-logs.md) avec le type d'événement *Accès au back office bloqué*, incluant l'adresse IP, l'URI demandée et le user agent.
 
 Le front office n'est jamais affecté : les clients peuvent naviguer et commander normalement, quelle que soit la liste blanche.
@@ -29,6 +30,8 @@ Les modifications sont enregistrées automatiquement à chaque ajout ou suppress
 ## Derrière un proxy ou un CDN
 
 Si votre boutique est derrière Cloudflare, un CDN, un load balancer ou un reverse proxy, **déclarez-le dans la carte « Derrière un proxy ou un CDN ? » sur la même page** avant d'activer la liste blanche. Sans cela, tous les visiteurs atteignent votre serveur avec l'adresse du proxy :
+
+Déclarer le proxy est la seule manière pour Sentinel d'accepter un en-tête de transfert : un `X-Forwarded-For` non déclaré est ignoré, car n'importe quel visiteur peut le définir et pourrait sinon se faire passer pour une adresse autorisée.
 
 - mettre « votre IP actuelle » en liste blanche reviendrait en réalité à whitelister le proxy, laissant passer **tout le monde** ;
 - derrière Cloudflare, l'adresse edge change même d'une requête à l'autre, ce qui pourrait vous bloquer juste après l'activation.

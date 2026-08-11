@@ -40,7 +40,7 @@ In **Monitor** mode Sentinel counts and reports without blocking anything. The s
 - **Logged-in employees**: back-office work generates bursts that front-office thresholds are not sized for.
 - **Verified search engine crawlers**: Googlebot, Bingbot and others are confirmed by forward-confirmed reverse DNS, so a spoofed user-agent does not get the exemption.
 - **Excluded URLs**, pre-filled with the usual payment callback paths. Keep your payment notification URLs here: a rejected notification never becomes an order.
-- **Static assets** and command-line execution.
+- **Static assets served directly by PHP**, and command-line execution. A URL that merely *looks* static is not exempt: PrestaShop rewrites any path that does not match an existing file to `index.php`, so a request for a non-existent `.css` boots the shop in full and is counted like any other.
 
 ## The safety threshold
 

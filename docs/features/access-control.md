@@ -12,6 +12,7 @@ This feature is **free** and available to every Sentinel user.
 
 1. **Whitelist check**: On every back-office request, Sentinel resolves the visitor's real IP address (proxy and CDN aware, shared with the other protections) and compares it against the whitelist.
 2. **Stealth blocking**: If the address does not match any entry, the visitor is redirected to the shop's 404 page. No login form, no error message — nothing reveals that a back office exists at this URL.
+3. **Checked before anything runs**: the address is verified on every back-office request, before any controller executes. Credentials submitted from a blocked address are never even checked, and routes that answer with JSON or a redirect are filtered too.
 3. **Logging**: Every blocked attempt is recorded in the [Security Logs](./security-logs.md) with the event type *Back Office Access Blocked*, including the IP address, the requested URI and the user agent.
 
 The front office is never affected: customers can browse and order normally regardless of the whitelist.
@@ -28,7 +29,9 @@ Changes are saved automatically as you add or remove entries.
 
 ## Behind a proxy or a CDN
 
-If your store sits behind Cloudflare, a CDN, a load balancer or a reverse proxy, **declare it in the "Behind a proxy or a CDN?" card on the same page** before enabling the whitelist. Without this, every visitor reaches your server with the proxy's address:
+If your store sits behind Cloudflare, a CDN, a load balancer or a reverse proxy, **declare it in the "Behind a proxy or a CDN?" card on the same page** before enabling the whitelist. Declaring the proxy is the only way Sentinel accepts a forwarding header: an undeclared `X-Forwarded-For` is ignored, because any visitor can set it and would otherwise be able to claim a whitelisted address.
+
+Without this, every visitor reaches your server with the proxy's address:
 
 - whitelisting "your current IP" would actually whitelist the proxy, letting **everyone** through;
 - behind Cloudflare, the edge address even changes between requests, which could lock you out right after enabling.

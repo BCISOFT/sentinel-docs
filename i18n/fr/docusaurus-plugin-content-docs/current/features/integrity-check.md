@@ -148,6 +148,14 @@ Chaque fichier dans les résultats dispose d'un bouton **Voir le diff** ou **Voi
 Le visualiseur de diff ne fonctionne que pour les fichiers texte. Les fichiers binaires (images, polices, etc.) afficheront un message "Fichier binaire" au lieu d'un diff.
 :::
 
+:::warning Restrictions d'accès
+La consultation du contenu des fichiers exige la permission **Voir** sur l'onglet Integrity Check de Sentinel ainsi qu'un abonnement actif incluant Integrity Check.
+
+Le visualiseur ne peut atteindre que des fichiers situés dans le répertoire de votre boutique. Tout chemin qui se résout en dehors est rejeté, y compris via un lien symbolique : la vérification porte sur le chemin réel sur le disque et non sur le chemin demandé, de sorte qu'un lien au nom anodin ne permet pas de sortir.
+
+Les fichiers contenant des identifiants ou des secrets ne sont jamais servis non plus, quel que soit le résultat du contrôle d'intégrité : `app/config/`, `config/settings*.php`, tout `parameters.php` / `parameters.yml`, les fichiers `.env`, `var/`, les répertoires de sauvegarde, `.git/`, ainsi que les fichiers `.sql` et `.log`.
+:::
+
 ### Fallback ZIP pour les modules
 
 Lorsque vous consultez le diff d'un fichier de module et que l'API Sentinel ne dispose pas des sources originales (par exemple, modules payants ou tiers dont seuls les hash sont disponibles), le visualiseur de diff affiche un message d'erreur accompagné d'une **zone d'upload ZIP intégrée**.

@@ -148,6 +148,14 @@ Each file in the results has a **View Diff** or **View File** button:
 The diff viewer works for text files only. Binary files (images, fonts, etc.) will show a "Binary file" message instead of a diff.
 :::
 
+:::warning Access restrictions
+Viewing file contents requires the **View** permission on the Sentinel Integrity Check tab and an active subscription including Integrity Check.
+
+The viewer can only reach files inside your shop directory. Any path resolving outside it is rejected, including through a symbolic link — resolution is checked against the real path on disk, not against the requested path, so a link with an innocent-looking name cannot escape.
+
+Files holding credentials or secrets are never served either, whatever the integrity check reported: `app/config/`, `config/settings*.php`, any `parameters.php` / `parameters.yml`, `.env` files, `var/`, backup directories, `.git/`, and `.sql` / `.log` files.
+:::
+
 ### ZIP Fallback for Modules
 
 When viewing a diff for a module file and the Sentinel API does not have the original sources (e.g., paid or third-party modules where only hashes are available), the diff viewer displays an error message along with an **inline ZIP upload area**.

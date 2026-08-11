@@ -12,10 +12,14 @@ Sentinel détecte et bloque automatiquement les requêtes malveillantes en utili
 
 ## Comment ça fonctionne
 
-1. **Analyse des requêtes** : Chaque requête HTTP est analysée avant d'atteindre PrestaShop
+1. **Analyse des requêtes** : Chaque requête HTTP est analysée avant d'atteindre PrestaShop — chaîne de requête, corps brut, champs de formulaire (y compris les envois `multipart/form-data`) et noms des fichiers téléversés. Le percent-encoding est d'abord défait, de sorte qu'encoder un caractère ne permet pas de dissimuler une charge.
 2. **Correspondance de motifs** : La requête est comparée aux signatures de menaces connues téléchargées depuis l'API Sentinel
 3. **Blocage instantané** : Si un motif malveillant est détecté, la requête est bloquée avec HTTP 403
 4. **Journalisation** : Toutes les attaques détectées sont enregistrées avec les détails (IP, URI, motif correspondant)
+
+:::note Requêtes surdimensionnées ou malformées
+La comparaison aux signatures s'exécute avec un budget de backtracking fixé par Sentinel, de sorte que le comportement ne dépend pas de la configuration PHP de votre hébergeur. Si une requête est construite pour que le moteur abandonne avant d'avoir terminé — une technique connue pour faire passer une charge à travers un filtrage par signatures — elle est traitée comme une menace et bloquée, jamais comme du trafic sain. Une signature qui ne compile pas est en revanche ignorée, afin qu'un motif défectueux ne puisse pas bloquer vos visiteurs.
+:::
 
 ## Mise à jour des signatures
 
