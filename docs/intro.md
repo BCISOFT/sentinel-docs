@@ -20,7 +20,7 @@ Sentinel is a security surveillance, threat detection, and vulnerability analysi
 - **Comprehensive logging**: Records all security events with detailed context for forensic analysis
 - **Vulnerability scanner**: Manual scanning for known vulnerabilities in modules and PrestaShop core
 - **File integrity check** *(Pro)*: Verifies that PrestaShop core and module files have not been tampered with
-- **Auto Prepend File protection** *(Pro)*: Protects against direct access to PHP files bypassing PrestaShop
+- **Auto Prepend File protection** *(Pro)*: Logs direct access to PHP files bypassing PrestaShop, and blocks those carrying a known attack
 - **Failed login logging**: Detects failed back-office login attempts
 - **POST/PUT/PATCH/DELETE request logging**: Records all modification requests with their payload
 - **Prerequisites check**: Verifies PHP configuration, extensions, and directory permissions against version-specific requirements

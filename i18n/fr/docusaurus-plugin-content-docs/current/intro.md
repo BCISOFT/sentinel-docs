@@ -20,7 +20,7 @@ Sentinel est un outil de surveillance, détection et analyse des menaces et vuln
 - **Logs complets** : Enregistre tous les événements de sécurité avec contexte détaillé pour analyse forensique
 - **Scanner de vulnérabilités** : Analyse manuelle des vulnérabilités connues dans les modules et le core PrestaShop
 - **Vérification d'intégrité des fichiers** *(Pro)* : Vérifie que les fichiers du core PrestaShop et des modules n'ont pas été altérés
-- **Protection Auto Prepend File** *(Pro)* : Protège contre les accès directs aux fichiers PHP contournant PrestaShop
+- **Protection Auto Prepend File** *(Pro)* : Journalise les accès directs aux fichiers PHP contournant PrestaShop, et bloque ceux qui portent une attaque connue
 - **Log des échecs de connexion** : Détecte les tentatives de connexion échouées au back-office
 - **Log des requêtes POST/PUT/PATCH/DELETE** : Enregistre toutes les requêtes de modification avec leur payload
 - **Vérification des prérequis** : Vérifie la configuration PHP, les extensions et les permissions des répertoires selon les exigences spécifiques à la version
@@ -109,7 +109,7 @@ Sentinel offre plusieurs couches de protection complémentaires :
 | **[Scanner de vulnérabilités](./features/vulnerability-scanner.md)** | Détecte les modules/core vulnérables        | Manuel via BO         |
 | **[Détection de signatures URI](./features/threat-detection.md)** | Bloque les patterns malveillants dans les requêtes | Automatique (Pro) |
 | **[Vérification d'intégrité](./features/integrity-check.md)** | Détecte les fichiers altérés                       | Manuel via BO (Pro)   |
-| **[Protection Auto Prepend File](./features/auto-prepend-protection.md)** | Protège contre accès directs aux fichiers PHP | Configuration (Pro) |
+| **[Protection Auto Prepend File](./features/auto-prepend-protection.md)** | Journalise les accès directs aux fichiers PHP et bloque les attaques | Configuration (Pro) |
 | **[Contrôle d'accès](./features/access-control.md)** | Restreint l'accès au back-office aux IP en liste blanche | Configuration |
 
 ---

@@ -119,7 +119,7 @@ Si le module ne parvient pas à s'activer :
 Pour une protection complète, activez la protection Auto Prepend File :
 
 1. Allez dans **Modules > Sentinel > Configuration**
-2. Cliquez sur **Installer Auto Prepend File**
+2. Cliquez sur **Tenter l'installation automatique**
 3. Si l'installation automatique échoue, suivez les [instructions manuelles](./features/auto-prepend-protection.md)
 
 ### 2. Lancer un scan de vulnérabilités
