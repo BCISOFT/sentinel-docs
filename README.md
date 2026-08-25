@@ -4,7 +4,7 @@ Documentation website for the Sentinel PrestaShop security module, built with [D
 
 ## 🌐 Live Site
 
-The documentation is available at: `https://your-username.github.io/sentinel-docs/`
+The documentation is available at: `https://bcisoft.github.io/sentinel-docs/`
 
 ## 🚀 Local Development
 
