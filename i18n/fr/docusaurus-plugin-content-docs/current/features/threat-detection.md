@@ -19,6 +19,8 @@ Sentinel détecte et bloque automatiquement les requêtes malveillantes en utili
 
 :::note Requêtes surdimensionnées ou malformées
 La comparaison aux signatures s'exécute avec un budget de backtracking fixé par Sentinel, de sorte que le comportement ne dépend pas de la configuration PHP de votre hébergeur. Si une requête est construite pour que le moteur abandonne avant d'avoir terminé — une technique connue pour faire passer une charge à travers un filtrage par signatures — elle est traitée comme une menace et bloquée, jamais comme du trafic sain. Une signature qui ne compile pas est en revanche ignorée, afin qu'un motif défectueux ne puisse pas bloquer vos visiteurs.
+
+Une exception : lorsque le moteur abandonne sur une requête provenant du back-office avec une session employé connectée, la requête n'est **pas** bloquée. Un formulaire d'administration volumineux peut épuiser le budget d'une signature gourmande sans rien transporter d'hostile, et bloquer coûterait une page à votre équipe pour un contrôle qui n'a jamais abouti. L'événement est enregistré dans les journaux de sécurité sous le type **Contrôle non effectué**, avec la signature concernée et la raison pour laquelle le contrôle n'a pas pu être mené à terme. Une signature qui correspond réellement bloque toujours la requête, session employé ou non.
 :::
 
 ## Mise à jour des signatures

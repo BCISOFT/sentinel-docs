@@ -19,6 +19,8 @@ Sentinel detects and blocks malicious requests automatically using signature-bas
 
 :::note Oversized or malformed requests
 Pattern matching runs with a backtracking budget set by Sentinel, so behaviour does not depend on your host's PHP configuration. If a request is crafted so that the matching engine gives up before finishing — a known way of slipping a payload past signature-based filters — the request is treated as a threat and blocked, never as clean traffic. A signature that fails to compile is ignored instead, so a faulty pattern cannot block your visitors.
+
+One exception: when the engine gives up on a request coming from the back office with a signed-in employee session, the request is **not** blocked. A very large back-office form can exhaust the budget of a greedy signature without carrying anything hostile, and blocking there would cost your team a page over a check that never reached a conclusion. The event is recorded in the security logs as **Detection Skipped**, with the signature involved and the reason the check could not be completed. A signature that actually matches still blocks the request, employee session or not.
 :::
 
 ## Signature Updates

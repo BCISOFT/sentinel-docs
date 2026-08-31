@@ -87,7 +87,32 @@ Requêtes de modification/suppression via API :
 }
 ```
 
-### 5. Auto Prepend File
+### 5. Contrôle non effectué
+
+Lorsqu'une signature n'a pas pu être évaluée sur une requête du back-office émise par un employé
+connecté. Le moteur de correspondance a épuisé ses ressources — un formulaire volumineux peut
+consommer tout le budget de backtracking d'une signature gourmande — et le contrôle n'a donc
+abouti à aucune conclusion. La requête est laissée passer et l'événement est enregistré avec sa
+raison :
+
+```json
+[2025-12-17 15:02:41] [WARNING] SIGNATURE CHECK SKIPPED - Pattern: (.*)=(.*)x_(.*)x$ - PREG_BACKTRACK_LIMIT_ERROR: the pattern could not be evaluated on this request, trusted back-office session, request not blocked
+{
+  "ip": "192.168.1.10",
+  "uri": "/admin-dev/index.php?controller=AdminCustomers",
+  "method": "POST",
+  "engine_failure": "PREG_BACKTRACK_LIMIT_ERROR",
+  "inspected_length": 26043,
+  "attack_pattern": "(.*)=(.*)x_(.*)x$",
+  "user_agent": "Mozilla/5.0...",
+  "timestamp": "2025-12-17 15:02:41"
+}
+```
+
+Hors session employé authentifiée, le même abandon du moteur bloque la requête. Une signature qui
+correspond réellement bloque toujours, session employé ou non.
+
+### 6. Auto Prepend File
 
 Accès directs aux fichiers PHP (voir [Protection Auto Prepend](./auto-prepend-protection.md)) :
 
@@ -133,8 +158,8 @@ chaque événement a été bloqué :
 - **Bloqué** : la requête a été stoppée par Sentinel (HTTP 403). Les attaques
   détectées sont toujours bloquées.
 - **Non bloqué** : l'événement a uniquement été enregistré (par exemple les
-  échecs de connexion ou les requêtes POST/PUT/PATCH/DELETE journalisées), la
-  requête a été autorisée à poursuivre.
+  échecs de connexion, les requêtes POST/PUT/PATCH/DELETE journalisées ou un
+  événement **Contrôle non effectué**), la requête a été autorisée à poursuivre.
 
 Le même statut est affiché dans la fenêtre de détails de l'événement.
 
@@ -152,6 +177,7 @@ php bin/console sentinel:logs
 
 ```bash
 php bin/console sentinel:logs --type=attack
+php bin/console sentinel:logs --type=detection_skipped
 php bin/console sentinel:logs --type=login_failed
 php bin/console sentinel:logs --type=post_request
 ```

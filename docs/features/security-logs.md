@@ -87,7 +87,31 @@ Modification/deletion requests via API:
 }
 ```
 
-### 5. Auto Prepend File
+### 5. Detection Skipped
+
+When a signature could not be evaluated on a back-office request made by a signed-in employee.
+The pattern matching engine ran out of resources — a very large form can exhaust the backtracking
+budget of a greedy signature — so the check reached no conclusion. The request is let through and
+the event is recorded with the reason:
+
+```json
+[2025-12-17 15:02:41] [WARNING] SIGNATURE CHECK SKIPPED - Pattern: (.*)=(.*)x_(.*)x$ - PREG_BACKTRACK_LIMIT_ERROR: the pattern could not be evaluated on this request, trusted back-office session, request not blocked
+{
+  "ip": "192.168.1.10",
+  "uri": "/admin-dev/index.php?controller=AdminCustomers",
+  "method": "POST",
+  "engine_failure": "PREG_BACKTRACK_LIMIT_ERROR",
+  "inspected_length": 26043,
+  "attack_pattern": "(.*)=(.*)x_(.*)x$",
+  "user_agent": "Mozilla/5.0...",
+  "timestamp": "2025-12-17 15:02:41"
+}
+```
+
+Outside an authenticated back-office session, the same aborted check blocks the request instead.
+A signature that actually matches always blocks, employee session or not.
+
+### 6. Auto Prepend File
 
 Direct PHP file access (see [Auto Prepend Protection](./auto-prepend-protection.md)):
 
@@ -132,8 +156,9 @@ event was blocked:
 
 - **Blocked**: the request was stopped by Sentinel (HTTP 403). Detected attacks
   are always blocked.
-- **Not blocked**: the event was only recorded (for example failed logins or
-  logged POST/PUT/PATCH/DELETE requests), the request was allowed to proceed.
+- **Not blocked**: the event was only recorded (for example failed logins,
+  logged POST/PUT/PATCH/DELETE requests, or a **Detection Skipped** event), the
+  request was allowed to proceed.
 
 The same status is shown in the event details dialog.
 
@@ -151,6 +176,7 @@ php bin/console sentinel:logs
 
 ```bash
 php bin/console sentinel:logs --type=attack
+php bin/console sentinel:logs --type=detection_skipped
 php bin/console sentinel:logs --type=login_failed
 php bin/console sentinel:logs --type=post_request
 ```
