@@ -90,6 +90,34 @@ You should see a page blocked by Sentinel with a 403 error.
 Only test with benign patterns and on your own store. Never attempt real attacks.
 :::
 
+## Updating Sentinel
+
+### Update Notifications
+
+Sentinel tells you when a newer version is published. Every call the module makes to the Sentinel API answers with the latest published version, so the check costs no extra request and needs no configuration.
+
+When your installed version is behind, a banner appears at the top of every Sentinel page with:
+
+- the published version number and the one you are running
+- a link to the release page to download the update
+- a link to the changelog, when one is available
+
+The PrestaShop home dashboard widget carries the same notice as a single line linking to the release.
+
+Dismissing the banner hides it until the next version is published; the widget line stays, so a pending update is never entirely out of sight.
+
+:::note
+The banner relies on the module reaching the Sentinel API. A store whose outbound calls are blocked never sees it, so check the [releases page](https://github.com/bcisoft/sentinel-docs/releases) from time to time.
+:::
+
+### Applying the Update
+
+1. Download the new version from the [releases page](https://github.com/bcisoft/sentinel-docs/releases)
+2. Go to **Modules > Module Manager**
+3. Click **Upload a module** and select the new ZIP file
+
+Your settings, logs and whitelists are preserved.
+
 ## Troubleshooting
 
 ### Permission Errors

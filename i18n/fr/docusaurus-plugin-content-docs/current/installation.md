@@ -90,6 +90,34 @@ Vous devriez voir une page bloquée par Sentinel avec une erreur 403.
 Testez uniquement avec des modèles bénins et sur votre propre boutique. Ne tentez jamais de vraies attaques.
 :::
 
+## Mettre à jour Sentinel
+
+### Notifications de mise à jour
+
+Sentinel vous prévient lorsqu'une nouvelle version est publiée. Chaque appel du module à l'API Sentinel répond avec la dernière version publiée : la vérification ne coûte aucune requête supplémentaire et ne demande aucune configuration.
+
+Lorsque votre version installée est en retard, un bandeau apparaît en haut de chaque page Sentinel avec :
+
+- le numéro de la version publiée et celui de la version que vous utilisez
+- un lien vers la page de release pour télécharger la mise à jour
+- un lien vers le journal des modifications, lorsqu'il est disponible
+
+Le widget Sentinel du tableau de bord PrestaShop reprend la même information sur une ligne, qui renvoie vers la release.
+
+Masquer le bandeau le cache jusqu'à la publication de la version suivante ; la ligne du widget, elle, reste affichée, pour qu'une mise à jour en attente ne disparaisse jamais complètement.
+
+:::note
+Le bandeau dépend de la capacité du module à joindre l'API Sentinel. Une boutique dont les appels sortants sont bloqués ne le verra jamais : consultez alors régulièrement la [page des releases](https://github.com/bcisoft/sentinel-docs/releases).
+:::
+
+### Appliquer la mise à jour
+
+1. Téléchargez la nouvelle version sur la [page des releases](https://github.com/bcisoft/sentinel-docs/releases)
+2. Allez dans **Modules > Gestionnaire de modules**
+3. Cliquez sur **Charger un module** et sélectionnez le nouveau fichier ZIP
+
+Vos réglages, journaux et listes blanches sont conservés.
+
 ## Dépannage
 
 ### Erreurs de permissions
