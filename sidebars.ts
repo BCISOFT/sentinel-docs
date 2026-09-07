@@ -33,6 +33,7 @@ const sidebars: SidebarsConfig = {
           className: 'menu-item-pro',
         },
         'features/access-control',
+        'features/two-factor-authentication',
       ],
     },
     {

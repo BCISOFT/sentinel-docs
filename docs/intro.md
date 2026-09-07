@@ -110,6 +110,7 @@ Sentinel offers several complementary protection layers:
 | **[File Integrity Check](./features/integrity-check.md)** | Detects tampered files                  | Manual via BO (Pro)    |
 | **[Auto Prepend File Protection](./features/auto-prepend-protection.md)** | Protects against direct PHP file access | Configuration (Pro) |
 | **[Access Control](./features/access-control.md)** | Restricts back-office access to whitelisted IPs | Configuration |
+| **[Two-Factor Authentication](./features/two-factor-authentication.md)** | Asks employees for a one-time code from an authenticator app | Manual, per employee |
 
 ---
 

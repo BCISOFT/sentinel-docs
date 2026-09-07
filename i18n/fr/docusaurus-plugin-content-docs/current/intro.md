@@ -111,6 +111,7 @@ Sentinel offre plusieurs couches de protection complémentaires :
 | **[Vérification d'intégrité](./features/integrity-check.md)** | Détecte les fichiers altérés                       | Manuel via BO (Pro)   |
 | **[Protection Auto Prepend File](./features/auto-prepend-protection.md)** | Journalise les accès directs aux fichiers PHP et bloque les attaques | Configuration (Pro) |
 | **[Contrôle d'accès](./features/access-control.md)** | Restreint l'accès au back-office aux IP en liste blanche | Configuration |
+| **[Double authentification](./features/two-factor-authentication.md)** | Demande aux employés un code à usage unique fourni par une application d'authentification | Manuel, par employé |
 
 ---
 
