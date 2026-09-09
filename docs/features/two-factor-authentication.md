@@ -56,6 +56,47 @@ A few rules keep the code safe to use:
 - A small difference between your phone's clock and the store's clock is tolerated, so you don't get locked out over a few seconds.
 - After six wrong codes in a row, the address trying to sign in is blocked, and the attempt is recorded.
 
+## Passkeys: Touch ID, Windows Hello, your phone
+
+Alongside your authenticator app, you can register a **passkey** — the fingerprint, the face or the PIN your computer or phone already uses to unlock itself. Touch ID on a Mac, Windows Hello on a PC, the screen lock on an Android or an iPhone.
+
+Like the rest of two-factor authentication, passkeys are **free**.
+
+:::warning What a passkey does today
+A passkey can be **added and removed**, and it appears in **My methods** with its label and the date you registered it. **Signing in with it is not available yet** — that arrives in a following version. Until then, the sign-in screen keeps asking for the six-digit code from your authenticator app.
+
+For the same reason, a passkey **does not yet satisfy a profile requirement**: if your profile is set to *Required*, you still need an authenticator app enrolled. Adding a passkey is preparation, not protection — not yet.
+:::
+
+### Adding one
+
+From **Sentinel > Two-Factor Authentication > My methods** — or from the enrollment page at `sentinel/account/two-factor`, which any signed-in employee can reach:
+
+1. **Prove the second factor you already have.** Before registering anything new, Sentinel asks for a fresh code from your authenticator app, or one of your recovery codes. It is the same proof you would give to sign in - and a recovery code given here is spent like any other, one of your ten rather than an extra - and it is what stops somebody who found your session unattended from quietly adding a key of their own. If you have no confirmed method at all yet, nothing is asked: your very first method is registered without it.
+2. **Choose "Add a passkey"**, and give it a name you will recognise later — "MacBook Touch ID", "Work PC". The name is for you alone; it is what the list will show.
+3. **Confirm on your device.** Your browser opens its own dialog, and your machine asks for your fingerprint, your face or your PIN. Only a public key ever reaches your store: the fingerprint itself never leaves your device, and neither does anything that could reconstruct it.
+4. **Check the list.** The passkey now appears in **My methods** with its label and its date. Your authenticator app and your recovery codes are untouched, and still work exactly as before — adding a method never takes one away.
+
+If the browser dialog never appears, the page says so rather than leaving you waiting. The usual causes: the back office is not served over HTTPS (browsers refuse passkeys otherwise), the browser is too old, or the device has no fingerprint reader, no face camera and no PIN set up.
+
+### One device, one entry
+
+A passkey already registered on your account cannot be registered a second time: your device recognises it and says so, instead of offering to create a duplicate. And a passkey already known to the shop — including one registered on **another employee's** account — is refused, with a message that says why.
+
+### Removing one
+
+From **My methods**, remove the passkey and confirm. As with adding, a fresh proof of your second factor is asked first - a code from your authenticator app, or one of your recovery codes when the app is the thing you no longer have.
+
+Removing one never leaves you locked out: if the passkey were your last confirmed method and your profile requires two-factor authentication, the removal is refused and you are sent to enroll something else first.
+
+### The address your back office is served at matters
+
+A passkey is tied to the domain where your back office answers. Move your shop to another domain and the passkeys registered under the old one stop being offered — each employee registers a new one. Two advanced settings let an administrator state that domain, and the addresses accepted alongside it, by hand: useful when the shop sits behind a proxy that hides them. Left empty, they are derived from your shop's own URLs, and a shop that has never touched them registers passkeys just fine.
+
+### What Sentinel records about passkeys
+
+Every passkey registered, refused or removed is written to the [Security Logs](./security-logs.md), with the address the request came from. The credential's identifier is never written there in clear.
+
 ## Requiring it for a profile
 
 As long as nothing is required, protection depends on each employee's goodwill. The **Policy** tab of **Sentinel > Two-Factor Authentication** lets you require two-factor authentication for the employees of a profile, and give them a window to set it up before it becomes mandatory. Like the rest of the feature, this is free.

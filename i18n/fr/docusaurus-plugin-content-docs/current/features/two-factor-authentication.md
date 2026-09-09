@@ -56,6 +56,47 @@ Quelques règles rendent ce code sûr à utiliser :
 - Un petit décalage entre l'horloge de votre téléphone et celle de la boutique est toléré, pour ne pas vous bloquer pour quelques secondes d'écart.
 - Après six codes erronés d'affilée, l'adresse qui tente de se connecter est bloquée, et la tentative est enregistrée.
 
+## Passkeys : Touch ID, Windows Hello, votre téléphone
+
+À côté de votre application d'authentification, vous pouvez enregistrer une **passkey** — l'empreinte, le visage ou le code PIN dont votre ordinateur ou votre téléphone se sert déjà pour se déverrouiller. Touch ID sur un Mac, Windows Hello sur un PC, le verrouillage d'écran d'un Android ou d'un iPhone.
+
+Comme le reste de la double authentification, les passkeys sont **gratuites**.
+
+:::warning Ce qu'une passkey fait aujourd'hui
+Une passkey peut être **ajoutée et retirée**, et elle apparaît dans **Mes méthodes** avec son libellé et sa date d'enregistrement. **Se connecter avec n'est pas encore possible** — cela arrive dans une version suivante. D'ici là, l'écran de connexion continue de demander le code à six chiffres de votre application d'authentification.
+
+Pour la même raison, une passkey **ne satisfait pas encore une obligation de profil** : si votre profil est réglé sur *Obligatoire*, il vous faut toujours une application d'authentification enrôlée. Ajouter une passkey, c'est préparer le terrain, pas encore se protéger.
+:::
+
+### En ajouter une
+
+Depuis **Sentinel > Double authentification > Mes méthodes** — ou depuis la page d'enrôlement `sentinel/account/two-factor`, accessible à tout employé connecté :
+
+1. **Prouvez le second facteur que vous avez déjà.** Avant d'enregistrer quoi que ce soit de nouveau, Sentinel demande un code frais de votre application d'authentification, ou l'un de vos codes de secours. C'est la même preuve que pour vous connecter - et un code de secours donné ici est consommé comme un autre, l'un de vos dix et non un supplément - et c'est elle qui empêche quelqu'un ayant trouvé votre session ouverte d'y ajouter discrètement sa propre clé. Si vous n'avez encore aucune méthode confirmée, rien ne vous est demandé : votre toute première méthode s'enregistre sans cette preuve.
+2. **Choisissez « Ajouter une passkey »**, et donnez-lui un nom que vous reconnaîtrez plus tard — « Touch ID du MacBook », « PC du bureau ». Ce nom n'est que pour vous ; c'est lui que la liste affichera.
+3. **Confirmez sur votre appareil.** Votre navigateur ouvre sa propre boîte de dialogue, et votre machine vous demande votre empreinte, votre visage ou votre code PIN. Seule une clé publique parvient jusqu'à votre boutique : l'empreinte elle-même ne quitte jamais votre appareil, et rien de ce qui permettrait de la reconstituer non plus.
+4. **Vérifiez la liste.** La passkey figure maintenant dans **Mes méthodes**, avec son libellé et sa date. Votre application d'authentification et vos codes de secours sont intacts et fonctionnent exactement comme avant — ajouter une méthode n'en retire jamais une autre.
+
+Si la boîte de dialogue du navigateur n'apparaît jamais, la page vous le dit plutôt que de vous laisser attendre. Les causes habituelles : le back-office n'est pas servi en HTTPS (les navigateurs refusent les passkeys sinon), le navigateur est trop ancien, ou l'appareil n'a ni lecteur d'empreinte, ni caméra de reconnaissance faciale, ni code PIN configuré.
+
+### Un appareil, une entrée
+
+Une passkey déjà enregistrée sur votre compte ne peut pas l'être une seconde fois : votre appareil la reconnaît et le signale, au lieu de vous proposer d'en créer un doublon. Et une passkey déjà connue de la boutique — y compris enregistrée sur le compte d'**un autre employé** — est refusée, avec un message qui dit pourquoi.
+
+### En retirer une
+
+Depuis **Mes méthodes**, supprimez la passkey et confirmez. Comme pour l'ajout, une preuve fraîche de votre second facteur est demandée d'abord : un code de votre application d'authentification, ou l'un de vos codes de secours quand c'est justement l'application que vous n'avez plus.
+
+Ce retrait ne vous met jamais dehors : si cette passkey était votre dernière méthode confirmée et que votre profil impose la double authentification, la suppression est refusée et vous êtes renvoyé vers l'enrôlement d'une autre méthode.
+
+### L'adresse à laquelle votre back-office répond compte
+
+Une passkey est liée au domaine sur lequel votre back-office répond. Déplacez votre boutique sur un autre domaine, et les passkeys enregistrées sous l'ancien cessent d'être proposées — chaque employé en enregistre une nouvelle. Deux réglages avancés permettent à un administrateur d'indiquer ce domaine, et les adresses acceptées à côté, à la main : utile quand la boutique se trouve derrière un proxy qui les masque. Laissés vides, ils sont déduits des URL de votre boutique, et une boutique qui n'y a jamais touché enregistre ses passkeys sans rien régler.
+
+### Ce qui est enregistré pour les passkeys
+
+Chaque passkey enregistrée, refusée ou retirée est consignée dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande. L'identifiant du credential n'y est jamais écrit en clair.
+
 ## L'imposer à un profil
 
 Tant que rien n'est imposé, la protection dépend de la bonne volonté de chacun. L'onglet **Politique** de **Sentinel > Double authentification** permet de rendre la double authentification obligatoire pour les employés d'un profil, en leur laissant un délai pour la mettre en place avant qu'elle ne s'impose. Comme le reste de la fonctionnalité, c'est gratuit.
