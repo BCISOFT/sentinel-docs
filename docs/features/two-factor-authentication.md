@@ -62,10 +62,10 @@ Alongside your authenticator app, you can register a **passkey** — the fingerp
 
 Like the rest of two-factor authentication, passkeys are **free**.
 
-:::warning What a passkey does today
-A passkey can be **added and removed**, and it appears in **My methods** with its label and the date you registered it. **Signing in with it is not available yet** — that arrives in a following version. Until then, the sign-in screen keeps asking for the six-digit code from your authenticator app.
+A passkey **satisfies a profile requirement on its own**: if your profile is set to *Required*, having a passkey enrolled is enough — you do not also need an authenticator app.
 
-For the same reason, a passkey **does not yet satisfy a profile requirement**: if your profile is set to *Required*, you still need an authenticator app enrolled. Adding a passkey is preparation, not protection — not yet.
+:::warning Passkeys need a secure connection
+Browsers only offer passkeys over HTTPS. If your back office is served over plain HTTP, "Add a passkey" does not appear at all, and the enrollment page explains why instead of leaving you looking for it. The [prerequisites check](./prerequisites-check.md) also flags a missing secure origin, so an administrator sees it without having to reach the enrollment page first.
 :::
 
 ### Adding one
@@ -78,6 +78,12 @@ From **Sentinel > Two-Factor Authentication > My methods** — or from the enrol
 4. **Check the list.** The passkey now appears in **My methods** with its label and its date. Your authenticator app and your recovery codes are untouched, and still work exactly as before — adding a method never takes one away.
 
 If the browser dialog never appears, the page says so rather than leaving you waiting. The usual causes: the back office is not served over HTTPS (browsers refuse passkeys otherwise), the browser is too old, or the device has no fingerprint reader, no face camera and no PIN set up.
+
+### Signing in with a passkey
+
+Once you have registered one, the sign-in screen offers it above the six-digit code field: confirm with your fingerprint, your face or your PIN, and you are in — no code to read or type. Your authenticator app is not replaced; both stay enrolled, and you choose either one at each sign-in.
+
+Recovery codes work with a passkey exactly as they do with an authenticator app: if you also have none of those ten codes left, **My methods** offers to generate a fresh set once you have confirmed your passkey.
 
 ### One device, one entry
 
@@ -92,6 +98,12 @@ Removing one never leaves you locked out: if the passkey were your last confirme
 ### The address your back office is served at matters
 
 A passkey is tied to the domain where your back office answers. Move your shop to another domain and the passkeys registered under the old one stop being offered — each employee registers a new one. Two advanced settings let an administrator state that domain, and the addresses accepted alongside it, by hand: useful when the shop sits behind a proxy that hides them. Left empty, they are derived from your shop's own URLs, and a shop that has never touched them registers passkeys just fine.
+
+If your shop sits behind a reverse proxy that terminates HTTPS — the proxy talks HTTPS to the outside world and plain HTTP to your store — you **must** state that domain by hand in those two settings. Without it, Sentinel cannot tell what address your employees actually see in their browser, and rather than guess, it does not offer passkeys at all.
+
+:::warning One passkey, one domain
+If your shop answers on several domains — several shops in one multistore install, or the same shop reachable under more than one address — a passkey registered under one domain is not offered under another: each domain needs its own. A warning says so on the enrollment page. If your employees move between domains, the authenticator app stays the one method that works everywhere.
+:::
 
 ### What Sentinel records about passkeys
 

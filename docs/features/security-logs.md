@@ -135,6 +135,35 @@ Direct PHP file access (see [Auto Prepend Protection](./auto-prepend-protection.
 }
 ```
 
+### 7. Two-Factor: Passkey Clone Suspected
+
+When an employee signs in with a passkey and the authenticator's signature
+counter does not strictly increase compared to the value stored at the last
+successful use. Compliant authenticators increment this counter on every
+assertion, so a value that stays the same or goes backward means the
+credential may have been cloned - either the genuine authenticator and a copy
+of it are both signing, or a captured assertion is being replayed:
+
+```json
+[2025-12-17 16:20:03] [WARNING] TWO-FACTOR CLONE SUSPECTED
+{
+  "id_employee": 3,
+  "credential": "a1b2c3d4",
+  "stored": 42,
+  "received": 42,
+  "timestamp": "2025-12-17 16:20:03"
+}
+```
+
+The assertion is refused and the failed attempt is counted like any other
+failed challenge, but **the credential itself is not revoked automatically** -
+deleting it on this signal alone would let an attacker who merely replayed a
+captured assertion strip the legitimate employee of their passkey. This is a
+warning to act on, not an automatic sanction: when this event appears, the
+merchant should treat the passkey as possibly compromised and have the
+employee remove and re-register it from **Sentinel > Two-Factor Authentication
+> My methods**.
+
 ## Log Rotation
 
 - **Frequency**: Daily (new file each day)

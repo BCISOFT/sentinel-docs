@@ -62,10 +62,10 @@ Quelques règles rendent ce code sûr à utiliser :
 
 Comme le reste de la double authentification, les passkeys sont **gratuites**.
 
-:::warning Ce qu'une passkey fait aujourd'hui
-Une passkey peut être **ajoutée et retirée**, et elle apparaît dans **Mes méthodes** avec son libellé et sa date d'enregistrement. **Se connecter avec n'est pas encore possible** — cela arrive dans une version suivante. D'ici là, l'écran de connexion continue de demander le code à six chiffres de votre application d'authentification.
+Une passkey **satisfait à elle seule une obligation de profil** : si votre profil est réglé sur *Obligatoire*, avoir une passkey enrôlée suffit — pas besoin d'avoir aussi une application d'authentification.
 
-Pour la même raison, une passkey **ne satisfait pas encore une obligation de profil** : si votre profil est réglé sur *Obligatoire*, il vous faut toujours une application d'authentification enrôlée. Ajouter une passkey, c'est préparer le terrain, pas encore se protéger.
+:::warning Les passkeys demandent une connexion sécurisée
+Les navigateurs ne proposent les passkeys qu'en HTTPS. Si votre back-office est servi en HTTP simple, « Ajouter une passkey » n'apparaît pas du tout, et la page d'enrôlement explique pourquoi plutôt que de vous laisser chercher. Le [contrôle des prérequis](./prerequisites-check.md) signale lui aussi l'absence d'origine sécurisée, pour qu'un administrateur la voie sans avoir à passer d'abord par la page d'enrôlement.
 :::
 
 ### En ajouter une
@@ -78,6 +78,12 @@ Depuis **Sentinel > Double authentification > Mes méthodes** — ou depuis la p
 4. **Vérifiez la liste.** La passkey figure maintenant dans **Mes méthodes**, avec son libellé et sa date. Votre application d'authentification et vos codes de secours sont intacts et fonctionnent exactement comme avant — ajouter une méthode n'en retire jamais une autre.
 
 Si la boîte de dialogue du navigateur n'apparaît jamais, la page vous le dit plutôt que de vous laisser attendre. Les causes habituelles : le back-office n'est pas servi en HTTPS (les navigateurs refusent les passkeys sinon), le navigateur est trop ancien, ou l'appareil n'a ni lecteur d'empreinte, ni caméra de reconnaissance faciale, ni code PIN configuré.
+
+### Se connecter avec une passkey
+
+Une fois que vous en avez enregistré une, l'écran de connexion la propose au-dessus du champ du code à six chiffres : confirmez avec votre empreinte, votre visage ou votre code PIN, et vous êtes entré — aucun code à lire ni à saisir. Votre application d'authentification n'est pas remplacée : les deux restent enrôlées, et vous choisissez l'une ou l'autre à chaque connexion.
+
+Les codes de secours fonctionnent avec une passkey exactement comme avec une application d'authentification : s'il ne vous en reste aucun des dix, **Mes méthodes** propose d'en régénérer un nouveau jeu une fois votre passkey confirmée.
 
 ### Un appareil, une entrée
 
@@ -92,6 +98,12 @@ Ce retrait ne vous met jamais dehors : si cette passkey était votre dernière m
 ### L'adresse à laquelle votre back-office répond compte
 
 Une passkey est liée au domaine sur lequel votre back-office répond. Déplacez votre boutique sur un autre domaine, et les passkeys enregistrées sous l'ancien cessent d'être proposées — chaque employé en enregistre une nouvelle. Deux réglages avancés permettent à un administrateur d'indiquer ce domaine, et les adresses acceptées à côté, à la main : utile quand la boutique se trouve derrière un proxy qui les masque. Laissés vides, ils sont déduits des URL de votre boutique, et une boutique qui n'y a jamais touché enregistre ses passkeys sans rien régler.
+
+Si votre boutique se trouve derrière un reverse-proxy qui termine le HTTPS — le proxy parle HTTPS vers l'extérieur et HTTP simple vers votre boutique — vous **devez** indiquer ce domaine à la main dans ces deux réglages. Sans cela, Sentinel ne peut pas savoir quelle adresse vos employés voient réellement dans leur navigateur, et plutôt que de deviner, il ne propose pas les passkeys du tout.
+
+:::warning Une passkey, un domaine
+Si votre boutique répond sur plusieurs domaines — plusieurs boutiques dans une installation multiboutique, ou une même boutique accessible sous plus d'une adresse — une passkey enregistrée sous un domaine n'est pas proposée sous un autre : chaque domaine a besoin de la sienne. Un avertissement le rappelle sur la page d'enrôlement. Si vos employés circulent entre les domaines, l'application d'authentification reste la méthode qui fonctionne partout.
+:::
 
 ### Ce qui est enregistré pour les passkeys
 

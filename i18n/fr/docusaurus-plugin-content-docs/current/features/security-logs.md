@@ -136,6 +136,34 @@ Accès directs aux fichiers PHP (voir [Protection Auto Prepend](./auto-prepend-p
 }
 ```
 
+### 7. Deux facteurs : suspicion de clonage de passkey
+
+Lorsqu'un employé se connecte avec une passkey et que le compteur de signature de
+l'authentificateur n'augmente pas strictement par rapport à la valeur enregistrée lors
+de la dernière utilisation réussie. Les authentificateurs conformes incrémentent ce
+compteur à chaque assertion : une valeur qui stagne ou régresse signale que la
+credential pourrait avoir été clonée — soit l'authentificateur légitime et une copie
+signent tous les deux, soit une assertion capturée est rejouée :
+
+```json
+[2025-12-17 16:20:03] [WARNING] TWO-FACTOR CLONE SUSPECTED
+{
+  "id_employee": 3,
+  "credential": "a1b2c3d4",
+  "stored": 42,
+  "received": 42,
+  "timestamp": "2025-12-17 16:20:03"
+}
+```
+
+L'assertion est refusée et l'échec est compté comme n'importe quel autre échec de défi,
+mais **la credential elle-même n'est pas révoquée automatiquement** — la supprimer sur
+ce seul signal permettrait à un attaquant qui a simplement rejoué une assertion capturée
+de priver l'employé légitime de sa passkey. C'est un avertissement à traiter, pas une
+sanction automatique : quand cet événement apparaît, le marchand doit considérer la
+passkey comme potentiellement compromise et faire retirer puis réenregistrer la
+credential par l'employé depuis **Sentinel > Double authentification > Mes méthodes**.
+
 ## Rotation des logs
 
 - **Fréquence** : Quotidienne (nouveau fichier chaque jour)
