@@ -109,6 +109,53 @@ Si votre boutique répond sur plusieurs domaines — plusieurs boutiques dans un
 
 Chaque passkey enregistrée, refusée ou retirée est consignée dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande. L'identifiant du credential n'y est jamais écrit en clair.
 
+## Clés de sécurité FIDO2 : YubiKey, Token2, Nitrokey…
+
+Vous pouvez aussi enregistrer une **clé de sécurité FIDO2** — un petit appareil physique, généralement branché en USB ou approché en NFC, dédié à cette seule preuve. Sentinel accepte n'importe quelle clé conforme à la norme FIDO2/WebAuthn : YubiKey, Token2, Nitrokey, et les autres marques du marché.
+
+Comme le reste de la double authentification, les clés de sécurité sont **gratuites**.
+
+Une clé de sécurité **satisfait à elle seule une obligation de profil** : si votre profil est réglé sur *Obligatoire*, avoir une clé enrôlée suffit — pas besoin d'avoir aussi une application d'authentification.
+
+:::warning Les clés de sécurité demandent une connexion sécurisée
+Les navigateurs ne proposent les clés de sécurité qu'en HTTPS. Si votre back-office est servi en HTTP simple, l'entrée « Clé de sécurité » de la fenêtre « Ajouter une méthode » est indisponible et dit pourquoi, et la page d'enrôlement l'explique aussi plutôt que de vous laisser chercher. Le [contrôle des prérequis](./prerequisites-check.md) signale lui aussi l'absence d'origine sécurisée, pour qu'un administrateur la voie sans avoir à passer d'abord par la page d'enrôlement.
+:::
+
+### En ajouter une
+
+Depuis **Sentinel > Double authentification > Mes méthodes** — ou depuis la page d'enrôlement `sentinel/account/two-factor`, accessible à tout employé connecté :
+
+1. **Prouvez le second facteur que vous avez déjà.** Avant d'enregistrer quoi que ce soit de nouveau, Sentinel demande un code frais de votre application d'authentification, ou l'un de vos codes de secours. C'est la même preuve que pour vous connecter - et un code de secours donné ici est consommé comme un autre, l'un de vos dix et non un supplément - et c'est elle qui empêche quelqu'un ayant trouvé votre session ouverte d'y ajouter discrètement sa propre clé. Si vous n'avez encore aucune méthode confirmée, rien ne vous est demandé : votre toute première méthode s'enregistre sans cette preuve.
+2. **Cliquez sur « Ajouter une méthode » puis choisissez « Clé de sécurité »** dans la fenêtre qui s'ouvre, et donnez-lui un nom que vous reconnaîtrez plus tard — « YubiKey du bureau », « Clé de secours ». Ce nom n'est que pour vous ; c'est lui que la liste affichera.
+3. **Confirmez avec votre clé.** Votre navigateur ouvre sa propre boîte de dialogue et vous invite à brancher ou approcher votre clé, puis à la toucher. Seule une clé publique parvient jusqu'à votre boutique : rien de ce qui permettrait de reconstituer votre clé physique ne quitte jamais l'appareil.
+4. **Vérifiez la liste.** La clé de sécurité figure maintenant dans **Mes méthodes**, avec son libellé et sa date. Votre application d'authentification et vos autres méthodes sont intactes et fonctionnent exactement comme avant — ajouter une méthode n'en retire jamais une autre.
+
+Si la boîte de dialogue du navigateur n'apparaît jamais, la page vous le dit plutôt que de vous laisser attendre. Les causes habituelles : le back-office n'est pas servi en HTTPS (les navigateurs refusent les clés de sécurité sinon), le navigateur est trop ancien, ou la clé n'est pas branchée ou approchée à temps.
+
+### Se connecter avec une clé de sécurité
+
+Une fois que vous en avez enregistré une, l'écran de connexion la propose au-dessus du champ du code à six chiffres : branchez ou approchez votre clé, touchez-la, et vous êtes entré — aucun code à lire ni à saisir. Votre application d'authentification n'est pas remplacée : les deux restent enrôlées, et vous choisissez l'une ou l'autre à chaque connexion.
+
+Les codes de secours fonctionnent avec une clé de sécurité exactement comme avec une application d'authentification : s'il ne vous en reste aucun des dix, **Mes méthodes** propose d'en régénérer un nouveau jeu une fois votre clé confirmée.
+
+### Une clé, une entrée
+
+Une clé de sécurité déjà enregistrée sur votre compte ne peut pas l'être une seconde fois : elle est reconnue et le signale, au lieu de vous proposer d'en créer un doublon. Et une clé déjà connue de la boutique — y compris enregistrée sur le compte d'**un autre employé** — est refusée, avec un message qui dit pourquoi.
+
+### En retirer une
+
+Depuis **Mes méthodes**, supprimez la clé de sécurité et confirmez. Comme pour l'ajout, une preuve fraîche de votre second facteur est demandée d'abord : un code de votre application d'authentification, ou l'un de vos codes de secours quand c'est justement l'application que vous n'avez plus.
+
+Ce retrait ne vous met jamais dehors : si cette clé était votre dernière méthode confirmée et que votre profil impose la double authentification, la suppression est refusée et vous êtes renvoyé vers l'enrôlement d'une autre méthode.
+
+### L'adresse à laquelle votre back-office répond compte
+
+Une clé de sécurité est liée au domaine sur lequel votre back-office répond, exactement comme une passkey. Déplacez votre boutique sur un autre domaine, et les clés enregistrées sous l'ancien cessent d'être proposées — chaque employé en enregistre une nouvelle. Les deux réglages avancés qui permettent à un administrateur d'indiquer ce domaine et les adresses acceptées à côté (voir la section Passkeys ci-dessus) s'appliquent de la même façon aux clés de sécurité.
+
+### Ce qui est enregistré pour les clés de sécurité
+
+Chaque clé de sécurité enregistrée, refusée ou retirée est consignée dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande. L'identifiant du credential n'y est jamais écrit en clair.
+
 ## L'imposer à un profil
 
 Tant que rien n'est imposé, la protection dépend de la bonne volonté de chacun. L'onglet **Politique** de **Sentinel > Double authentification** permet de rendre la double authentification obligatoire pour les employés d'un profil, en leur laissant un délai pour la mettre en place avant qu'elle ne s'impose. Comme le reste de la fonctionnalité, c'est gratuit.

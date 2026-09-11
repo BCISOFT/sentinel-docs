@@ -109,6 +109,53 @@ If your shop answers on several domains — several shops in one multistore inst
 
 Every passkey registered, refused or removed is written to the [Security Logs](./security-logs.md), with the address the request came from. The credential's identifier is never written there in clear.
 
+## Security keys: YubiKey, Token2, Nitrokey…
+
+Alongside your authenticator app and passkeys, you can register a **FIDO2 security key** — a physical device you plug in or tap, such as a YubiKey, a Token2, a Nitrokey, or any other FIDO2-compliant key.
+
+Like the rest of two-factor authentication, security keys are **free**.
+
+A security key **satisfies a profile requirement on its own**: if your profile is set to *Required*, having a security key enrolled is enough — you do not also need an authenticator app.
+
+:::warning Security keys need a secure connection
+Browsers only offer security keys over HTTPS. If your back office is served over plain HTTP, the "Security key" entry in the "Add a method" dialog is unavailable and says why, and the enrollment page explains it too instead of leaving you looking for it. The [prerequisites check](./prerequisites-check.md) also flags a missing secure origin, so an administrator sees it without having to reach the enrollment page first.
+:::
+
+### Adding one
+
+From **Sentinel > Two-Factor Authentication > My methods** — or from the enrollment page at `sentinel/account/two-factor`, which any signed-in employee can reach:
+
+1. **Prove the second factor you already have.** Before registering anything new, Sentinel asks for a fresh code from your authenticator app, or one of your recovery codes. It is the same proof you would give to sign in - and a recovery code given here is spent like any other, one of your ten rather than an extra - and it is what stops somebody who found your session unattended from quietly adding a key of their own. If you have no confirmed method at all yet, nothing is asked: your very first method is registered without it.
+2. **Click "Add a method" and choose "Security key"** in the dialog that opens, then give it a name you will recognise later — "YubiKey on keyring", "Desk Nitrokey". The name is for you alone; it is what the list will show.
+3. **Confirm on your device.** Your browser opens its own dialog, and you plug in or tap your key, then touch it when it blinks. Only a public key ever reaches your store: nothing about the physical key itself leaves your device.
+4. **Check the list.** The security key now appears in **My methods** with its label and its date. Your authenticator app and your recovery codes are untouched, and still work exactly as before — adding a method never takes one away.
+
+If the browser dialog never appears, the page says so rather than leaving you waiting. The usual causes: the back office is not served over HTTPS (browsers refuse security keys otherwise), the browser is too old, or no key is plugged in or within reach.
+
+### Signing in with a security key
+
+Once you have registered one, the sign-in screen offers it above the six-digit code field: plug in or tap your key and touch it, and you are in — no code to read or type. Your authenticator app is not replaced; both stay enrolled, and you choose either one at each sign-in.
+
+Recovery codes work with a security key exactly as they do with an authenticator app: if you also have none of those ten codes left, **My methods** offers to generate a fresh set once you have confirmed your security key.
+
+### One device, one entry
+
+A security key already registered on your account cannot be registered a second time: your device recognises it and says so, instead of offering to create a duplicate. And a security key already known to the shop — including one registered on **another employee's** account — is refused, with a message that says why.
+
+### Removing one
+
+From **My methods**, remove the security key and confirm. As with adding, a fresh proof of your second factor is asked first - a code from your authenticator app, or one of your recovery codes when the app is the thing you no longer have.
+
+Removing one never leaves you locked out: if the security key were your last confirmed method and your profile requires two-factor authentication, the removal is refused and you are sent to enroll something else first.
+
+### The address your back office is served at matters
+
+A security key registration is tied to the domain where your back office answers, exactly like a passkey. Move your shop to another domain and the keys registered under the old one stop being offered — each employee registers again. The same two advanced settings used for passkeys govern this; see [Passkeys: Touch ID, Windows Hello, your phone](#passkeys-touch-id-windows-hello-your-phone) for details.
+
+### What Sentinel records about security keys
+
+Every security key registered, refused or removed is written to the [Security Logs](./security-logs.md), with the address the request came from. The credential's identifier is never written there in clear.
+
 ## Requiring it for a profile
 
 As long as nothing is required, protection depends on each employee's goodwill. The **Policy** tab of **Sentinel > Two-Factor Authentication** lets you require two-factor authentication for the employees of a profile, and give them a window to set it up before it becomes mandatory. Like the rest of the feature, this is free.
