@@ -12,7 +12,7 @@ This feature is **free**. Each employee turns it on for their own account, and c
 
 ## Turning it on
 
-Go to **Sentinel > Two-Factor Authentication > My methods** and start the wizard.
+Go to **Sentinel > Two-Factor Authentication > My methods**, click **Add a method**, and choose **Authenticator app** in the dialog that opens.
 
 1. **Scan the QR code.** Open your authenticator app, choose to add an account, and point your camera at the QR code on screen. If you would rather type things in by hand, the same key is also shown as a line of text you can copy.
 2. **Confirm.** Your app now shows a six-digit number that changes every thirty seconds. Type the current one into the wizard. This last step proves your app and the store agree before anything is switched on.
@@ -65,7 +65,7 @@ Like the rest of two-factor authentication, passkeys are **free**.
 A passkey **satisfies a profile requirement on its own**: if your profile is set to *Required*, having a passkey enrolled is enough — you do not also need an authenticator app.
 
 :::warning Passkeys need a secure connection
-Browsers only offer passkeys over HTTPS. If your back office is served over plain HTTP, "Add a passkey" does not appear at all, and the enrollment page explains why instead of leaving you looking for it. The [prerequisites check](./prerequisites-check.md) also flags a missing secure origin, so an administrator sees it without having to reach the enrollment page first.
+Browsers only offer passkeys over HTTPS. If your back office is served over plain HTTP, the "Passkey" entry in the "Add a method" dialog is unavailable and says why, and the enrollment page explains it too instead of leaving you looking for it. The [prerequisites check](./prerequisites-check.md) also flags a missing secure origin, so an administrator sees it without having to reach the enrollment page first.
 :::
 
 ### Adding one
@@ -73,7 +73,7 @@ Browsers only offer passkeys over HTTPS. If your back office is served over plai
 From **Sentinel > Two-Factor Authentication > My methods** — or from the enrollment page at `sentinel/account/two-factor`, which any signed-in employee can reach:
 
 1. **Prove the second factor you already have.** Before registering anything new, Sentinel asks for a fresh code from your authenticator app, or one of your recovery codes. It is the same proof you would give to sign in - and a recovery code given here is spent like any other, one of your ten rather than an extra - and it is what stops somebody who found your session unattended from quietly adding a key of their own. If you have no confirmed method at all yet, nothing is asked: your very first method is registered without it.
-2. **Choose "Add a passkey"**, and give it a name you will recognise later — "MacBook Touch ID", "Work PC". The name is for you alone; it is what the list will show.
+2. **Click "Add a method" and choose "Passkey"** in the dialog that opens, then give it a name you will recognise later — "MacBook Touch ID", "Work PC". The name is for you alone; it is what the list will show.
 3. **Confirm on your device.** Your browser opens its own dialog, and your machine asks for your fingerprint, your face or your PIN. Only a public key ever reaches your store: the fingerprint itself never leaves your device, and neither does anything that could reconstruct it.
 4. **Check the list.** The passkey now appears in **My methods** with its label and its date. Your authenticator app and your recovery codes are untouched, and still work exactly as before — adding a method never takes one away.
 

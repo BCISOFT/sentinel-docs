@@ -12,7 +12,7 @@ Cette fonctionnalité est **gratuite**. Chaque employé l'active pour son propre
 
 ## L'activer
 
-Rendez-vous dans **Sentinel > Double authentification > Mes méthodes** et lancez l'assistant.
+Rendez-vous dans **Sentinel > Double authentification > Mes méthodes**, cliquez sur **Ajouter une méthode**, et choisissez **Application d'authentification** dans la fenêtre qui s'ouvre.
 
 1. **Scannez le QR code.** Ouvrez votre application d'authentification, choisissez d'ajouter un compte, et visez le QR code affiché à l'écran avec l'appareil photo. Si vous préférez saisir les informations à la main, la même clé est aussi affichée sous forme de texte, prête à être copiée.
 2. **Confirmez.** Votre application affiche maintenant un nombre à six chiffres qui change toutes les trente secondes. Saisissez celui du moment dans l'assistant. Cette dernière étape vérifie que votre application et la boutique sont bien d'accord avant que quoi que ce soit ne soit activé.
@@ -65,7 +65,7 @@ Comme le reste de la double authentification, les passkeys sont **gratuites**.
 Une passkey **satisfait à elle seule une obligation de profil** : si votre profil est réglé sur *Obligatoire*, avoir une passkey enrôlée suffit — pas besoin d'avoir aussi une application d'authentification.
 
 :::warning Les passkeys demandent une connexion sécurisée
-Les navigateurs ne proposent les passkeys qu'en HTTPS. Si votre back-office est servi en HTTP simple, « Ajouter une passkey » n'apparaît pas du tout, et la page d'enrôlement explique pourquoi plutôt que de vous laisser chercher. Le [contrôle des prérequis](./prerequisites-check.md) signale lui aussi l'absence d'origine sécurisée, pour qu'un administrateur la voie sans avoir à passer d'abord par la page d'enrôlement.
+Les navigateurs ne proposent les passkeys qu'en HTTPS. Si votre back-office est servi en HTTP simple, l'entrée « Passkey » de la fenêtre « Ajouter une méthode » est indisponible et dit pourquoi, et la page d'enrôlement l'explique aussi plutôt que de vous laisser chercher. Le [contrôle des prérequis](./prerequisites-check.md) signale lui aussi l'absence d'origine sécurisée, pour qu'un administrateur la voie sans avoir à passer d'abord par la page d'enrôlement.
 :::
 
 ### En ajouter une
@@ -73,7 +73,7 @@ Les navigateurs ne proposent les passkeys qu'en HTTPS. Si votre back-office est 
 Depuis **Sentinel > Double authentification > Mes méthodes** — ou depuis la page d'enrôlement `sentinel/account/two-factor`, accessible à tout employé connecté :
 
 1. **Prouvez le second facteur que vous avez déjà.** Avant d'enregistrer quoi que ce soit de nouveau, Sentinel demande un code frais de votre application d'authentification, ou l'un de vos codes de secours. C'est la même preuve que pour vous connecter - et un code de secours donné ici est consommé comme un autre, l'un de vos dix et non un supplément - et c'est elle qui empêche quelqu'un ayant trouvé votre session ouverte d'y ajouter discrètement sa propre clé. Si vous n'avez encore aucune méthode confirmée, rien ne vous est demandé : votre toute première méthode s'enregistre sans cette preuve.
-2. **Choisissez « Ajouter une passkey »**, et donnez-lui un nom que vous reconnaîtrez plus tard — « Touch ID du MacBook », « PC du bureau ». Ce nom n'est que pour vous ; c'est lui que la liste affichera.
+2. **Cliquez sur « Ajouter une méthode » puis choisissez « Passkey »** dans la fenêtre qui s'ouvre, et donnez-lui un nom que vous reconnaîtrez plus tard — « Touch ID du MacBook », « PC du bureau ». Ce nom n'est que pour vous ; c'est lui que la liste affichera.
 3. **Confirmez sur votre appareil.** Votre navigateur ouvre sa propre boîte de dialogue, et votre machine vous demande votre empreinte, votre visage ou votre code PIN. Seule une clé publique parvient jusqu'à votre boutique : l'empreinte elle-même ne quitte jamais votre appareil, et rien de ce qui permettrait de la reconstituer non plus.
 4. **Vérifiez la liste.** La passkey figure maintenant dans **Mes méthodes**, avec son libellé et sa date. Votre application d'authentification et vos codes de secours sont intacts et fonctionnent exactement comme avant — ajouter une méthode n'en retire jamais une autre.
 
