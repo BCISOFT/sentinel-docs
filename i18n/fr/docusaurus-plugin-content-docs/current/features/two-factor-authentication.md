@@ -156,6 +156,34 @@ Une clé de sécurité est liée au domaine sur lequel votre back-office répond
 
 Chaque clé de sécurité enregistrée, refusée ou retirée est consignée dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande. L'identifiant du credential n'y est jamais écrit en clair.
 
+## Appareils de confiance : passer le code sur votre propre ordinateur
+
+Quand vous vous connectez avec un code ou une passkey, une case à cocher propose **Se souvenir de cet appareil**. Cochez-la, et ce navigateur, sur cet ordinateur, ne redemande plus de second facteur pendant un moment — votre mot de passe seul suffit à vous connecter, jusqu'à ce que la confiance expire ou que vous la révoquiez.
+
+Comme le reste de la double authentification, les appareils de confiance sont **gratuits**.
+
+:::warning C'est un compromis assumé, pas un raccourci
+Tant qu'un appareil reste de confiance, votre mot de passe seul suffit à vous y connecter — le second facteur est réellement sauté, pas seulement mémorisé comme « déjà fait aujourd'hui ». Si cet ordinateur est volé, ou si quelqu'un d'autre s'en empare pendant que vous êtes connecté, il entre avec votre seul mot de passe, sans qu'aucun code ni aucune passkey ne lui soit demandé. Ne faites confiance qu'à un appareil que vous gardez pour vous, et révoquez-la dès que ce n'est plus vrai.
+:::
+
+La case n'est proposée que sur une connexion sécurisée, et Sentinel juge cette connexion exactement comme pour les passkeys : votre back-office répond en HTTPS, ou un reverse-proxy répond en HTTPS à sa place et la boutique a déclaré l'adresse de ce proxy dans le réglage `SENTINEL_TRUSTED_PROXIES`. Un en-tête transmis par un proxy que la boutique n'a pas déclaré ne prouve rien : il n'est pas cru. Sur une boutique servie en HTTPS par un proxy non déclaré, la case reste donc absente quelle que soit la durée réglée. L'écran de connexion lui-même ne l'explique pas : il n'affiche jamais que la case, ou rien. Les deux écrans qui l'expliquent sont **Mes méthodes**, dans la section des appareils de confiance, et l'onglet **Politique**, qui nomment le réglage à renseigner. Le [contrôle des prérequis](./prerequisites-check.md) signale la même absence d'origine sécurisée, pour qu'un administrateur la voie sans avoir à passer d'abord par un écran de connexion. La case n'apparaît jamais non plus pendant la récupération de compte : un code de secours pose toujours la question à laquelle il existe pour répondre, quel que soit le nombre d'appareils déjà approuvés.
+
+### Combien de temps un appareil reste de confiance
+
+Un administrateur règle la durée, en jours, depuis l'onglet **Politique** de **Sentinel > Double authentification** — de 0 à 90 jours. Elle est livrée à **0**, ce qui signifie que la fonctionnalité est fermée à l'installation : la case n'est proposée qu'une fois qu'un administrateur a posé une durée. La remettre à **0** ensuite la referme de la même façon, sans révoquer les appareils déjà approuvés — cela arrête seulement la case et la reconnaissance, si bien que rétablir une durée plus tard réactive leur confiance exactement où elle en était restée. Pour fermer un appareil définitivement, révoquez-le — voir [La désactiver](#turning-it-off-1) ci-dessous.
+
+### La désactiver {#turning-it-off-1}
+
+**Mes méthodes** liste tous les appareils actuellement de confiance sur votre compte, chacun avec un intitulé simple — le navigateur et la plateforme depuis lesquels il a été ajouté, jamais la chaîne brute envoyée par le navigateur — et un bouton **Révoquer**. Révoquer un appareil est immédiat et ne demande rien de plus : la prochaine connexion depuis cet appareil redemande un code ou une passkey, comme n'importe quel autre.
+
+Seuls les **dix** appareils les plus récemment mémorisés sont conservés par compte ; faire confiance à un onzième retire discrètement le plus ancien.
+
+Retirer une méthode — pas seulement la dernière — révoque d'un coup tous les appareils de confiance de votre compte ; les appareils ne sont liés à aucune méthode en particulier. Un bouton **Tout révoquer**, à côté de la liste, fait la même chose à la demande, sans toucher à vos méthodes : c'est la seule action qui ferme réellement tous les appareils, par opposition à la durée remise à 0, qui ne fait que suspendre la reconnaissance sans rien révoquer. Vous pouvez aussi révoquer n'importe quel appareil vous-même, à tout moment, depuis **Mes méthodes**.
+
+### Ce qui est enregistré
+
+Faire confiance à un appareil, en révoquer un, et s'en servir pour se connecter sont tous trois consignés dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande — l'événement de connexion est ce qui permet de savoir, après coup, si un appareil de confiance a réellement servi et depuis où.
+
 ## L'imposer à un profil
 
 Tant que rien n'est imposé, la protection dépend de la bonne volonté de chacun. L'onglet **Politique** de **Sentinel > Double authentification** permet de rendre la double authentification obligatoire pour les employés d'un profil, en leur laissant un délai pour la mettre en place avant qu'elle ne s'impose. Comme le reste de la fonctionnalité, c'est gratuit.

@@ -156,6 +156,34 @@ A security key registration is tied to the domain where your back office answers
 
 Every security key registered, refused or removed is written to the [Security Logs](./security-logs.md), with the address the request came from. The credential's identifier is never written there in clear.
 
+## Trusted devices: skipping the code on your own computer
+
+When you sign in with a code or a passkey, a checkbox offers **Remember this device**. Tick it, and this one browser on this one computer is not asked for a second factor again for a while — your password alone gets you in, until the trust expires or you revoke it.
+
+Like the rest of two-factor authentication, trusted devices are **free**.
+
+:::warning This is a deliberate trade-off, not a shortcut
+For as long as a device stays trusted, your password alone is enough to sign in from it — the second factor is genuinely skipped, not just remembered as "already done today". If that computer is stolen or someone else gets to it while you are signed in, they get in on your password alone, no code and no passkey asked. Only trust a device you keep to yourself, and revoke it the moment that stops being true.
+:::
+
+The checkbox is only offered over a secure connection, and Sentinel judges that connection exactly as it does for passkeys: your back office answers over HTTPS, or a reverse proxy answers over HTTPS on its behalf and the shop has declared that proxy's address in the `SENTINEL_TRUSTED_PROXIES` setting. A forwarded header from a proxy the shop has not declared proves nothing, so it is not believed: on a shop served over HTTPS by an undeclared proxy the checkbox stays away whatever duration is set. The sign-in screen itself carries no explanation for this — it only ever shows the checkbox or nothing. The two screens that do explain it are **My methods**, in the trusted-devices section, and the **Policy** tab, naming the setting to fill in. The [prerequisites check](./prerequisites-check.md) flags the same missing secure origin, so an administrator sees it without having to reach a sign-in screen first. The checkbox also never appears during account recovery: a recovery code always asks the question it exists to answer, however many trusted devices you already have.
+
+### How long a device stays trusted
+
+An administrator sets the duration, in days, from the **Policy** tab of **Sentinel > Two-Factor Authentication** — from 0 to 90 days. It ships at **0**, which means the feature is delivered off: the checkbox is not offered until an administrator sets a duration. Setting it back to **0** afterwards turns it off the same way, without revoking devices already trusted — it only stops the checkbox and the recognition, so restoring a duration later revives their trust exactly where it was left. To close a device off for good, revoke it — see [Turning it off](#turning-it-off-1) below.
+
+### Turning it off {#turning-it-off-1}
+
+**My methods** lists every device currently trusted on your account, each with a plain label — the browser and the platform it was added from, never the raw string your browser sends — and a **Revoke** button. Revoking one is immediate and asks for nothing else: the next sign-in from that device asks for a code or a passkey again, like any other.
+
+Only the **ten** most recently trusted devices are kept per account; trusting an eleventh quietly retires the oldest one.
+
+Removing any method — not just your last one — revokes every trusted device on your account at once; devices are not tied to a particular method. A **Revoke all** button next to the list does the same thing on demand, without touching your methods: it is the one action that actually closes every device off, as opposed to setting the duration to 0, which only suspends recognition without revoking anything. You can also revoke any device yourself, at any time, from **My methods**.
+
+### What Sentinel records
+
+Trusting a device, revoking one, and using one to sign in are all written to the [Security Logs](./security-logs.md), with the address the request came from — the sign-in event is what lets you tell, after the fact, whether a trusted device was actually used and from where.
+
 ## Requiring it for a profile
 
 As long as nothing is required, protection depends on each employee's goodwill. The **Policy** tab of **Sentinel > Two-Factor Authentication** lets you require two-factor authentication for the employees of a profile, and give them a window to set it up before it becomes mandatory. Like the rest of the feature, this is free.
