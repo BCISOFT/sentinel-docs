@@ -251,6 +251,25 @@ Le [Journal de sécurité](./security-logs.md) conserve les étapes de l'obligat
 
 Un employé en déplacement, un téléphone en cours de remplacement, une échéance qui tombe au plus mauvais moment : `sentinel:2fa:exempt` (voir [plus bas](#pour-les-administrateurs--retrouver-laccès)) dispense un employé de l'obligation pour un nombre de jours donné. C'est temporaire — les jours écoulés, l'obligation s'applique à nouveau à lui — et cela ne change rien à l'onglet Politique, qui continue de s'appliquer à tous les autres.
 
+## Onglet Employés
+
+Aux côtés de **Mes méthodes** et **Politique**, l'onglet **Employés** de **Sentinel > Double authentification** liste la situation de chaque employé : qui est protégé, qui est en retard, et que faire — sans attendre `sentinel:2fa:status` sur le serveur.
+
+Une carte de synthèse en tête compte les employés par statut — en retard, à relancer, en grâce, dispensé, enrôlé, aucun — pour voir la forme de l'effectif avant de parcourir la liste. Le tableau montre, pour chaque employé : son nom et son e-mail, son profil, son statut, les méthodes qu'il détient, la dernière utilisation d'une méthode, et son échéance ou sa dispense. Des filtres restreignent à un profil ou un statut, et la pagination fonctionne comme dans le reste du module.
+
+Toute action de cet onglet est **réservée aux employés SuperAdmin**. Un employé qui peut lire la page Sentinel mais ne détient pas ce profil voit l'onglet, mais chaque bouton lui est refusé.
+
+### Six actions par employé
+
+- **Révoquer les méthodes** — retire tout second facteur détenu par l'employé. Si l'employé est le **dernier SuperAdmin enrôlé**, la première tentative est refusée avec un avertissement explicite au lieu de passer silencieusement ; confirmer une seconde fois l'exécute malgré tout.
+- **Révoquer les sessions** — clôt les sessions de double authentification ouvertes de l'employé. Ses méthodes ne sont pas touchées : il lui est simplement demandé de vérifier à nouveau à sa prochaine requête. Rien n'empêche un SuperAdmin de se l'appliquer à lui-même, et rien ne le devrait — ce n'est pas sa session PrestaShop qui est fermée.
+- **Révoquer les appareils de confiance** — retire les appareils que l'employé avait demandé à la boutique de mémoriser. Sa prochaine connexion depuis l'un d'eux redemande un code.
+- **Forcer le ré-enrôlement** — ramène l'échéance de l'employé à maintenant : il s'enrôle à sa prochaine connexion, quelle que soit la période de grâce ou de rappel où il se trouvait encore.
+- **Accorder une dérogation** — place l'employé hors de la politique d'enrôlement pour un nombre de jours donné, avec une raison. Cela fonctionne même sur un employé qui ne s'est jamais connecté depuis le début de la politique.
+- **Retirer une dérogation** — reprend la dérogation. L'employé retombe sur l'échéance qu'il avait déjà ; retirer une dérogation ne la reporte jamais, puisque son échéance n'a jamais été touchée pendant qu'il était dispensé.
+
+Chacune de ces six actions est écrite dans le [Journal de sécurité](./security-logs.md), avec son auteur.
+
 ## La désactiver
 
 Depuis **Mes méthodes**, supprimez votre application d'authentification et confirmez. Votre mot de passe seul suffira à la prochaine connexion.
@@ -270,7 +289,7 @@ Sentinel est conçu pour qu'une panne du contrôle du second facteur ne verrouil
 Si un employé perd son téléphone — ou si plus personne ne parvient à passer l'écran du code — des commandes lancées depuis le serveur rétablissent l'accès. Le code ne leur est jamais demandé, ce qui en fait un recours fiable.
 
 ```bash
-# Voir qui est protégé, avec quelle application, depuis quand, et combien de codes de secours restent
+# Voir qui est protégé, avec quelles méthodes, depuis quand, et son échéance — une ligne par employé
 bin/console sentinel:2fa:status
 
 # Désactiver pour un employé
@@ -280,12 +299,16 @@ bin/console sentinel:2fa:disable --employee=employe@exemple.com
 bin/console sentinel:2fa:disable --all
 
 # Dispenser un employé de la politique d'enrôlement, sans toucher à la politique
-bin/console sentinel:2fa:exempt --employee=employe@exemple.com --days=30
+bin/console sentinel:2fa:exempt --employee=employe@exemple.com --days=30 --reason="Téléphone en cours de remplacement"
 ```
 
-`sentinel:2fa:status` n'affiche jamais de secret, ni de code — pas même un code de secours. Si un employé a aussi perdu ses codes de secours, désactiver depuis le serveur reste le chemin pour rentrer.
+`sentinel:2fa:status` liste le personnel de la même façon que l'onglet **Employés**, une ligne par employé — profil, statut, méthodes, dernière utilisation, échéance — plutôt qu'une ligne par méthode. Il n'affiche jamais de secret, ni de code — pas même un code de secours. Si un employé a aussi perdu ses codes de secours, désactiver depuis le serveur reste le chemin pour rentrer. Ajoutez `--json` pour un script : le résultat porte un objet `summary` avec les compteurs et un tableau `employees` avec une entrée par ligne.
 
-`sentinel:2fa:exempt` suspend la [politique d'enrôlement](#limposer-à-un-profil) pour ce seul employé, pendant le nombre de jours indiqué. Une fois ces jours écoulés, l'obligation s'applique à nouveau à lui, toute seule — il n'y a rien à défaire. L'onglet Politique reste exactement tel qu'il était, et tous les autres employés y restent soumis. Ajoutez `--json` pour lire le résultat depuis un script.
+:::warning `--json` a changé de forme
+Avant cette fonctionnalité, `--json` renvoyait un tableau `methods` à plat. Il renvoie maintenant `summary` et `employees` à la place, comme l'onglet. Un script qui lit l'ancienne forme doit être mis à jour.
+:::
+
+`sentinel:2fa:exempt` suspend la [politique d'enrôlement](#limposer-à-un-profil) pour ce seul employé, pendant le nombre de jours indiqué, avec une raison conservée aux côtés de la dérogation. `--reason` est **requis**. Une fois ces jours écoulés, l'obligation s'applique à nouveau à lui, toute seule — il n'y a rien à défaire. L'onglet Politique reste exactement tel qu'il était, et tous les autres employés y restent soumis. Ajoutez `--json` pour lire le résultat depuis un script.
 
 ## Ce qui est couvert
 

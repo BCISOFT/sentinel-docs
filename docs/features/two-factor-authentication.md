@@ -251,6 +251,25 @@ The [Security Logs](./security-logs.md) keep the requirement's milestones: oblig
 
 An employee on the road, a phone being replaced, a deadline falling at the worst moment: `sentinel:2fa:exempt` (see [below](#for-administrators-getting-back-in)) gives one employee a set number of days without the requirement. It is temporary — once the days are up, the requirement applies to them again — and it changes nothing in the Policy tab, which keeps applying to everybody else.
 
+## Employees tab
+
+Alongside **My methods** and **Policy**, the **Employees** tab of **Sentinel > Two-Factor Authentication** lists every employee's own standing: who is protected, who is behind, and what to do about it — without waiting for `sentinel:2fa:status` on the server.
+
+A summary card at the top counts employees by status — overdue, to remind, in grace, exempt, enrolled, none — so you see the shape of the staff before scrolling the list. The table itself shows, for each employee: their name and email, their profile, their status, which methods they hold, when a method was last used, and their deadline or exemption. Filters narrow it to one profile or one status, and it pages the same way the rest of the module does.
+
+Every action in this tab is **reserved to SuperAdmin employees**. An employee who can read the Sentinel page but does not hold that profile sees the tab, but every button on it is refused.
+
+### Six actions per employee
+
+- **Revoke methods** — takes away every second factor the employee holds. If the employee is the **last enrolled SuperAdmin**, the first attempt is refused with an explicit warning instead of silently going through; confirming a second time carries it out anyway.
+- **Revoke sessions** — closes the employee's open two-factor sessions. Their methods are untouched: they are simply asked to verify again at their next request. Nothing prevents a SuperAdmin from doing this to themselves, and nothing should — their own PrestaShop session is not the one being closed.
+- **Revoke trusted devices** — drops the devices the employee had asked the shop to remember. Their next sign-in from any of them asks for a code again.
+- **Force re-enrollment** — brings the employee's deadline to now: they enroll at their next sign-in, whatever grace or reminder period they were still in.
+- **Grant a waiver** — puts the employee outside the enrollment policy for a set number of days, with a reason. It works even on an employee who has never signed in since the policy started.
+- **Lift a waiver** — takes the waiver back. The employee falls back on the deadline they already had; lifting a waiver never postpones it, because their deadline was never touched while they were exempt.
+
+Every one of these six actions is written to the [Security Logs](./security-logs.md), with who performed it.
+
 ## Turning it off
 
 From **My methods**, remove your authenticator app and confirm. Your password alone is enough at the next sign-in.
@@ -270,7 +289,7 @@ Sentinel is built so that a problem with the second-factor check never locks eve
 If an employee loses their phone — or if nobody can get past the code screen — commands run from the server restore access. They are never asked for a code themselves, which is what makes them a reliable way back in.
 
 ```bash
-# See who is protected, with which app, since when, and how many recovery codes remain
+# See who is protected, with which methods, since when, and their deadline — one line per employee
 bin/console sentinel:2fa:status
 
 # Turn it off for one employee
@@ -280,12 +299,16 @@ bin/console sentinel:2fa:disable --employee=employee@example.com
 bin/console sentinel:2fa:disable --all
 
 # Give one employee a break from the enrollment policy, without touching the policy
-bin/console sentinel:2fa:exempt --employee=employee@example.com --days=30
+bin/console sentinel:2fa:exempt --employee=employee@example.com --days=30 --reason="Phone being replaced"
 ```
 
-`sentinel:2fa:status` never prints a secret or a code — not even a recovery code. If an employee has also lost their recovery codes, disabling from the server is still the way back in.
+`sentinel:2fa:status` lists the staff the same way the **Employees** tab does, one row per employee — profile, status, methods, last use, deadline — rather than one row per method. It never prints a secret or a code — not even a recovery code. If an employee has also lost their recovery codes, disabling from the server is still the way back in. Add `--json` for a script: the result carries a `summary` object with the counts and an `employees` array with one entry per row.
 
-`sentinel:2fa:exempt` suspends the [enrollment policy](#requiring-it-for-a-profile) for that one employee, for the number of days given. When they are up, the requirement applies to them again on its own — there is nothing to undo. The Policy tab is left exactly as it was, and every other employee stays under it. Add `--json` to read the result from a script.
+:::warning `--json` changed shape
+Before this feature, `--json` returned a flat `methods` array. It now returns `summary` and `employees` instead, matching the tab. A script reading the old shape needs updating.
+:::
+
+`sentinel:2fa:exempt` suspends the [enrollment policy](#requiring-it-for-a-profile) for that one employee, for the number of days given, with a reason kept alongside the exemption. `--reason` is **required**. When the days are up, the requirement applies to them again on its own — there is nothing to undo. The Policy tab is left exactly as it was, and every other employee stays under it. Add `--json` to read the result from a script.
 
 ## What it covers
 
