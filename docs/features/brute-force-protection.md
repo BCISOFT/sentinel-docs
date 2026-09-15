@@ -38,9 +38,9 @@ The same card appears on the DDoS Protection page and edits the same list.
 
 ## Behind a proxy or a CDN
 
-The **Behind a proxy or a CDN?** card configures how Sentinel resolves the real visitor IP. Without it, a store behind Cloudflare or a reverse proxy sees all its visitors under the proxy's address, and the protections cannot tell them apart.
+The trusted proxies setting, on the Sentinel module's configuration page (**Modules > Module Manager > Sentinel > Configure**), configures how Sentinel resolves the real visitor IP. Without it, a store behind Cloudflare or a reverse proxy sees all its visitors under the proxy's address, and the protections cannot tell them apart.
 
-- Sentinel inspects the request you are making from the back-office and, when it detects Cloudflare or a reverse proxy that is not trusted yet, offers a **one-click** fix.
+- From that page, Sentinel inspects the request you are making from the back-office and, when it detects Cloudflare or a reverse proxy that is not trusted yet, offers a **one-click** fix.
 - The **Cloudflare** toggle trusts Cloudflare's published ranges without pasting a single CIDR.
 - **Other reverse proxies** accepts your own proxy addresses or CIDR ranges.
 

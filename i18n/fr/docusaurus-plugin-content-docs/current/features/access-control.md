@@ -29,14 +29,14 @@ Les modifications sont enregistrées automatiquement à chaque ajout ou suppress
 
 ## Derrière un proxy ou un CDN
 
-Si votre boutique est derrière Cloudflare, un CDN, un load balancer ou un reverse proxy, **déclarez-le dans la carte « Derrière un proxy ou un CDN ? » sur la même page** avant d'activer la liste blanche. Sans cela, tous les visiteurs atteignent votre serveur avec l'adresse du proxy :
+Si votre boutique est derrière Cloudflare, un CDN, un load balancer ou un reverse proxy, **déclarez-le sur la page de configuration du module Sentinel** (**Modules > Gestionnaire de modules > Sentinel > Configurer**) avant d'activer la liste blanche. Déclarer le proxy est la seule manière pour Sentinel d'accepter un en-tête de transfert : un `X-Forwarded-For` non déclaré est ignoré, car n'importe quel visiteur peut le définir et pourrait sinon se faire passer pour une adresse autorisée.
 
-Déclarer le proxy est la seule manière pour Sentinel d'accepter un en-tête de transfert : un `X-Forwarded-For` non déclaré est ignoré, car n'importe quel visiteur peut le définir et pourrait sinon se faire passer pour une adresse autorisée.
+Sans cela, tous les visiteurs atteignent votre serveur avec l'adresse du proxy :
 
 - mettre « votre IP actuelle » en liste blanche reviendrait en réalité à whitelister le proxy, laissant passer **tout le monde** ;
 - derrière Cloudflare, l'adresse edge change même d'une requête à l'autre, ce qui pourrait vous bloquer juste après l'activation.
 
-Sentinel détecte les configurations les plus courantes (Cloudflare, reverse proxy local) et propose un bouton « Faire confiance » en un clic quand quelque chose semble mal configuré. Cette configuration proxy est partagée avec les autres protections (brute-force, DDoS) et est disponible pour tous les utilisateurs, gratuits comme Pro.
+Sentinel détecte les configurations les plus courantes (Cloudflare, reverse proxy local) et propose un bouton « Faire confiance » en un clic quand quelque chose semble mal configuré. Cette configuration proxy est partagée avec les autres protections de Sentinel (brute-force, DDoS, double authentification) et est disponible pour tous les utilisateurs, gratuits comme Pro.
 
 Le bouton « Ajouter mon IP actuelle (x.x.x.x) » affiche toujours l'adresse **telle que le serveur la résout** — si ce n'est pas celle que vous attendez, corrigez d'abord la configuration proxy.
 

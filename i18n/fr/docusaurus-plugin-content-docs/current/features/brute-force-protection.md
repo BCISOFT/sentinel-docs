@@ -38,9 +38,9 @@ La même carte apparaît sur la page Protection DDoS et modifie la même liste.
 
 ## Derrière un proxy ou un CDN
 
-La carte **Derrière un proxy ou un CDN ?** configure la façon dont Sentinel résout la véritable IP des visiteurs. Sans cela, une boutique derrière Cloudflare ou un reverse proxy voit tous ses visiteurs sous l'adresse du proxy, et les protections ne peuvent pas les distinguer.
+Le réglage de proxy de confiance, sur la page de configuration du module Sentinel (**Modules > Gestionnaire de modules > Sentinel > Configurer**), configure la façon dont Sentinel résout la véritable IP des visiteurs. Sans cela, une boutique derrière Cloudflare ou un reverse proxy voit tous ses visiteurs sous l'adresse du proxy, et les protections ne peuvent pas les distinguer.
 
-- Sentinel inspecte la requête que vous effectuez depuis le back-office et, lorsqu'il détecte Cloudflare ou un reverse proxy non déclaré, propose une correction **en un clic**.
+- Depuis cette page, Sentinel inspecte la requête que vous effectuez depuis le back-office et, lorsqu'il détecte Cloudflare ou un reverse proxy non déclaré, propose une correction **en un clic**.
 - L'interrupteur **Cloudflare** fait confiance aux plages publiées par Cloudflare sans avoir à saisir le moindre CIDR.
 - **Autres reverse proxies** accepte les adresses ou plages CIDR de vos propres proxies.
 

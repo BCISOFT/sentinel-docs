@@ -10,7 +10,7 @@ La protection DDoS est disponible avec la **licence Pro**. [Obtenez votre licenc
 
 Sentinel compte les requêtes de chaque adresse IP, ralentit puis bloque celles qui dépassent largement une navigation normale.
 
-Les réglages se trouvent dans le back-office sous **Sentinel → Protection DDoS**. Les cartes **IP de confiance** et **Derrière un proxy ou un CDN ?** apparaissent à la fois sur cette page et sur la page Protection Brute-force et modifient la même configuration partagée : une seule liste d'IP de confiance couvre les deux.
+Les réglages se trouvent dans le back-office sous **Sentinel → Protection DDoS**. La carte **IP de confiance** apparaît aussi sur la page Protection Brute-force et modifie la même configuration partagée : une seule liste d'IP de confiance couvre les deux. Le réglage de proxy de confiance vit sur la page de configuration du module Sentinel (**Modules > Gestionnaire de modules > Sentinel > Configurer**) et est partagé de la même façon.
 
 ## Fonctionnement
 
@@ -46,12 +46,12 @@ En mode **Surveillance**, Sentinel compte et rapporte sans rien bloquer. Les sta
 
 Si plus que la part configurée de votre trafic est bloquée sur une heure, Sentinel **suspend le blocage de lui-même**, affiche un avertissement dans le back-office et continue de compter.
 
-Ce garde-fou existe pour un scénario précis : un reverse proxy non déclaré dans la carte **Derrière un proxy ou un CDN ?**. Tous les visiteurs sont alors vus sous la même adresse, cette unique adresse dépasse tous les seuils, et la boutique entière se bannirait elle-même. Plutôt que de laisser cela arriver, Sentinel cesse de bloquer et vous prévient.
+Ce garde-fou existe pour un scénario précis : un reverse proxy non déclaré sur la page de configuration du module Sentinel. Tous les visiteurs sont alors vus sous la même adresse, cette unique adresse dépasse tous les seuils, et la boutique entière se bannirait elle-même. Plutôt que de laisser cela arriver, Sentinel cesse de bloquer et vous prévient.
 
 Une fois la configuration corrigée, cliquez sur **Reprendre le blocage** (ou lancez `sentinel:rate-limit resume`). Le blocage reprend également seul au bout d'une heure.
 
 :::caution Derrière un reverse proxy ou un CDN
-Déclarez votre infrastructure dans la carte **Derrière un proxy ou un CDN ?** sur la même page — Sentinel détecte Cloudflare ou un reverse proxy devant votre boutique et propose une correction en un clic. Sans cela, Sentinel ignore délibérément les en-têtes transmis et voit l'adresse de votre proxy au lieu de celle de vos visiteurs.
+Déclarez votre infrastructure sur la page de configuration du module Sentinel (**Modules > Gestionnaire de modules > Sentinel > Configurer**) — Sentinel détecte Cloudflare ou un reverse proxy devant votre boutique et propose une correction en un clic. Sans cela, Sentinel ignore délibérément les en-têtes transmis et voit l'adresse de votre proxy au lieu de celle de vos visiteurs.
 :::
 
 ## Statistiques

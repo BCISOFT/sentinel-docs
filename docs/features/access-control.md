@@ -29,14 +29,14 @@ Changes are saved automatically as you add or remove entries.
 
 ## Behind a proxy or a CDN
 
-If your store sits behind Cloudflare, a CDN, a load balancer or a reverse proxy, **declare it in the "Behind a proxy or a CDN?" card on the same page** before enabling the whitelist. Declaring the proxy is the only way Sentinel accepts a forwarding header: an undeclared `X-Forwarded-For` is ignored, because any visitor can set it and would otherwise be able to claim a whitelisted address.
+If your store sits behind Cloudflare, a CDN, a load balancer or a reverse proxy, **declare it on the Sentinel module's configuration page** (**Modules > Module Manager > Sentinel > Configure**) before enabling the whitelist. Declaring the proxy is the only way Sentinel accepts a forwarding header: an undeclared `X-Forwarded-For` is ignored, because any visitor can set it and would otherwise be able to claim a whitelisted address.
 
 Without this, every visitor reaches your server with the proxy's address:
 
 - whitelisting "your current IP" would actually whitelist the proxy, letting **everyone** through;
 - behind Cloudflare, the edge address even changes between requests, which could lock you out right after enabling.
 
-Sentinel detects the most common setups (Cloudflare, local reverse proxy) and offers a one-click "Trust" button when something looks misconfigured. This proxy configuration is shared with the other protections (brute-force, DDoS) and is available to all users, free and Pro.
+Sentinel detects the most common setups (Cloudflare, local reverse proxy) and offers a one-click "Trust" button when something looks misconfigured. This proxy configuration is shared with Sentinel's other protections (brute-force, DDoS, two-factor authentication) and is available to all users, free and Pro.
 
 The "Add my current IP (x.x.x.x)" button always shows the address **as the server resolves it** — if that address is not the one you expect, fix the proxy configuration first.
 

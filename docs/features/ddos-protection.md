@@ -10,7 +10,7 @@ DDoS protection is available with the **Pro license**. [Get your Pro license](ht
 
 Sentinel counts the requests made by each IP address and slows down, then blocks, addresses that go far beyond normal browsing.
 
-Settings live in the back-office under **Sentinel → DDoS Protection**. The **Trusted IPs** and **Behind a proxy or a CDN?** cards appear on both this page and the Brute-force Protection page and edit the same shared configuration, so a single trusted-IP list covers both.
+Settings live in the back-office under **Sentinel → DDoS Protection**. The **Trusted IPs** card also appears on the Brute-force Protection page and edits the same shared configuration, so a single trusted-IP list covers both. The trusted proxies setting lives on the Sentinel module's configuration page (**Modules > Module Manager > Sentinel > Configure**) and is shared the same way.
 
 ## How it works
 
@@ -46,12 +46,12 @@ In **Monitor** mode Sentinel counts and reports without blocking anything. The s
 
 If more than the configured share of your traffic gets blocked over an hour, Sentinel **suspends enforcement by itself**, shows a warning in the back-office, and keeps counting.
 
-This exists for one scenario in particular: a reverse proxy that has not been declared in the **Behind a proxy or a CDN?** card. Every visitor is then seen under the same address, that single address exceeds every threshold, and the whole storefront would ban itself. Rather than let that happen, Sentinel stops enforcing and tells you.
+This exists for one scenario in particular: a reverse proxy that has not been declared on the Sentinel module's configuration page. Every visitor is then seen under the same address, that single address exceeds every threshold, and the whole storefront would ban itself. Rather than let that happen, Sentinel stops enforcing and tells you.
 
 Once the configuration is fixed, click **Resume enforcement** (or run `sentinel:rate-limit resume`). Enforcement also resumes on its own after one hour.
 
 :::caution Behind a reverse proxy or a CDN
-Declare your infrastructure in the **Behind a proxy or a CDN?** card on the same page — Sentinel detects Cloudflare or a reverse proxy in front of your store and offers a one-click fix. Without that, Sentinel deliberately ignores forwarded headers and sees your proxy's address instead of your visitors'.
+Declare your infrastructure on the Sentinel module's configuration page (**Modules > Module Manager > Sentinel > Configure**) — Sentinel detects Cloudflare or a reverse proxy in front of your store and offers a one-click fix. Without that, Sentinel deliberately ignores forwarded headers and sees your proxy's address instead of your visitors'.
 :::
 
 ## Statistics
