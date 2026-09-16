@@ -107,7 +107,7 @@ Si votre boutique répond sur plusieurs domaines — plusieurs boutiques dans un
 
 ### Ce qui est enregistré pour les passkeys
 
-Chaque passkey enregistrée, refusée ou retirée est consignée dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande. L'identifiant du credential n'y est jamais écrit en clair.
+Chaque passkey enregistrée, refusée ou retirée est consignée dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande. L'identifiant du credential n'y est jamais écrit en clair. Les enregistrements et les retraits sont écrits mais ne sont pas listés dans le journal du back-office, qui s'en tient aux événements qui appellent une décision ; relisez-les en ligne de commande avec `php bin/console sentinel:logs --type=2fa_enrolled` et `--type=2fa_method_removed`. Une tentative refusée, elle, est listée comme n'importe quel échec de défi.
 
 ## Clés de sécurité FIDO2 : YubiKey, Token2, Nitrokey…
 
@@ -154,7 +154,7 @@ Une clé de sécurité est liée au domaine sur lequel votre back-office répond
 
 ### Ce qui est enregistré pour les clés de sécurité
 
-Chaque clé de sécurité enregistrée, refusée ou retirée est consignée dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande. L'identifiant du credential n'y est jamais écrit en clair.
+Chaque clé de sécurité enregistrée, refusée ou retirée est consignée dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande. L'identifiant du credential n'y est jamais écrit en clair. Les enregistrements et les retraits sont écrits mais ne sont pas listés dans le journal du back-office ; relisez-les en ligne de commande avec `php bin/console sentinel:logs --type=2fa_enrolled` et `--type=2fa_method_removed`. Une tentative refusée, elle, est listée comme n'importe quel échec de défi.
 
 ## Appareils de confiance : passer le code sur votre propre ordinateur
 
@@ -182,7 +182,7 @@ Retirer une méthode — pas seulement la dernière — révoque d'un coup tous 
 
 ### Ce qui est enregistré
 
-Faire confiance à un appareil, en révoquer un, et s'en servir pour se connecter sont tous trois consignés dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande — l'événement de connexion est ce qui permet de savoir, après coup, si un appareil de confiance a réellement servi et depuis où.
+Faire confiance à un appareil, en révoquer un, et s'en servir pour se connecter sont tous trois consignés dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande — l'événement de connexion est ce qui permet de savoir, après coup, si un appareil de confiance a réellement servi et depuis où. Cet événement de connexion est listé dans le journal du back-office, précisément parce que c'est celui avec lequel on enquête. Faire confiance à un appareil et en révoquer un sont écrits mais ne sont pas listés ; relisez-les en ligne de commande avec `php bin/console sentinel:logs --type=2fa_trusted_device_added` et `--type=2fa_trusted_device_revoked`.
 
 ## L'imposer à un profil
 
@@ -241,11 +241,11 @@ Cette page n'affiche jamais que les méthodes de l'employé connecté. Elle ne p
 
 ### Si rien ne peut être enrôlé ici
 
-Si la boutique se trouve dans un état où aucune méthode ne peut être enrôlée, l'obligation se suspend d'elle-même plutôt que de mettre quelqu'un dehors : rien n'est demandé, personne n'est bloqué, et un avertissement est consigné dans le [Journal de sécurité](./security-logs.md) une fois par jour jusqu'à ce que la situation soit réglée. La politique que vous avez enregistrée n'est pas touchée : il n'y a rien à rétablir ensuite.
+Si la boutique se trouve dans un état où aucune méthode ne peut être enrôlée, l'obligation se suspend d'elle-même plutôt que de mettre quelqu'un dehors : rien n'est demandé, personne n'est bloqué, et un avertissement est consigné dans le [Journal de sécurité](./security-logs.md) une fois par jour jusqu'à ce que la situation soit réglée — écrit mais non listé dans le journal du back-office : relisez-le avec `php bin/console sentinel:logs --type=2fa_policy_alert`. La politique que vous avez enregistrée n'est pas touchée : il n'y a rien à rétablir ensuite.
 
 ### Les étapes journalisées
 
-Le [Journal de sécurité](./security-logs.md) conserve les étapes de l'obligation : obligation démarrée pour un employé, passage en rappel, échéance dépassée, et dérogation accordée.
+Le [Journal de sécurité](./security-logs.md) conserve les étapes de l'obligation : obligation démarrée pour un employé, passage en rappel, échéance dépassée, et dérogation accordée. Ces étapes sont écrites mais ne sont pas listées dans le journal du back-office, qui s'en tient aux événements qui appellent une décision ; relisez-les en ligne de commande avec `php bin/console sentinel:logs --type=2fa_policy_started`, et de même `2fa_policy_reminder`, `2fa_policy_due` et `2fa_policy_exempted`.
 
 ### Dispenser un employé
 
@@ -268,7 +268,7 @@ Toute action de cet onglet est **réservée aux employés SuperAdmin**. Un emplo
 - **Accorder une dérogation** — place l'employé hors de la politique d'enrôlement pour un nombre de jours donné, avec une raison. Cela fonctionne même sur un employé qui ne s'est jamais connecté depuis le début de la politique.
 - **Retirer une dérogation** — reprend la dérogation. L'employé retombe sur l'échéance qu'il avait déjà ; retirer une dérogation ne la reporte jamais, puisque son échéance n'a jamais été touchée pendant qu'il était dispensé.
 
-Chacune de ces six actions est écrite dans le [Journal de sécurité](./security-logs.md), avec son auteur.
+Chacune de ces six actions est écrite dans le [Journal de sécurité](./security-logs.md), avec son auteur. Deux d'entre elles sont aussi listées dans le journal du back-office — **Révoquer les sessions** et **Forcer le ré-enrôlement** — parce qu'un administrateur qui intervient sur le compte d'un autre employé se lit sans terminal. Les quatre autres sont écrites mais non listées ; relisez-les avec `php bin/console sentinel:logs --type=2fa_method_removed`, `--type=2fa_trusted_device_revoked`, `--type=2fa_policy_exempted` et `--type=2fa_policy_waiver_lifted`.
 
 ## La désactiver
 
@@ -279,6 +279,8 @@ Si votre profil est réglé sur **Obligatoire**, supprimer votre application ne 
 ## Ce qui est enregistré
 
 Sentinel note chaque activation, chaque code saisi — juste ou faux —, chaque suppression, et chaque usage ou régénération de codes de secours dans le [Journal de sécurité](./security-logs.md), avec l'adresse d'où venait la demande et, pour les codes de secours, le nombre de codes restants ensuite.
+
+Le journal du back-office liste ce qui appelle l'attention : un code saisi faux, un code de secours utilisé, une suspicion de clonage, un incident. Les activations, les codes saisis juste, les suppressions et les régénérations de codes de secours sont écrites tout autant, mais ne sont pas listées ; relisez-les en ligne de commande avec `php bin/console sentinel:logs --type=2fa_enrolled`, `--type=2fa_challenge_success`, `--type=2fa_method_removed` et `--type=2fa_recovery_generated`. La liste complète est dans [Logs de sécurité](./security-logs.md#événements-écrits-mais-non-listés).
 
 ## En cas de problème
 

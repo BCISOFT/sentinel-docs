@@ -191,6 +191,33 @@ event was blocked:
 
 The same status is shown in the event details dialog.
 
+#### Events written but not listed
+
+The back-office listing keeps to the events that call for a decision. Twelve
+two-factor event types are recorded in the database exactly like the others,
+but are not shown in the table, are not offered by the type filter, are not
+counted in the dashboard figures, and are not served by the details dialog:
+
+`2fa_enrolled`, `2fa_method_removed`, `2fa_challenge_success`,
+`2fa_recovery_generated`, `2fa_trusted_device_added`,
+`2fa_trusted_device_revoked`, `2fa_policy_started`, `2fa_policy_reminder`,
+`2fa_policy_due`, `2fa_policy_alert`, `2fa_policy_exempted`,
+`2fa_policy_waiver_lifted`.
+
+Nothing changed about what is written: these events are recorded with the same
+detail as before, they are kept for the same retention period, and the command
+line reads every one of them.
+
+```bash
+php bin/console sentinel:logs --type=2fa_enrolled
+php bin/console sentinel:logs --type=2fa_policy_due
+```
+
+The two-factor events that stay in the listing are the ones worth acting on or
+investigating with: `2fa_challenge_failed`, `2fa_clone_suspected`,
+`2fa_incident`, `2fa_recovery_used`, `2fa_trusted_device_used`,
+`2fa_enrolment_forced` and `2fa_sessions_revoked`.
+
 ### Via Sentinel Command
 
 Sentinel provides a dedicated command to view and manage logs:

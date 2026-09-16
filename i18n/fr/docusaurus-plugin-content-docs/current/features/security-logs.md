@@ -191,6 +191,34 @@ chaque événement a été bloqué :
 
 Le même statut est affiché dans la fenêtre de détails de l'événement.
 
+#### Événements écrits mais non listés
+
+La liste du back-office s'en tient aux événements qui appellent une décision.
+Douze types d'événements de double authentification sont enregistrés en base
+exactement comme les autres, mais ne sont pas affichés dans le tableau, ne sont
+pas proposés par le filtre de type, ne sont pas comptés dans les chiffres du
+tableau de bord, et ne sont pas servis par la fenêtre de détails :
+
+`2fa_enrolled`, `2fa_method_removed`, `2fa_challenge_success`,
+`2fa_recovery_generated`, `2fa_trusted_device_added`,
+`2fa_trusted_device_revoked`, `2fa_policy_started`, `2fa_policy_reminder`,
+`2fa_policy_due`, `2fa_policy_alert`, `2fa_policy_exempted`,
+`2fa_policy_waiver_lifted`.
+
+Rien n'a changé à ce qui est écrit : ces événements sont enregistrés avec le
+même détail qu'avant, ils sont conservés pendant la même durée de rétention, et
+la ligne de commande les lit tous.
+
+```bash
+php bin/console sentinel:logs --type=2fa_enrolled
+php bin/console sentinel:logs --type=2fa_policy_due
+```
+
+Les événements de double authentification qui restent dans la liste sont ceux
+sur lesquels on agit ou avec lesquels on enquête : `2fa_challenge_failed`,
+`2fa_clone_suspected`, `2fa_incident`, `2fa_recovery_used`,
+`2fa_trusted_device_used`, `2fa_enrolment_forced` et `2fa_sessions_revoked`.
+
 ### Via la commande Sentinel
 
 Sentinel fournit une commande dédiée pour visualiser et gérer les logs :

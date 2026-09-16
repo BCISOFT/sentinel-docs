@@ -107,7 +107,7 @@ If your shop answers on several domains — several shops in one multistore inst
 
 ### What Sentinel records about passkeys
 
-Every passkey registered, refused or removed is written to the [Security Logs](./security-logs.md), with the address the request came from. The credential's identifier is never written there in clear.
+Every passkey registered, refused or removed is written to the [Security Logs](./security-logs.md), with the address the request came from. The credential's identifier is never written there in clear. Registrations and removals are written but not listed in the back-office journal, which keeps to the events calling for a decision; read them from the command line with `php bin/console sentinel:logs --type=2fa_enrolled` and `--type=2fa_method_removed`. A refused attempt is listed like any other failed challenge.
 
 ## Security keys: YubiKey, Token2, Nitrokey…
 
@@ -154,7 +154,7 @@ A security key registration is tied to the domain where your back office answers
 
 ### What Sentinel records about security keys
 
-Every security key registered, refused or removed is written to the [Security Logs](./security-logs.md), with the address the request came from. The credential's identifier is never written there in clear.
+Every security key registered, refused or removed is written to the [Security Logs](./security-logs.md), with the address the request came from. The credential's identifier is never written there in clear. Registrations and removals are written but not listed in the back-office journal; read them from the command line with `php bin/console sentinel:logs --type=2fa_enrolled` and `--type=2fa_method_removed`. A refused attempt is listed like any other failed challenge.
 
 ## Trusted devices: skipping the code on your own computer
 
@@ -182,7 +182,7 @@ Removing any method — not just your last one — revokes every trusted device 
 
 ### What Sentinel records
 
-Trusting a device, revoking one, and using one to sign in are all written to the [Security Logs](./security-logs.md), with the address the request came from — the sign-in event is what lets you tell, after the fact, whether a trusted device was actually used and from where.
+Trusting a device, revoking one, and using one to sign in are all written to the [Security Logs](./security-logs.md), with the address the request came from — the sign-in event is what lets you tell, after the fact, whether a trusted device was actually used and from where. That sign-in event is listed in the back-office journal, precisely because it is the one you investigate with. Trusting a device and revoking one are written but not listed there; read them from the command line with `php bin/console sentinel:logs --type=2fa_trusted_device_added` and `--type=2fa_trusted_device_revoked`.
 
 ## Requiring it for a profile
 
@@ -241,11 +241,11 @@ That page only ever shows the methods of the employee who is signed in. It never
 
 ### If nothing can be enrolled here
 
-If the shop is in a state where no method can be enrolled at all, the requirement suspends itself rather than lock anyone out: nobody is asked, nobody is blocked, and a warning is recorded in the [Security Logs](./security-logs.md) once a day until the situation is fixed. The policy you saved is left untouched, so there is nothing to restore afterwards.
+If the shop is in a state where no method can be enrolled at all, the requirement suspends itself rather than lock anyone out: nobody is asked, nobody is blocked, and a warning is recorded in the [Security Logs](./security-logs.md) once a day until the situation is fixed — written but not listed in the back-office journal, so read it with `php bin/console sentinel:logs --type=2fa_policy_alert`. The policy you saved is left untouched, so there is nothing to restore afterwards.
 
 ### What is recorded
 
-The [Security Logs](./security-logs.md) keep the requirement's milestones: obligation started for an employee, moved to reminder, deadline passed, and exemption granted.
+The [Security Logs](./security-logs.md) keep the requirement's milestones: obligation started for an employee, moved to reminder, deadline passed, and exemption granted. These milestones are written but not listed in the back-office journal, which keeps to the events calling for a decision; read them from the command line with `php bin/console sentinel:logs --type=2fa_policy_started`, and likewise `2fa_policy_reminder`, `2fa_policy_due` and `2fa_policy_exempted`.
 
 ### Exempting one employee
 
@@ -268,7 +268,7 @@ Every action in this tab is **reserved to SuperAdmin employees**. An employee wh
 - **Grant a waiver** — puts the employee outside the enrollment policy for a set number of days, with a reason. It works even on an employee who has never signed in since the policy started.
 - **Lift a waiver** — takes the waiver back. The employee falls back on the deadline they already had; lifting a waiver never postpones it, because their deadline was never touched while they were exempt.
 
-Every one of these six actions is written to the [Security Logs](./security-logs.md), with who performed it.
+Every one of these six actions is written to the [Security Logs](./security-logs.md), with who performed it. Two of them are also listed in the back-office journal — **Revoke sessions** and **Force re-enrollment** — because an administrator reaching into another employee's account is read without a terminal. The four others are written but not listed there; read them with `php bin/console sentinel:logs --type=2fa_method_removed`, `--type=2fa_trusted_device_revoked`, `--type=2fa_policy_exempted` and `--type=2fa_policy_waiver_lifted`.
 
 ## Turning it off
 
@@ -279,6 +279,8 @@ If your profile is set to **Required**, removing your app does not exempt you: t
 ## Keeping track
 
 Sentinel records each time an account is protected, each successful and failed code entry, each removal, and each use or regeneration of recovery codes in the [Security Logs](./security-logs.md), along with the address it came from and, for recovery codes, how many were left afterwards.
+
+The back-office journal lists what calls for attention: a failed code entry, a recovery code used, a suspected clone, an incident. Enrollments, successful code entries, removals and recovery-code regenerations are written just the same but are not listed there; read them from the command line with `php bin/console sentinel:logs --type=2fa_enrolled`, `--type=2fa_challenge_success`, `--type=2fa_method_removed` and `--type=2fa_recovery_generated`. The full list is in [Security Logs](./security-logs.md#events-written-but-not-listed).
 
 ## If something goes wrong
 
