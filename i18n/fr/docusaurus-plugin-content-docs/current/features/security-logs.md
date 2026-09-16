@@ -162,7 +162,7 @@ ce seul signal permettrait à un attaquant qui a simplement rejoué une assertio
 de priver l'employé légitime de sa passkey. C'est un avertissement à traiter, pas une
 sanction automatique : quand cet événement apparaît, le marchand doit considérer la
 passkey comme potentiellement compromise et faire retirer puis réenregistrer la
-credential par l'employé depuis **Sentinel > Double authentification > Mes méthodes**.
+credential par l'employé depuis **Mes méthodes**, accessible depuis son profil employé.
 
 ## Rotation des logs
 

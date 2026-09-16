@@ -161,8 +161,8 @@ deleting it on this signal alone would let an attacker who merely replayed a
 captured assertion strip the legitimate employee of their passkey. This is a
 warning to act on, not an automatic sanction: when this event appears, the
 merchant should treat the passkey as possibly compromised and have the
-employee remove and re-register it from **Sentinel > Two-Factor Authentication
-> My methods**.
+employee remove and re-register it from **My methods**, reached from their
+employee profile.
 
 ## Log Rotation
 

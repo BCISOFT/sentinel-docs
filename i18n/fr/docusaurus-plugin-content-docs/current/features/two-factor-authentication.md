@@ -12,7 +12,7 @@ Cette fonctionnalité est **gratuite**. Chaque employé l'active pour son propre
 
 ## L'activer
 
-Rendez-vous dans **Sentinel > Double authentification > Mes méthodes**, cliquez sur **Ajouter une méthode**, et choisissez **Application d'authentification** dans la fenêtre qui s'ouvre.
+Ouvrez votre profil employé - le menu de votre compte, en haut à droite du back-office - et cliquez sur **Gérer mes méthodes** dans le panneau **Double authentification**. Cliquez ensuite sur **Ajouter une méthode**, et choisissez **Application d'authentification** dans la fenêtre qui s'ouvre.
 
 1. **Scannez le QR code.** Ouvrez votre application d'authentification, choisissez d'ajouter un compte, et visez le QR code affiché à l'écran avec l'appareil photo. Si vous préférez saisir les informations à la main, la même clé est aussi affichée sous forme de texte, prête à être copiée.
 2. **Confirmez.** Votre application affiche maintenant un nombre à six chiffres qui change toutes les trente secondes. Saisissez celui du moment dans l'assistant. Cette dernière étape vérifie que votre application et la boutique sont bien d'accord avant que quoi que ce soit ne soit activé.
@@ -70,7 +70,7 @@ Les navigateurs ne proposent les passkeys qu'en HTTPS. Si votre back-office est 
 
 ### En ajouter une
 
-Depuis **Sentinel > Double authentification > Mes méthodes** — ou depuis la page d'enrôlement `sentinel/account/two-factor`, accessible à tout employé connecté :
+Depuis **Mes méthodes** — accessible depuis votre profil employé, dans le panneau **Double authentification** — ou depuis la page d'enrôlement `sentinel/account/two-factor`, accessible à tout employé connecté :
 
 1. **Prouvez le second facteur que vous avez déjà.** Avant d'enregistrer quoi que ce soit de nouveau, Sentinel demande un code frais de votre application d'authentification, ou l'un de vos codes de secours. C'est la même preuve que pour vous connecter - et un code de secours donné ici est consommé comme un autre, l'un de vos dix et non un supplément - et c'est elle qui empêche quelqu'un ayant trouvé votre session ouverte d'y ajouter discrètement sa propre clé. Si vous n'avez encore aucune méthode confirmée, rien ne vous est demandé : votre toute première méthode s'enregistre sans cette preuve.
 2. **Cliquez sur « Ajouter une méthode » puis choisissez « Passkey »** dans la fenêtre qui s'ouvre, et donnez-lui un nom que vous reconnaîtrez plus tard — « Touch ID du MacBook », « PC du bureau ». Ce nom n'est que pour vous ; c'est lui que la liste affichera.
@@ -123,7 +123,7 @@ Les navigateurs ne proposent les clés de sécurité qu'en HTTPS. Si votre back-
 
 ### En ajouter une
 
-Depuis **Sentinel > Double authentification > Mes méthodes** — ou depuis la page d'enrôlement `sentinel/account/two-factor`, accessible à tout employé connecté :
+Depuis **Mes méthodes** — accessible depuis votre profil employé, dans le panneau **Double authentification** — ou depuis la page d'enrôlement `sentinel/account/two-factor`, accessible à tout employé connecté :
 
 1. **Prouvez le second facteur que vous avez déjà.** Avant d'enregistrer quoi que ce soit de nouveau, Sentinel demande un code frais de votre application d'authentification, ou l'un de vos codes de secours. C'est la même preuve que pour vous connecter - et un code de secours donné ici est consommé comme un autre, l'un de vos dix et non un supplément - et c'est elle qui empêche quelqu'un ayant trouvé votre session ouverte d'y ajouter discrètement sa propre clé. Si vous n'avez encore aucune méthode confirmée, rien ne vous est demandé : votre toute première méthode s'enregistre sans cette preuve.
 2. **Cliquez sur « Ajouter une méthode » puis choisissez « Clé de sécurité »** dans la fenêtre qui s'ouvre, et donnez-lui un nom que vous reconnaîtrez plus tard — « YubiKey du bureau », « Clé de secours ». Ce nom n'est que pour vous ; c'est lui que la liste affichera.

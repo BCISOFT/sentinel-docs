@@ -12,7 +12,7 @@ This feature is **free**. Each employee turns it on for their own account, and c
 
 ## Turning it on
 
-Go to **Sentinel > Two-Factor Authentication > My methods**, click **Add a method**, and choose **Authenticator app** in the dialog that opens.
+Open your employee profile - the account menu at the top right of the back office - and click **Manage my methods** in the **Two-factor authentication** panel. Then click **Add a method**, and choose **Authenticator app** in the dialog that opens.
 
 1. **Scan the QR code.** Open your authenticator app, choose to add an account, and point your camera at the QR code on screen. If you would rather type things in by hand, the same key is also shown as a line of text you can copy.
 2. **Confirm.** Your app now shows a six-digit number that changes every thirty seconds. Type the current one into the wizard. This last step proves your app and the store agree before anything is switched on.
@@ -70,7 +70,7 @@ Browsers only offer passkeys over HTTPS. If your back office is served over plai
 
 ### Adding one
 
-From **Sentinel > Two-Factor Authentication > My methods** — or from the enrollment page at `sentinel/account/two-factor`, which any signed-in employee can reach:
+From **My methods** — reached from your employee profile, in the **Two-factor authentication** panel — or from the enrollment page at `sentinel/account/two-factor`, which any signed-in employee can reach:
 
 1. **Prove the second factor you already have.** Before registering anything new, Sentinel asks for a fresh code from your authenticator app, or one of your recovery codes. It is the same proof you would give to sign in - and a recovery code given here is spent like any other, one of your ten rather than an extra - and it is what stops somebody who found your session unattended from quietly adding a key of their own. If you have no confirmed method at all yet, nothing is asked: your very first method is registered without it.
 2. **Click "Add a method" and choose "Passkey"** in the dialog that opens, then give it a name you will recognise later — "MacBook Touch ID", "Work PC". The name is for you alone; it is what the list will show.
@@ -123,7 +123,7 @@ Browsers only offer security keys over HTTPS. If your back office is served over
 
 ### Adding one
 
-From **Sentinel > Two-Factor Authentication > My methods** — or from the enrollment page at `sentinel/account/two-factor`, which any signed-in employee can reach:
+From **My methods** — reached from your employee profile, in the **Two-factor authentication** panel — or from the enrollment page at `sentinel/account/two-factor`, which any signed-in employee can reach:
 
 1. **Prove the second factor you already have.** Before registering anything new, Sentinel asks for a fresh code from your authenticator app, or one of your recovery codes. It is the same proof you would give to sign in - and a recovery code given here is spent like any other, one of your ten rather than an extra - and it is what stops somebody who found your session unattended from quietly adding a key of their own. If you have no confirmed method at all yet, nothing is asked: your very first method is registered without it.
 2. **Click "Add a method" and choose "Security key"** in the dialog that opens, then give it a name you will recognise later — "YubiKey on keyring", "Desk Nitrokey". The name is for you alone; it is what the list will show.
