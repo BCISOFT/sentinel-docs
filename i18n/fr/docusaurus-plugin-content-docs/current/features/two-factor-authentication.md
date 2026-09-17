@@ -12,10 +12,12 @@ Cette fonctionnalité est **gratuite**. Chaque employé l'active pour son propre
 
 ## L'activer
 
-Ouvrez votre profil employé - le menu de votre compte, en haut à droite du back-office - et cliquez sur **Gérer mes méthodes** dans le panneau **Double authentification**. Cliquez ensuite sur **Ajouter une méthode**, et choisissez **Application d'authentification** dans la fenêtre qui s'ouvre.
+Ouvrez votre profil employé - le menu de votre compte, en haut à droite du back-office - et cliquez sur **Gérer mes méthodes** dans le panneau **Double authentification**. Cliquez ensuite sur **Ajouter une méthode**, et choisissez **Application d'authentification** dans la fenêtre qui s'ouvre. Le choix de la méthode, le QR code et la confirmation se déroulent tous dans cette même fenêtre, du début à la fin — vous ne la quittez jamais pour y arriver.
 
 1. **Scannez le QR code.** Ouvrez votre application d'authentification, choisissez d'ajouter un compte, et visez le QR code affiché à l'écran avec l'appareil photo. Si vous préférez saisir les informations à la main, la même clé est aussi affichée sous forme de texte, prête à être copiée.
 2. **Confirmez.** Votre application affiche maintenant un nombre à six chiffres qui change toutes les trente secondes. Saisissez celui du moment dans l'assistant. Cette dernière étape vérifie que votre application et la boutique sont bien d'accord avant que quoi que ce soit ne soit activé.
+
+Vous vous êtes trompé de méthode ? **Retour** ramène au choix de la méthode, et **Annuler cette configuration** — comme la croix, <kbd>Échap</kbd>, ou un clic hors de la fenêtre — abandonne cet enrôlement : le code affiché ne vaut plus rien et vous pouvez recommencer immédiatement avec la méthode de votre choix.
 
 C'est tout. Votre compte est protégé dès la prochaine connexion.
 

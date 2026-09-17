@@ -12,10 +12,12 @@ This feature is **free**. Each employee turns it on for their own account, and c
 
 ## Turning it on
 
-Open your employee profile - the account menu at the top right of the back office - and click **Manage my methods** in the **Two-factor authentication** panel. Then click **Add a method**, and choose **Authenticator app** in the dialog that opens.
+Open your employee profile - the account menu at the top right of the back office - and click **Manage my methods** in the **Two-factor authentication** panel. Then click **Add a method**, and choose **Authenticator app** in the dialog that opens. Choosing a method, scanning the QR code and confirming it all happen in that same dialog, from start to finish — you never leave it to get there.
 
 1. **Scan the QR code.** Open your authenticator app, choose to add an account, and point your camera at the QR code on screen. If you would rather type things in by hand, the same key is also shown as a line of text you can copy.
 2. **Confirm.** Your app now shows a six-digit number that changes every thirty seconds. Type the current one into the wizard. This last step proves your app and the store agree before anything is switched on.
+
+Changed your mind at this step? **Back** returns to the method choice, and **Cancel this setup** — like the close button, <kbd>Esc</kbd>, or a click outside the dialog — abandons this enrollment: the code shown becomes worthless and you can start again with any method right away.
 
 That's it. Your account is protected from the next sign-in onwards.
 
