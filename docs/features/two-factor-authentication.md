@@ -12,7 +12,7 @@ This feature is **free**. Each employee turns it on for their own account, and c
 
 ## Turning it on
 
-Open your employee profile - the account menu at the top right of the back office - and click **Manage my methods** in the **Two-factor authentication** panel. Then click **Add a method**, and choose **Authenticator app** in the dialog that opens. Choosing a method, scanning the QR code and confirming it all happen in that same dialog, from start to finish — you never leave it to get there.
+Open your employee profile - the account menu at the top right of the back office - and click **Set up two-factor authentication** in the **Two-factor authentication** panel (once you have a method active, that same button reads **Manage my methods**). Then click **Add a method**, and choose **Authenticator app** in the dialog that opens. Choosing a method, scanning the QR code and confirming it all happen in that same dialog, from start to finish — you never leave it to get there.
 
 1. **Scan the QR code.** Open your authenticator app, choose to add an account, and point your camera at the QR code on screen. If you would rather type things in by hand, the same key is also shown as a line of text you can copy.
 2. **Confirm.** Your app now shows a six-digit number that changes every thirty seconds. Type the current one into the wizard. This last step proves your app and the store agree before anything is switched on.
@@ -255,7 +255,7 @@ An employee on the road, a phone being replaced, a deadline falling at the worst
 
 ## Employees tab
 
-Alongside **My methods** and **Policy**, the **Employees** tab of **Sentinel > Two-Factor Authentication** lists every employee's own standing: who is protected, who is behind, and what to do about it — without waiting for `sentinel:2fa:status` on the server.
+Alongside **Policy**, the **Employees** tab of **Sentinel > Two-Factor Authentication** lists every employee's own standing: who is protected, who is behind, and what to do about it — without waiting for `sentinel:2fa:status` on the server.
 
 A summary card at the top counts employees by status — overdue, to remind, in grace, exempt, enrolled, none — so you see the shape of the staff before scrolling the list. The table itself shows, for each employee: their name and email, their profile, their status, which methods they hold, when a method was last used, and their deadline or exemption. Filters narrow it to one profile or one status, and it pages the same way the rest of the module does.
 

@@ -12,7 +12,7 @@ Cette fonctionnalité est **gratuite**. Chaque employé l'active pour son propre
 
 ## L'activer
 
-Ouvrez votre profil employé - le menu de votre compte, en haut à droite du back-office - et cliquez sur **Gérer mes méthodes** dans le panneau **Double authentification**. Cliquez ensuite sur **Ajouter une méthode**, et choisissez **Application d'authentification** dans la fenêtre qui s'ouvre. Le choix de la méthode, le QR code et la confirmation se déroulent tous dans cette même fenêtre, du début à la fin — vous ne la quittez jamais pour y arriver.
+Ouvrez votre profil employé - le menu de votre compte, en haut à droite du back-office - et cliquez sur **Configurer la double authentification** dans le panneau **Double authentification** (une fois une méthode active, ce même bouton devient **Gérer mes méthodes**). Cliquez ensuite sur **Ajouter une méthode**, et choisissez **Application d'authentification** dans la fenêtre qui s'ouvre. Le choix de la méthode, le QR code et la confirmation se déroulent tous dans cette même fenêtre, du début à la fin — vous ne la quittez jamais pour y arriver.
 
 1. **Scannez le QR code.** Ouvrez votre application d'authentification, choisissez d'ajouter un compte, et visez le QR code affiché à l'écran avec l'appareil photo. Si vous préférez saisir les informations à la main, la même clé est aussi affichée sous forme de texte, prête à être copiée.
 2. **Confirmez.** Votre application affiche maintenant un nombre à six chiffres qui change toutes les trente secondes. Saisissez celui du moment dans l'assistant. Cette dernière étape vérifie que votre application et la boutique sont bien d'accord avant que quoi que ce soit ne soit activé.
@@ -255,7 +255,7 @@ Un employé en déplacement, un téléphone en cours de remplacement, une éché
 
 ## Onglet Employés
 
-Aux côtés de **Mes méthodes** et **Politique**, l'onglet **Employés** de **Sentinel > Double authentification** liste la situation de chaque employé : qui est protégé, qui est en retard, et que faire — sans attendre `sentinel:2fa:status` sur le serveur.
+Aux côtés de **Politique**, l'onglet **Employés** de **Sentinel > Double authentification** liste la situation de chaque employé : qui est protégé, qui est en retard, et que faire — sans attendre `sentinel:2fa:status` sur le serveur.
 
 Une carte de synthèse en tête compte les employés par statut — en retard, à relancer, en grâce, dispensé, enrôlé, aucun — pour voir la forme de l'effectif avant de parcourir la liste. Le tableau montre, pour chaque employé : son nom et son e-mail, son profil, son statut, les méthodes qu'il détient, la dernière utilisation d'une méthode, et son échéance ou sa dispense. Des filtres restreignent à un profil ou un statut, et la pagination fonctionne comme dans le reste du module.
 
