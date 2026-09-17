@@ -213,6 +213,11 @@ php bin/console sentinel:logs --type=2fa_enrolled
 php bin/console sentinel:logs --type=2fa_policy_due
 ```
 
+Clearing the journal from the back office follows the same rule: it empties the
+events the listing shows, and leaves these twelve types in the database. The
+same goes for deleting a single event — an event the listing does not show is
+not deleted, and not served either, even when its identifier is known.
+
 The two-factor events that stay in the listing are the ones worth acting on or
 investigating with: `2fa_challenge_failed`, `2fa_clone_suspected`,
 `2fa_incident`, `2fa_recovery_used`, `2fa_trusted_device_used`,

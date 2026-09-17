@@ -214,6 +214,12 @@ php bin/console sentinel:logs --type=2fa_enrolled
 php bin/console sentinel:logs --type=2fa_policy_due
 ```
 
+Vider le journal depuis le back-office suit la même règle : l'opération efface
+les événements que la liste affiche et laisse ces douze types en base. Il en va
+de même pour la suppression d'un événement isolé : un événement que la liste
+n'affiche pas n'est pas supprimé, et n'est pas non plus servi, même lorsque son
+identifiant est connu.
+
 Les événements de double authentification qui restent dans la liste sont ceux
 sur lesquels on agit ou avec lesquels on enquête : `2fa_challenge_failed`,
 `2fa_clone_suspected`, `2fa_incident`, `2fa_recovery_used`,
