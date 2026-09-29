@@ -10,8 +10,8 @@ This guide will walk you through the process of installing Sentinel on your Pres
 
 Before installing Sentinel, ensure your system meets these requirements:
 
-- PrestaShop 1.7.7 - 9.0.x
-- PHP >= 7.2
+- PrestaShop 1.7.7.0 - 9.1.x
+- PHP 7.2 - 8.5
 - Write permissions for `/modules` and `/var/logs` directories
 
 ## Download the Module

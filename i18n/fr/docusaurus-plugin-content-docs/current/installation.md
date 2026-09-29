@@ -10,8 +10,8 @@ Ce guide vous accompagnera dans le processus d'installation de Sentinel sur votr
 
 Avant d'installer Sentinel, assurez-vous que votre système répond à ces exigences :
 
-- PrestaShop 1.7.7 - 9.0.x
-- PHP >= 7.2
+- PrestaShop 1.7.7.0 - 9.1.x
+- PHP 7.2 - 8.5
 - Permissions d'écriture pour les répertoires `/modules` et `/var/logs`
 
 ## Télécharger le module
