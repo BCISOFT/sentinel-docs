@@ -384,7 +384,7 @@ Loggé : username=admin&password=********&api_key=********
 Si vous voyez de nombreux échecs de connexion :
 
 1. Vérifier si l'IP correspond à un administrateur légitime
-2. Si non, bloquer l'IP (attaque par force brute)
+2. Si non, bloquer l'IP (attaque par brute force)
 3. Envisager l'activation d'un système 2FA
 
 ### Surveiller les accès directs aux fichiers PHP

@@ -104,7 +104,7 @@ Sentinel offre plusieurs couches de protection complémentaires :
 
 | Couche                                                        | Protection                                         | Activation            |
 | ------------------------------------------------------------- | -------------------------------------------------- | --------------------- |
-| **[Log des échecs de connexion](./features/security-logs.md)** | Détecte les tentatives de force brute            | ✓ Automatique         |
+| **[Log des échecs de connexion](./features/security-logs.md)** | Détecte les tentatives de brute force            | ✓ Automatique         |
 | **[Log des requêtes POST/PUT/PATCH/DELETE](./features/security-logs.md)** | Enregistre toutes les modifications   | ✓ Automatique         |
 | **[Scanner de vulnérabilités](./features/vulnerability-scanner.md)** | Détecte les modules/core vulnérables        | Manuel via BO         |
 | **[Détection de signatures URI](./features/threat-detection.md)** | Bloque les patterns malveillants dans les requêtes | Automatique (Pro) |
