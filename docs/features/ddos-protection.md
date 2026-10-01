@@ -128,7 +128,8 @@ php bin/console sentinel:rate-limit reset 203.0.113.10
 # Resume enforcement after the safety threshold suspended it
 php bin/console sentinel:rate-limit resume
 
-# Write the current counters to the statistics table
+# Write the current counters to the statistics table, and the bans decided
+# by the Auto Prepend protection to the ban list
 php bin/console sentinel:rate-limit flush
 
 # Remove old statistics and expired counters
@@ -136,6 +137,8 @@ php bin/console sentinel:rate-limit purge
 ```
 
 `reset` is the recovery path if a legitimate visitor is caught.
+
+With [Auto Prepend Protection](./auto-prepend-protection.md) enabled, a flooding address is banned before PrestaShop starts. The ban reaches the ban list at the next back-office page (after a flood from more than 200 addresses, the rest follows over the next pages), or all at once when `flush` runs: scheduling `flush` keeps the list, the dashboard and `sentinel:brute-force list` up to date without anyone opening the back office.
 
 ## Requirements
 
