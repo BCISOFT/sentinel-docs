@@ -200,7 +200,7 @@ Un interrupteur, **Imposer la double authentification sur cette boutique**, arme
 | **Optionnelle** | Rien ne leur est demandé. Ils peuvent toujours s'enrôler d'eux-mêmes. |
 | **Obligatoire** | Ils sont prévenus, puis relancés, puis contraints de s'enrôler. |
 
-Une colonne indique combien d'employés compte chaque profil : vous savez à qui vous vous apprêtez à imposer quoi. À l'enregistrement, une boîte de confirmation annonce le nombre d'employés concernés et la date la plus proche à laquelle l'obligation peut tomber.
+La colonne **Non enrôlés / employés** indique, pour chaque profil, les employés pas encore enrôlés sur ses employés actifs — **2 / 4** signifie que deux de ses quatre employés doivent encore s'enrôler, **0 / 3** que les trois le sont déjà. Les employés désactivés n'y figurent pas, comme dans l'onglet **Employés**. Si la boutique ne peut pas être lue à ce moment-là, la cellule affiche un tiret et *Comptage impossible pour le moment* au lieu d'un chiffre. À l'enregistrement, une boîte de confirmation annonce le nombre d'employés pas encore enrôlés sur les profils que vous rendez obligatoires, et la date la plus proche à laquelle l'obligation peut tomber.
 
 Quatre réglages complètent la matrice :
 

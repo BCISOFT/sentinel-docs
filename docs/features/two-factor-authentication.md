@@ -200,7 +200,7 @@ One switch, **Enforce two-factor authentication on this shop**, arms the whole t
 | **Optional** | Nothing is asked of them. They can still enroll on their own. |
 | **Required** | They are warned, then reminded, then required to enroll. |
 
-A column shows how many employees each profile currently holds, so you know what you are about to require of whom. When you save, a confirmation dialog states the number of employees concerned and the earliest date the requirement can bite.
+The **Not enrolled / employees** column shows, for each profile, the employees who have not enrolled yet out of its active employees — **2 / 4** means two of its four employees still have to enroll, **0 / 3** that all three already have. Deactivated employees are left out, as on the **Employees** tab. If the shop cannot be read at that moment, the cell shows a dash and *Cannot be counted right now* instead of a number. When you save, a confirmation dialog states the number of employees not enrolled yet on the profiles you require, and the earliest date the requirement can bite.
 
 Four settings sit under the matrix:
 
