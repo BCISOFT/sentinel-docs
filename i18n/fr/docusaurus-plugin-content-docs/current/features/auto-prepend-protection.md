@@ -105,6 +105,19 @@ Sentinel déroule les étapes suivantes :
 Il n'y a pas de repli d'une méthode sur l'autre, et c'est délibéré. Un `.user.ini` est ignoré par `mod_php`, et une directive `php_value` dans un `.htaccess` est une directive inconnue pour un serveur sans `mod_php` — ce qui répondrait 500 sur toutes les pages de votre boutique.
 :::
 
+### Installation en ligne de commande
+
+Lorsque Sentinel est installé ou mis à jour en ligne de commande — `bin/console prestashop:module install`, une chaîne de déploiement, Composer —, le PHP qui exécute la commande n'est pas celui qui sert votre boutique. Sa configuration ne dit rien de la façon dont le serveur web exécute PHP, ni d'un `auto_prepend_file` déclaré côté web.
+
+Sentinel interroge donc en HTTP le serveur web qui sert votre boutique, et décide d'après sa réponse, pas d'après le PHP de la ligne de commande :
+
+- **PHP en module Apache (`mod_php`)** → le bloc va dans `.htaccess`, et la protection est *Active* immédiatement.
+- **PHP-FPM et autres** → le bloc va dans `.user.ini`. L'état est *Activation en cours* jusqu'à ce que PHP lise le fichier, puis *Active*, comme pour une installation depuis le back-office.
+- **Un autre `auto_prepend_file` est actif côté web** → *Installation impossible*, et rien n'est écrit, même quand le PHP de la ligne de commande ne voit pas ce prepend. Voir [Conflit avec un prepend existant](#conflit-avec-un-prepend-existant).
+- **Le serveur web ne répond pas à la ligne de commande** → rien n'est écrit : Sentinel ne devine jamais la méthode. La protection reste *Non active* jusqu'au premier chargement du back-office, qui termine l'installation avec le même résultat que ci-dessus.
+
+Dans ce dernier cas, rien n'est à lancer à la main : ouvrir une fois le back-office suffit.
+
 ### États d'installation
 
 La page de configuration indique l'un des états suivants :
@@ -114,7 +127,7 @@ La page de configuration indique l'un des états suivants :
 | **Active** | Le prepend s'exécute, confirmé en HTTP | Rien |
 | **Activation en cours** | La configuration est écrite mais PHP ne l'a pas encore lue | Attendre, puis cliquer sur **Vérifier maintenant** |
 | **Installation impossible** | Un autre `auto_prepend_file` est déjà configuré | Voir [Conflit avec un prepend existant](#conflit-avec-un-prepend-existant) |
-| **Non active** | L'installation automatique n'a pas abouti | Suivre les instructions manuelles |
+| **Non active** | L'installation automatique n'a pas abouti, ou une installation en ligne de commande attend le back-office | Suivre les instructions manuelles, ou ouvrir le back-office pour terminer une [installation en ligne de commande](#installation-en-ligne-de-commande) |
 
 #### Pourquoi « Activation en cours » ?
 

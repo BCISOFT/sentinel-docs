@@ -105,6 +105,19 @@ Sentinel goes through the following steps:
 There is no fallback from one method to the other, and this is deliberate. A `.user.ini` is ignored by `mod_php`, and a `php_value` directive in an `.htaccess` is an unknown directive for a server without `mod_php` — which would answer every page of your shop with a 500 error.
 :::
 
+### Installing from the Command Line
+
+When Sentinel is installed or updated from the command line — `bin/console prestashop:module install`, a deployment pipeline, Composer — the PHP that runs the command is not the one that serves your shop. Its configuration says nothing about how the web server runs PHP, nor about an `auto_prepend_file` declared on the web side.
+
+Sentinel therefore asks the web server that serves your shop, over HTTP, and decides on its answer, not on the command line's PHP:
+
+- **PHP as an Apache module (`mod_php`)** → the block goes into `.htaccess`, and the protection is *Active* right away.
+- **PHP-FPM and others** → the block goes into `.user.ini`. The state is *Activation in progress* until PHP reads the file, then *Active*, as with an installation from the back office.
+- **Another `auto_prepend_file` is active on the web side** → *Installation not possible*, and nothing is written, even when the command line's PHP does not see that prepend. See [Conflict with an existing prepend](#conflict-with-an-existing-prepend).
+- **The web server does not answer the command line** → nothing is written: Sentinel never guesses the method. The protection remains *Not active* until the first back-office page load, which completes the installation with the same outcome as above.
+
+There is nothing to run by hand in the last case: opening the back office once is enough.
+
 ### Installation States
 
 The configuration page reports one of the following states:
@@ -114,7 +127,7 @@ The configuration page reports one of the following states:
 | **Active** | The prepend runs, confirmed over HTTP | Nothing |
 | **Activation in progress** | The configuration was written but PHP has not read it yet | Wait, then click **Check Now** |
 | **Installation not possible** | Another `auto_prepend_file` is already configured | See [Conflict with an existing prepend](#conflict-with-an-existing-prepend) |
-| **Not active** | Automatic installation did not succeed | Follow the manual instructions |
+| **Not active** | Automatic installation did not succeed, or an installation from the command line is waiting for the back office | Follow the manual instructions, or open the back office to complete a [command-line installation](#installing-from-the-command-line) |
 
 #### Why "Activation in progress"?
 
