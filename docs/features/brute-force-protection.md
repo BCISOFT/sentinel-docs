@@ -75,8 +75,8 @@ php bin/console sentinel:brute-force ban 203.0.113.10 --duration=7200 --reason="
 php bin/console sentinel:brute-force ban 203.0.113.10 --permanent
 
 # Unban an IP. With the Redis backend, a warning is added when the ban set
-# before the shop loads could not be lifted on this server (its files are not
-# writable by the user running the command): the address may be refused until
+# before the shop loads could not be lifted on this server (the user running
+# the command cannot change or read its files): the address may be refused until
 # it expires
 php bin/console sentinel:brute-force unban 203.0.113.10
 

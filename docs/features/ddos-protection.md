@@ -133,8 +133,8 @@ php bin/console sentinel:rate-limit test 203.0.113.10
 # Clear an address: counters plus any rate-limit ban, like Unban on the
 # DDoS Protection page (brute-force bans and the blacklist are kept).
 # With Redis, a warning is added when the ban set before the shop loads
-# could not be lifted on this server (its files are not writable by the
-# user running the command): the address may be refused until it expires
+# could not be lifted on this server (the user running the command cannot
+# change or read its files): the address may be refused until it expires
 php bin/console sentinel:rate-limit reset 203.0.113.10
 
 # Resume enforcement after the safety threshold suspended it

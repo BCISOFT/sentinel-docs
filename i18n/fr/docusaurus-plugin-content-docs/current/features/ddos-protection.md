@@ -133,8 +133,8 @@ php bin/console sentinel:rate-limit test 203.0.113.10
 # Réinitialiser une adresse : compteurs et ban éventuel, comme Débannir sur la
 # page Protection DDoS (les bans brute force et la liste noire sont conservés).
 # Avec Redis, un avertissement s'ajoute quand le ban posé avant le chargement
-# de la boutique n'a pas pu être levé sur ce serveur (ses fichiers ne sont pas
-# modifiables par l'utilisateur qui lance la commande) : l'adresse peut rester
+# de la boutique n'a pas pu être levé sur ce serveur (l'utilisateur qui lance la
+# commande ne peut pas modifier ou lire ses fichiers) : l'adresse peut rester
 # refusée jusqu'à son expiration
 php bin/console sentinel:rate-limit reset 203.0.113.10
 
