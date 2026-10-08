@@ -17,7 +17,7 @@ Les réglages se trouvent dans le back-office sous **Sentinel → Protection DDo
 1. **Comptage** : chaque requête est comptée par adresse IP sur une fenêtre glissante.
 2. **Ralentissement** : au-delà du seuil de ralentissement, les requêtes reçoivent une réponse HTTP `429 Too Many Requests` avec un en-tête `Retry-After`. L'adresse n'est pas bannie.
 3. **Bannissement** : au-delà du seuil de bannissement, l'adresse est bannie pour la durée configurée et apparaît dans la liste des bans.
-4. **Libération automatique** : les bans expirent d'eux-mêmes. En cas de récidive, la durée augmente progressivement, plafonnée à 24 heures.
+4. **Libération automatique** : les bans expirent d'eux-mêmes. En cas de récidive, la durée augmente progressivement, plafonnée à 24 heures. Un ban que vous levez, depuis l'écran Protection DDoS ou en ligne de commande, ne compte pas : le ban suivant de cette adresse reprend la durée de base.
 
 Le code `429` est utilisé plutôt que `403` car il signifie « temporaire » : les moteurs de recherche réessaient plus tard au lieu de retirer vos pages de leur index.
 
