@@ -118,6 +118,8 @@ Par défaut, les compteurs vivent dans des fichiers, locaux à un serveur. Si pl
 
 Renseigner un DSN Redis (`redis://127.0.0.1:6379/0`, éventuellement avec mot de passe : `redis://:secret@host:6379/0`) donne à tous les serveurs une vue partagée unique. Laissez vide sur une boutique mono-serveur : cela n'apporte rien. Si Redis devient injoignable, le limiteur bascule sur le backend local plutôt que d'échouer.
 
+Avec Redis, la [protection Auto Prepend](./auto-prepend-protection.md) compte et bannit toujours dans des fichiers locaux, avant le démarrage de PrestaShop. Débannir une adresse, depuis l'écran Protection DDoS ou en ligne de commande, lève aussi ce ban, mais seulement sur le serveur où vous débannissez : sur une boutique servie par plusieurs serveurs, les autres continuent de refuser l'adresse jusqu'à la fin de son ban.
+
 ## Ligne de commande
 
 ```bash

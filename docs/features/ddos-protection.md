@@ -118,6 +118,8 @@ By default counters live in files, local to one server. If several servers run t
 
 Setting a Redis DSN (`redis://127.0.0.1:6379/0`, optionally with a password: `redis://:secret@host:6379/0`) gives every server a single shared view. Leave it empty on a single-server shop — it buys nothing there. If Redis becomes unreachable, the limiter falls back to the local backend rather than failing.
 
+With Redis, the [Auto Prepend protection](./auto-prepend-protection.md) still counts and bans in local files, before PrestaShop starts. Unbanning an address, from the DDoS Protection screen or the command line, also lifts that ban, but only on the server where you unban it: on a shop run by several servers, the others keep refusing the address until its ban runs out.
+
 ## Command line
 
 ```bash
