@@ -84,7 +84,7 @@ php bin/console sentinel:brute-force list
 php bin/console sentinel:brute-force purge
 ```
 
-The `unban` command is the recommended recovery path if an administrator is ever locked out of the back-office. It lifts every ban of the address, whatever its type, including a [DDoS protection](./ddos-protection.md) ban: the address is accepted from its very next request. An IPv6 address can be typed in any notation.
+The `unban` command is the recommended recovery path if an administrator is ever locked out of the back-office. It lifts every ban of the address, whatever its type, including a [DDoS protection](./ddos-protection.md) ban: the address is no longer banned from its very next request, though it can still be slowed down while its network is under attack, since the [per-network limit](./ddos-protection.md#per-network-limit) is shared with its neighbours. An IPv6 address can be typed in any notation.
 
 ## Notes on IP resolution
 

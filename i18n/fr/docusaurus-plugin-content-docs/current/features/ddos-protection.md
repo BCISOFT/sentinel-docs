@@ -23,7 +23,7 @@ Le code `429` est utilisé plutôt que `403` car il signifie « temporaire » : 
 
 ## Lever un ban
 
-La liste des bans de cette page ne montre que les bans de limitation de débit. **Débannir** lève le ban de limitation de débit de l'adresse et remet ses compteurs de requêtes à zéro : l'adresse est de nouveau acceptée dès sa requête suivante. Un ban brute force ou une entrée de la liste noire manuelle de la même adresse reste en place : ils se lèvent depuis la page [Protection brute-force](./brute-force-protection.md).
+La liste des bans de cette page ne montre que les bans de limitation de débit. **Débannir** lève le ban de limitation de débit de l'adresse et remet ses compteurs de requêtes à zéro : l'adresse n'est plus bannie dès sa requête suivante. Elle peut encore être ralentie tant que son réseau est attaqué, car la [limite par réseau](#limite-par-réseau) est partagée avec ses voisines. Un ban brute force ou une entrée de la liste noire manuelle de la même adresse reste en place : ils se lèvent depuis la page [Protection brute-force](./brute-force-protection.md).
 
 ## Réglages
 

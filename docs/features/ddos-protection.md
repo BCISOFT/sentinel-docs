@@ -23,7 +23,7 @@ Settings live in the back-office under **Sentinel → DDoS Protection**. The **T
 
 ## Lifting a ban
 
-The ban list on this page shows rate-limit bans only. **Unban** lifts the rate-limit ban of the address and resets its request counters, so the address is accepted again from its next request. It leaves any brute-force ban or manual blacklist entry of the same address in place: those are lifted from the [Brute-force Protection](./brute-force-protection.md) page.
+The ban list on this page shows rate-limit bans only. **Unban** lifts the rate-limit ban of the address and resets its request counters, so the address is no longer banned from its next request. It can still be slowed down while its network is under attack, since the [per-network limit](#per-network-limit) is shared with its neighbours. It leaves any brute-force ban or manual blacklist entry of the same address in place: those are lifted from the [Brute-force Protection](./brute-force-protection.md) page.
 
 ## Settings
 
