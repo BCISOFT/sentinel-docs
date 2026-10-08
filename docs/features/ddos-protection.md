@@ -17,7 +17,7 @@ Settings live in the back-office under **Sentinel → DDoS Protection**. The **T
 1. **Counting**: every request is counted per IP address over a sliding window.
 2. **Throttling**: past the throttle threshold, requests receive an HTTP `429 Too Many Requests` response with a `Retry-After` header. The address is not banned.
 3. **Banning**: past the ban threshold, the address is banned for the configured duration and appears in the ban list.
-4. **Automatic release**: bans expire on their own. Repeat offenders get progressively longer bans, capped at 24 hours. A ban you lift, from the DDoS Protection screen or the command line, does not count: the next ban of that address lasts the base duration again.
+4. **Automatic release**: bans expire on their own. Repeat offenders get progressively longer bans, capped at 24 hours. Bans decided by the [Auto Prepend protection](./auto-prepend-protection.md), before PrestaShop starts, keep the base duration, even for repeat offenders. A ban you lift, from the DDoS Protection screen or the command line, does not count: the next ban of that address lasts the base duration again.
 
 `429` is used rather than `403` because it means "temporary": search engines retry later instead of dropping your pages from their index.
 

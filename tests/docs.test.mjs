@@ -43,3 +43,18 @@ test('the French docs never say "force brute"', () => {
     .filter((file) => /force brute/i.test(readFileSync(join(frenchDir, file), 'utf8')));
   assert.deepEqual(offending, []);
 });
+
+function paragraphWith(file, marker) {
+  return readFileSync(file, 'utf8').split(/\n\s*\n|\n(?=\d+\. )/).find((block) => block.includes(marker)) ?? '';
+}
+
+test('the DDoS pages say Auto Prepend bans keep the base duration on repeat offences', () => {
+  const english = paragraphWith(join(englishDir, 'features/ddos-protection.md'), 'progressively longer');
+  const french = paragraphWith(join(frenchDir, 'features/ddos-protection.md'), 'augmente progressivement');
+  assert.match(english, /\[Auto Prepend[^\]]*\]\(\.\/auto-prepend-protection\.md\)/);
+  assert.match(english, /base duration[^.]*even[^.]*repeat/i);
+  assert.match(french, /\[protection Auto Prepend\]\(\.\/auto-prepend-protection\.md\)/);
+  assert.match(french, /durée de base[^.]*même en cas de récidive/i);
+  assert.match(english, /does not count/);
+  assert.match(french, /ne compte pas/);
+});
