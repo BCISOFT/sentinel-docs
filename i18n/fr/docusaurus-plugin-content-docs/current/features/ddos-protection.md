@@ -21,6 +21,10 @@ Les réglages se trouvent dans le back-office sous **Sentinel → Protection DDo
 
 Le code `429` est utilisé plutôt que `403` car il signifie « temporaire » : les moteurs de recherche réessaient plus tard au lieu de retirer vos pages de leur index.
 
+## Lever un ban
+
+La liste des bans de cette page ne montre que les bans de limitation de débit. **Débannir** lève le ban de limitation de débit de l'adresse et remet ses compteurs de requêtes à zéro : l'adresse est de nouveau acceptée dès sa requête suivante. Un ban brute force ou une entrée de la liste noire manuelle de la même adresse reste en place : ils se lèvent depuis la page [Protection brute-force](./brute-force-protection.md).
+
 ## Réglages
 
 Deux contrôles couvrent le cas courant :
@@ -122,7 +126,8 @@ php bin/console sentinel:rate-limit status --json
 # Ce que le limiteur pense d'une adresse (ne compte rien)
 php bin/console sentinel:rate-limit test 203.0.113.10
 
-# Réinitialiser une adresse : compteurs et ban éventuel
+# Réinitialiser une adresse : compteurs et ban éventuel, comme Débannir sur la
+# page Protection DDoS (les bans brute force et la liste noire sont conservés)
 php bin/console sentinel:rate-limit reset 203.0.113.10
 
 # Reprendre le blocage après suspension par le seuil de sécurité

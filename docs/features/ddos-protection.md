@@ -21,6 +21,10 @@ Settings live in the back-office under **Sentinel → DDoS Protection**. The **T
 
 `429` is used rather than `403` because it means "temporary": search engines retry later instead of dropping your pages from their index.
 
+## Lifting a ban
+
+The ban list on this page shows rate-limit bans only. **Unban** lifts the rate-limit ban of the address and resets its request counters, so the address is accepted again from its next request. It leaves any brute-force ban or manual blacklist entry of the same address in place: those are lifted from the [Brute-force Protection](./brute-force-protection.md) page.
+
 ## Settings
 
 Two controls cover the common case:
@@ -122,7 +126,8 @@ php bin/console sentinel:rate-limit status --json
 # What the limiter currently thinks of an address (counts nothing)
 php bin/console sentinel:rate-limit test 203.0.113.10
 
-# Clear an address: counters plus any rate-limit ban
+# Clear an address: counters plus any rate-limit ban, like Unban on the
+# DDoS Protection page (brute-force bans and the blacklist are kept)
 php bin/console sentinel:rate-limit reset 203.0.113.10
 
 # Resume enforcement after the safety threshold suspended it
