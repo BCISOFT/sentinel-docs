@@ -52,7 +52,7 @@ The **Manual blacklist** form permanently bans an IP, with an optional comment s
 
 ## Managing bans
 
-The Brute-force Protection page lists all active bans (IP, type, reason, ban date, expiry, attempt count) and lets you unban any IP with a single click. Clicking the attempt count opens a modal listing the email addresses that were tried from that IP (sourced from the failed-login security logs). A ban whose address is also in the trusted IPs list is flagged with a **Trusted** badge: that address is no longer blocked.
+The Brute-force Protection page lists all active bans (IP, type, reason, ban date, expiry, attempt count) and lets you unban any IP with a single click. **Unban** lifts the brute-force ban or manual blacklist entry of the address and nothing else: a rate-limit ban of the same address stays in place, and is lifted from the [DDoS Protection](./ddos-protection.md) page. Clicking the attempt count opens a modal listing the email addresses that were tried from that IP (sourced from the failed-login security logs). A ban whose address is also in the trusted IPs list is flagged with a **Trusted** badge: that address is no longer blocked.
 
 ## Dashboard overview
 

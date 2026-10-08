@@ -52,7 +52,7 @@ Le formulaire **Liste noire manuelle** bannit définitivement une IP, avec un co
 
 ## Gestion des bannissements
 
-La page Protection brute-force liste tous les bannissements actifs (IP, type, raison, date de bannissement, expiration, nombre de tentatives) et permet de débannir une IP en un clic. Cliquer sur le nombre de tentatives ouvre une fenêtre listant les adresses email essayées depuis cette IP (issues des journaux de connexions échouées). Un bannissement dont l'adresse figure aussi dans les IP de confiance est signalé par un badge **De confiance** : cette adresse n'est plus bloquée.
+La page Protection brute-force liste tous les bannissements actifs (IP, type, raison, date de bannissement, expiration, nombre de tentatives) et permet de débannir une IP en un clic. **Débannir** lève le ban brute force ou l'entrée de la liste noire manuelle de l'adresse, et rien d'autre : un ban de limitation de débit de la même adresse reste en place, et se lève depuis la page [Protection DDoS](./ddos-protection.md). Cliquer sur le nombre de tentatives ouvre une fenêtre listant les adresses email essayées depuis cette IP (issues des journaux de connexions échouées). Un bannissement dont l'adresse figure aussi dans les IP de confiance est signalé par un badge **De confiance** : cette adresse n'est plus bloquée.
 
 ## Vue d'ensemble dans le dashboard
 
