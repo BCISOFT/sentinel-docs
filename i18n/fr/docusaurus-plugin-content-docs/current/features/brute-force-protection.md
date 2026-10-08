@@ -84,7 +84,7 @@ php bin/console sentinel:brute-force list
 php bin/console sentinel:brute-force purge
 ```
 
-La commande `unban` est la solution de secours recommandée si un administrateur se retrouve bloqué hors du back-office.
+La commande `unban` est la solution de secours recommandée si un administrateur se retrouve bloqué hors du back-office. Elle lève tous les bannissements de l'adresse, quel que soit leur type, y compris un bannissement de la [protection DDoS](./ddos-protection.md) : l'adresse est acceptée dès sa requête suivante. Une adresse IPv6 peut être saisie sous n'importe quelle notation.
 
 ## Remarques sur la résolution de l'IP
 
