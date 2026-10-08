@@ -74,7 +74,10 @@ php bin/console sentinel:brute-force ban 203.0.113.10 --duration=7200 --reason="
 # Mettre une IP en liste noire permanente
 php bin/console sentinel:brute-force ban 203.0.113.10 --permanent
 
-# Débannir une IP
+# Débannir une IP. Avec le backend Redis, un avertissement s'ajoute quand le
+# ban posé avant le chargement de la boutique n'a pas pu être levé sur ce
+# serveur (ses fichiers ne sont pas modifiables par l'utilisateur qui lance la
+# commande) : l'adresse peut rester refusée jusqu'à son expiration
 php bin/console sentinel:brute-force unban 203.0.113.10
 
 # Lister tous les bannissements (ajoutez --json pour une sortie machine)
