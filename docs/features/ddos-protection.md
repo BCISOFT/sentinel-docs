@@ -102,6 +102,8 @@ Matching is by prefix, or with `*` wildcards, and the first matching rule wins. 
 
 This is what a single global threshold cannot express: set it low enough to protect the login form and ordinary browsing breaks.
 
+Unbanning an address, from the DDoS Protection screen or the command line, also clears its count on every path rule: its next visit to the page it was banned on starts from zero instead of being banned again. The count of its network is kept, since the neighbours share it.
+
 ### Automatic tightening during a spike
 
 When total traffic over one window exceeds the spike threshold, every limit is **divided by four for ten minutes**, then re-evaluated.

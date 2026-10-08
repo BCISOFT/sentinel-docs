@@ -102,6 +102,8 @@ La correspondance se fait par préfixe, ou avec des jokers `*`, et la première 
 
 C'est ce qu'un seuil global unique ne peut pas exprimer : réglez-le assez bas pour protéger le formulaire de connexion et la navigation ordinaire casse.
 
+Débannir une adresse, depuis l'écran Protection DDoS ou en ligne de commande, remet aussi à zéro son compteur sur chaque règle de chemin : sa visite suivante de la page qui l'avait fait bannir repart de zéro au lieu de la faire bannir à nouveau. Le compteur de son réseau est conservé, car ses voisines le partagent.
+
 ### Resserrement automatique lors d'un pic
 
 Lorsque le trafic total sur une fenêtre dépasse le seuil de pic, toutes les limites sont **divisées par quatre pendant dix minutes**, puis réévaluées.
