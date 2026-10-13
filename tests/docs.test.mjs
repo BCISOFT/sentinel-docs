@@ -69,3 +69,12 @@ test('the DDoS pages say the Redis DSN has no effect and counters stay local to 
   assert.doesNotMatch(englishPage, /shared view|or Redis when|Redis is used|With Redis/);
   assert.doesNotMatch(frenchPage, /vue partagée|ou dans Redis|Redis est utilisé|Avec Redis/);
 });
+
+test('the Brute force pages keep the unban command and never mention Redis', () => {
+  const english = readFileSync(join(englishDir, 'features/brute-force-protection.md'), 'utf8');
+  const french = readFileSync(join(frenchDir, 'features/brute-force-protection.md'), 'utf8');
+  assert.match(english, /# Unban an IP\nphp bin\/console sentinel:brute-force unban 203\.0\.113\.10/);
+  assert.match(french, /# Débannir une IP\nphp bin\/console sentinel:brute-force unban 203\.0\.113\.10/);
+  assert.doesNotMatch(english, /Redis/i);
+  assert.doesNotMatch(french, /Redis/i);
+});
