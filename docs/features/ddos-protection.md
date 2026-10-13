@@ -32,7 +32,7 @@ Two controls cover the common case:
 - **Protection** — `Off`, `Monitor` or `On`.
 - **Sensitivity** — `Relaxed`, `Balanced` (default) or `Strict`. This is the only knob most shops need: it sets the request thresholds and the ban duration for you. `Relaxed` tolerates more traffic before acting; `Strict` reacts sooner.
 
-Everything else lives under **Advanced** and never needs to be touched for a normal setup: the exact per-window thresholds, ban duration, excluded URLs, safety threshold, verified-crawler and repeat-offender toggles, and the per-network / per-path / spike / Redis options described below. Editing any threshold by hand switches Sensitivity to `Custom`.
+Everything else lives under **Advanced** and never needs to be touched for a normal setup: the exact per-window thresholds, ban duration, excluded URLs, safety threshold, verified-crawler and repeat-offender toggles, the per-network / per-path / spike options and the Redis DSN field described below. Editing any threshold by hand switches Sensitivity to `Custom`.
 
 ### Monitor mode
 
@@ -114,11 +114,11 @@ The back-office and `sentinel:rate-limit status` both show when the regime is en
 
 ### Redis
 
-By default counters live in files, local to one server. If several servers run the same shop, an attacker gets a full budget on each of them.
+Counters live in files, local to each server. If several servers run the same shop, an attacker gets a full budget on each of them.
 
-Setting a Redis DSN (`redis://127.0.0.1:6379/0`, optionally with a password: `redis://:secret@host:6379/0`) gives every server a single shared view. Leave it empty on a single-server shop — it buys nothing there. If Redis becomes unreachable, the limiter falls back to the local backend rather than failing.
+The **Redis DSN** field is saved, but it has no effect at this time: even when it is filled in, counters stay in local files, and the servers of a shop do not share them.
 
-With Redis, the [Auto Prepend protection](./auto-prepend-protection.md) still counts and bans in local files, before PrestaShop starts. Unbanning an address, from the DDoS Protection screen or the command line, also lifts that ban, but only on the server where you unban it: on a shop run by several servers, the others keep refusing the address until its ban runs out.
+The [Auto Prepend protection](./auto-prepend-protection.md) counts and bans in the same local files, before PrestaShop starts. Unbanning an address, from the DDoS Protection screen or the command line, also lifts that ban, but only on the server where you unban it: on a shop run by several servers, the others keep refusing the address until its ban runs out.
 
 ## Command line
 
@@ -131,10 +131,7 @@ php bin/console sentinel:rate-limit status --json
 php bin/console sentinel:rate-limit test 203.0.113.10
 
 # Clear an address: counters plus any rate-limit ban, like Unban on the
-# DDoS Protection page (brute-force bans and the blacklist are kept).
-# With Redis, a warning is added when the ban set before the shop loads
-# could not be lifted on this server (the user running the command cannot
-# change or read its files): the address may be refused until it expires
+# DDoS Protection page (brute-force bans and the blacklist are kept)
 php bin/console sentinel:rate-limit reset 203.0.113.10
 
 # Resume enforcement after the safety threshold suspended it
@@ -156,10 +153,10 @@ With [Auto Prepend Protection](./auto-prepend-protection.md) enabled, a flooding
 
 None. The protection runs on stock PHP: no extension to install, no package to add, no server configuration to change.
 
-Counters are stored in files, which works on every host. Redis is used when you explicitly configure it, but it is never required. The features above behave identically either way; only the storage differs.
+Counters are stored in files, which works on every host. Redis is never required: the Redis DSN field has no effect at this time (see [Redis](#redis)).
 
 ## Notes and limits
 
 - **Shared addresses**: counting is per IP, so visitors behind a corporate NAT, mobile CGNAT or a school network share one counter. This is why the default thresholds are generous.
-- **Counter storage**: counters are kept in files (or Redis when configured). They may reset when the server restarts; bans are stored in the database and are not affected.
+- **Counter storage**: counters are kept in files, local to each server. They may reset when the server restarts; bans are stored in the database and are not affected.
 - **Scope**: this protects against application-level floods, aggressive scraping and bot traffic. A volumetric network-level attack saturates the server before any PHP code runs, and no PHP module can address that.

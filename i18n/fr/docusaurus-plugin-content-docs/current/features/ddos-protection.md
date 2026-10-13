@@ -32,7 +32,7 @@ Deux contrôles couvrent le cas courant :
 - **Protection** — `Désactivé`, `Surveillance` ou `Activé`.
 - **Sensibilité** — `Souple`, `Équilibré` (défaut) ou `Strict`. C'est le seul curseur dont la plupart des boutiques ont besoin : il règle pour vous les seuils de requêtes et la durée de ban. `Souple` tolère plus de trafic avant d'agir ; `Strict` réagit plus tôt.
 
-Tout le reste se trouve sous **Avancé** et n'a pas besoin d'être touché pour une configuration normale : les seuils exacts par fenêtre, la durée de ban, les URLs exclues, le seuil de sécurité, les options robots vérifiés / récidive, et les options par réseau / par chemin / pic / Redis décrites plus bas. Modifier un seuil à la main bascule la sensibilité sur `Personnalisé`.
+Tout le reste se trouve sous **Avancé** et n'a pas besoin d'être touché pour une configuration normale : les seuils exacts par fenêtre, la durée de ban, les URLs exclues, le seuil de sécurité, les options robots vérifiés / récidive, les options par réseau / par chemin / pic et le champ DSN Redis décrits plus bas. Modifier un seuil à la main bascule la sensibilité sur `Personnalisé`.
 
 ### Mode surveillance
 
@@ -114,11 +114,11 @@ Le back-office et `sentinel:rate-limit status` indiquent tous deux quand le rég
 
 ### Redis
 
-Par défaut, les compteurs vivent dans des fichiers, locaux à un serveur. Si plusieurs serveurs font tourner la même boutique, un attaquant dispose d'un quota complet sur chacun.
+Les compteurs vivent dans des fichiers, locaux à chaque serveur. Si plusieurs serveurs font tourner la même boutique, un attaquant dispose d'un quota complet sur chacun.
 
-Renseigner un DSN Redis (`redis://127.0.0.1:6379/0`, éventuellement avec mot de passe : `redis://:secret@host:6379/0`) donne à tous les serveurs une vue partagée unique. Laissez vide sur une boutique mono-serveur : cela n'apporte rien. Si Redis devient injoignable, le limiteur bascule sur le backend local plutôt que d'échouer.
+Le champ **DSN Redis** est enregistré, mais il n'a pas d'effet à ce jour : même quand il est renseigné, les compteurs restent dans des fichiers locaux, et les serveurs d'une boutique ne les partagent pas.
 
-Avec Redis, la [protection Auto Prepend](./auto-prepend-protection.md) compte et bannit toujours dans des fichiers locaux, avant le démarrage de PrestaShop. Débannir une adresse, depuis l'écran Protection DDoS ou en ligne de commande, lève aussi ce ban, mais seulement sur le serveur où vous débannissez : sur une boutique servie par plusieurs serveurs, les autres continuent de refuser l'adresse jusqu'à la fin de son ban.
+La [protection Auto Prepend](./auto-prepend-protection.md) compte et bannit dans ces mêmes fichiers locaux, avant le démarrage de PrestaShop. Débannir une adresse, depuis l'écran Protection DDoS ou en ligne de commande, lève aussi ce ban, mais seulement sur le serveur où vous débannissez : sur une boutique servie par plusieurs serveurs, les autres continuent de refuser l'adresse jusqu'à la fin de son ban.
 
 ## Ligne de commande
 
@@ -131,11 +131,7 @@ php bin/console sentinel:rate-limit status --json
 php bin/console sentinel:rate-limit test 203.0.113.10
 
 # Réinitialiser une adresse : compteurs et ban éventuel, comme Débannir sur la
-# page Protection DDoS (les bans brute force et la liste noire sont conservés).
-# Avec Redis, un avertissement s'ajoute quand le ban posé avant le chargement
-# de la boutique n'a pas pu être levé sur ce serveur (l'utilisateur qui lance la
-# commande ne peut ni modifier ni lire ses fichiers) : l'adresse peut rester
-# refusée jusqu'à son expiration
+# page Protection DDoS (les bans brute force et la liste noire sont conservés)
 php bin/console sentinel:rate-limit reset 203.0.113.10
 
 # Reprendre le blocage après suspension par le seuil de sécurité
@@ -157,10 +153,10 @@ Avec la [protection Auto Prepend](./auto-prepend-protection.md) activée, une ad
 
 Aucun. La protection fonctionne avec PHP tel quel : aucune extension à installer, aucun paquet à ajouter, aucune configuration serveur à modifier.
 
-Les compteurs sont stockés dans des fichiers, ce qui fonctionne sur tous les hébergements. Redis est utilisé si vous le configurez explicitement, mais il n'est jamais requis. Les fonctionnalités ci-dessus se comportent de façon identique dans tous les cas ; seul le stockage change.
+Les compteurs sont stockés dans des fichiers, ce qui fonctionne sur tous les hébergements. Redis n'est jamais requis : le champ DSN Redis n'a pas d'effet à ce jour (voir [Redis](#redis)).
 
 ## Remarques et limites
 
 - **Adresses partagées** : le comptage se fait par IP, donc les visiteurs derrière un NAT d'entreprise, un CGNAT mobile ou un réseau scolaire partagent un même compteur. C'est pourquoi les seuils par défaut sont larges.
-- **Stockage des compteurs** : les compteurs sont conservés dans des fichiers (ou dans Redis si configuré). Ils peuvent être réinitialisés au redémarrage du serveur ; les bans sont stockés en base et ne sont pas affectés.
+- **Stockage des compteurs** : les compteurs sont conservés dans des fichiers, locaux à chaque serveur. Ils peuvent être réinitialisés au redémarrage du serveur ; les bans sont stockés en base et ne sont pas affectés.
 - **Portée** : cette protection couvre les floods applicatifs, le scraping agressif et le trafic de robots. Une attaque volumétrique au niveau réseau sature le serveur avant que le moindre code PHP ne s'exécute, et aucun module PHP ne peut y répondre.

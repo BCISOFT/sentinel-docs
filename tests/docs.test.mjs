@@ -58,3 +58,14 @@ test('the DDoS pages say Auto Prepend bans keep the base duration on repeat offe
   assert.match(english, /does not count/);
   assert.match(french, /ne compte pas/);
 });
+
+test('the DDoS pages say the Redis DSN has no effect and counters stay local to each server', () => {
+  const englishPage = readFileSync(join(englishDir, 'features/ddos-protection.md'), 'utf8');
+  const frenchPage = readFileSync(join(frenchDir, 'features/ddos-protection.md'), 'utf8');
+  const english = paragraphWith(join(englishDir, 'features/ddos-protection.md'), '**Redis DSN**');
+  const french = paragraphWith(join(frenchDir, 'features/ddos-protection.md'), '**DSN Redis**');
+  assert.match(english, /no effect[^.]*local files/);
+  assert.match(french, /n'a pas d'effet[^.]*fichiers locaux/);
+  assert.doesNotMatch(englishPage, /shared view|or Redis when|Redis is used|With Redis/);
+  assert.doesNotMatch(frenchPage, /vue partagée|ou dans Redis|Redis est utilisé|Avec Redis/);
+});
