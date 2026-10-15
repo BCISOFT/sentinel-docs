@@ -78,3 +78,85 @@ test('the Brute force pages keep the unban command and never mention Redis', () 
   assert.doesNotMatch(english, /Redis/i);
   assert.doesNotMatch(french, /Redis/i);
 });
+
+function sectionOf(file, heading) {
+  const page = readFileSync(file, 'utf8');
+  const start = page.indexOf(heading);
+  if (start < 0) return '';
+  const end = page.indexOf('\n## ', start + heading.length);
+  return page.slice(start, end < 0 ? undefined : end);
+}
+
+test('the scanner pages describe the automatic scans in both languages', () => {
+  const englishPage = readFileSync(join(englishDir, 'features/vulnerability-scanner.md'), 'utf8');
+  const frenchPage = readFileSync(join(frenchDir, 'features/vulnerability-scanner.md'), 'utf8');
+  const english = sectionOf(join(englishDir, 'features/vulnerability-scanner.md'), '## Automatic scans {#automatic-scans}');
+  const french = sectionOf(join(frenchDir, 'features/vulnerability-scanner.md'), '## Analyses automatiques {#automatic-scans}');
+  assert.ok(englishPage.indexOf('{#automatic-scans}') > 0 && englishPage.indexOf('{#automatic-scans}') < englishPage.indexOf('## Scan History'));
+  assert.ok(frenchPage.indexOf('{#automatic-scans}') > 0 && frenchPage.indexOf('{#automatic-scans}') < frenchPage.indexOf('## Historique des scans'));
+  assert.match(english, /Europe\/Paris/);
+  assert.match(french, /Europe\/Paris/);
+  assert.match(english, /once a day|every day|daily/i);
+  assert.match(french, /une fois par jour|chaque jour|quotidien/i);
+  assert.match(english, /\*\*Run automatically\*\*[^.]*without (deleting|erasing)/);
+  assert.match(french, /\*\*Exécuter automatiquement\*\*[^.]*sans l'effacer/);
+  assert.match(english, /between 0 and 23[^.]*between 0 and 59/);
+  assert.match(french, /entre 0 et 23[^.]*entre 0 et 59/);
+  assert.match(english, /\*\*Edit\*\* permission[^.]*Security Scanner[^.]*Integrity Check/);
+  assert.match(french, /droit \*\*Modifier\*\*[^.]*Scanner de sécurité[^.]*Vérification d'intégrité/);
+  assert.match(english, /\*\*Upgrade to Pro\*\*/);
+  assert.match(french, /\*\*Passer en Pro\*\*/);
+  assert.doesNotMatch(english, /conver/i);
+  assert.doesNotMatch(french, /conver/i);
+  assert.doesNotMatch(english, /\bonly\b/i);
+  assert.doesNotMatch(french, /seulement|uniquement/i);
+});
+
+test('the scanner pages describe the alert recipients in both languages', () => {
+  const englishPage = readFileSync(join(englishDir, 'features/vulnerability-scanner.md'), 'utf8');
+  const frenchPage = readFileSync(join(frenchDir, 'features/vulnerability-scanner.md'), 'utf8');
+  const english = sectionOf(join(englishDir, 'features/vulnerability-scanner.md'), '## Alert recipients {#alert-recipients}');
+  const french = sectionOf(join(frenchDir, 'features/vulnerability-scanner.md'), '## Destinataires des alertes {#alert-recipients}');
+  assert.ok(englishPage.indexOf('{#automatic-scans}') < englishPage.indexOf('{#alert-recipients}') && englishPage.indexOf('{#alert-recipients}') < englishPage.indexOf('## Scan History'));
+  assert.ok(frenchPage.indexOf('{#automatic-scans}') < frenchPage.indexOf('{#alert-recipients}') && frenchPage.indexOf('{#alert-recipients}') < frenchPage.indexOf('## Historique des scans'));
+  assert.match(english, /report of each/);
+  assert.match(french, /rapport de chaque analyse/);
+  assert.match(english, /separated by commas/);
+  assert.match(french, /séparées par des virgules/);
+  assert.match(english, /1000 characters/);
+  assert.match(french, /1000 caractères/);
+  assert.match(english, /not valid[^.]*nothing is saved|nothing is saved[^.]*not valid/i);
+  assert.match(french, /pas valides?[^.]*rien n'est enregistré|rien n'est enregistré[^.]*pas valides?/i);
+  assert.match(english, /[Ee]mpty the field[^.]*remove/);
+  assert.match(french, /[Vv]idez le champ[^.]*retir/);
+  assert.match(english, /\*\*Edit\*\* permission/);
+  assert.match(french, /droit \*\*Modifier\*\*/);
+  assert.match(english, /\*\*Upgrade to Pro\*\*/);
+  assert.match(french, /\*\*Passer en Pro\*\*/);
+  assert.doesNotMatch(english, /manual/i);
+  assert.doesNotMatch(french, /manuel/i);
+  assert.doesNotMatch(english, /\bonly\b/i);
+  assert.doesNotMatch(french, /seulement|uniquement/i);
+});
+
+test('the Integrity Check and intro pages point to the automatic scans', () => {
+  const englishCheck = readFileSync(join(englishDir, 'features/integrity-check.md'), 'utf8');
+  const frenchCheck = readFileSync(join(frenchDir, 'features/integrity-check.md'), 'utf8');
+  const englishIntro = readFileSync(join(englishDir, 'intro.md'), 'utf8');
+  const frenchIntro = readFileSync(join(frenchDir, 'intro.md'), 'utf8');
+  assert.match(englishCheck, /\]\(\.\/vulnerability-scanner\.md#automatic-scans\)/);
+  assert.match(frenchCheck, /\]\(\.\/vulnerability-scanner\.md#automatic-scans\)/);
+  assert.doesNotMatch(englishIntro, /Manual scanning|\| Manual via BO +\||Manual via BO \(Pro\)/);
+  assert.doesNotMatch(frenchIntro, /Analyse manuelle des|\| Manuel via BO +\||Manuel via BO \(Pro\)/);
+  assert.doesNotMatch(englishCheck + englishIntro + readFileSync(join(englishDir, 'features/vulnerability-scanner.md'), 'utf8'), /manager/i);
+  assert.doesNotMatch(frenchCheck + frenchIntro + readFileSync(join(frenchDir, 'features/vulnerability-scanner.md'), 'utf8'), /manager/i);
+});
+
+test('the French pages name the tab Scanner de sécurité in the scanner menu path', () => {
+  const scanner = readFileSync(join(frenchDir, 'features/vulnerability-scanner.md'), 'utf8');
+  const installation = readFileSync(join(frenchDir, 'installation.md'), 'utf8');
+  assert.match(scanner, /\*\*Modules > Sentinel > Scanner de sécurité\*\*/);
+  assert.match(installation, /\*\*Modules > Sentinel > Scanner de sécurité\*\*/);
+  assert.doesNotMatch(scanner, /Sentinel > Security Scanner/);
+  assert.doesNotMatch(installation, /Sentinel > Security Scanner/);
+});

@@ -63,6 +63,8 @@ Pour lancer une vérification d'intégrité depuis le back-office :
 2. Allez dans **Modules > Sentinel > Vérification d'intégrité**
 3. Cliquez sur le bouton **Lancer la vérification**
 
+Pour exécuter la vérification d'intégrité chaque jour, planifiez-la dans la carte **Analyses automatiques** de la page **Scanner de sécurité** (voir [Analyses automatiques](./vulnerability-scanner.md#automatic-scans)). L'enregistrement de cette planification demande le droit **Modifier** sur l'onglet Scanner de sécurité.
+
 ### Via la ligne de commande
 
 Vous pouvez également lancer des vérifications d'intégrité depuis la ligne de commande, ce qui est utile pour l'automatisation ou lorsque le back-office n'est pas disponible.

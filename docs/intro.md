@@ -18,7 +18,7 @@ Sentinel is a security surveillance, threat detection, and vulnerability analysi
 - **Brute-force protection** *(Pro)*: Detects repeated failed back-office logins and automatically bans the offending IP addresses
 - **Access control**: Restricts back-office access to a whitelist of IP addresses
 - **Comprehensive logging**: Records all security events with detailed context for forensic analysis
-- **Vulnerability scanner**: Manual scanning for known vulnerabilities in modules and PrestaShop core
+- **Vulnerability scanner**: Manual or daily automatic *(Pro)* scanning for known vulnerabilities in modules and PrestaShop core
 - **File integrity check** *(Pro)*: Verifies that PrestaShop core and module files have not been tampered with
 - **Auto Prepend File protection** *(Pro)*: Logs direct access to PHP files bypassing PrestaShop, and blocks those carrying a known attack
 - **Failed login logging**: Detects failed back-office login attempts
@@ -105,9 +105,9 @@ Sentinel offers several complementary protection layers:
 | --------------------------------------------------------- | --------------------------------------- | ---------------------- |
 | **[Failed Login Logging](./features/security-logs.md)**   | Detects brute force attempts            | ✓ Automatic            |
 | **[POST/PUT/PATCH/DELETE Logging](./features/security-logs.md)** | Records all modifications          | ✓ Automatic            |
-| **[Vulnerability Scanner](./features/vulnerability-scanner.md)** | Detects vulnerable modules/core   | Manual via BO          |
+| **[Vulnerability Scanner](./features/vulnerability-scanner.md)** | Detects vulnerable modules/core   | Manual via BO, automatic (Pro) |
 | **[URI Signature Detection](./features/threat-detection.md)** | Blocks malicious patterns in requests | Automatic (Pro)    |
-| **[File Integrity Check](./features/integrity-check.md)** | Detects tampered files                  | Manual via BO (Pro)    |
+| **[File Integrity Check](./features/integrity-check.md)** | Detects tampered files                  | Manual via BO or automatic (Pro) |
 | **[Auto Prepend File Protection](./features/auto-prepend-protection.md)** | Protects against direct PHP file access | Configuration (Pro) |
 | **[Access Control](./features/access-control.md)** | Restricts back-office access to whitelisted IPs | Configuration |
 | **[Two-Factor Authentication](./features/two-factor-authentication.md)** | Asks employees for a one-time code from an authenticator app | Manual, per employee |

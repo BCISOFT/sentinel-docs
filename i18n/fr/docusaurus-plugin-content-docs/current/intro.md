@@ -18,7 +18,7 @@ Sentinel est un outil de surveillance, détection et analyse des menaces et vuln
 - **Protection brute-force** *(Pro)* : Détecte les connexions au back-office échouées répétées et bannit automatiquement les adresses IP fautives
 - **Contrôle d'accès** : Restreint l'accès au back-office à une liste blanche d'adresses IP
 - **Logs complets** : Enregistre tous les événements de sécurité avec contexte détaillé pour analyse forensique
-- **Scanner de vulnérabilités** : Analyse manuelle des vulnérabilités connues dans les modules et le core PrestaShop
+- **Scanner de vulnérabilités** : Analyse manuelle ou automatique quotidienne *(Pro)* des vulnérabilités connues dans les modules et le core PrestaShop
 - **Vérification d'intégrité des fichiers** *(Pro)* : Vérifie que les fichiers du core PrestaShop et des modules n'ont pas été altérés
 - **Protection Auto Prepend File** *(Pro)* : Journalise les accès directs aux fichiers PHP contournant PrestaShop, et bloque ceux qui portent une attaque connue
 - **Log des échecs de connexion** : Détecte les tentatives de connexion échouées au back-office
@@ -77,8 +77,7 @@ jamais sur le chemin critique du rendu du back-office :
 3. **Widget asynchrone** : le widget du tableau de bord d'accueil s'affiche immédiatement et charge ses données issues de l'API en arrière-plan.
 
 Si l'API Sentinel est lente ou injoignable, le back-office PrestaShop continue de
-fonctionner normalement ; seules les sections alimentées par l'API affichent un état
-temporairement dégradé.
+fonctionner normalement ; seules les sections alimentées par l'API affichent un état temporairement dégradé.
 
 ## Prérequis système
 
@@ -106,9 +105,9 @@ Sentinel offre plusieurs couches de protection complémentaires :
 | ------------------------------------------------------------- | -------------------------------------------------- | --------------------- |
 | **[Log des échecs de connexion](./features/security-logs.md)** | Détecte les tentatives de brute force            | ✓ Automatique         |
 | **[Log des requêtes POST/PUT/PATCH/DELETE](./features/security-logs.md)** | Enregistre toutes les modifications   | ✓ Automatique         |
-| **[Scanner de vulnérabilités](./features/vulnerability-scanner.md)** | Détecte les modules/core vulnérables        | Manuel via BO         |
+| **[Scanner de vulnérabilités](./features/vulnerability-scanner.md)** | Détecte les modules/core vulnérables        | Manuel via BO, automatique (Pro) |
 | **[Détection de signatures URI](./features/threat-detection.md)** | Bloque les patterns malveillants dans les requêtes | Automatique (Pro) |
-| **[Vérification d'intégrité](./features/integrity-check.md)** | Détecte les fichiers altérés                       | Manuel via BO (Pro)   |
+| **[Vérification d'intégrité](./features/integrity-check.md)** | Détecte les fichiers altérés                       | Manuel via BO ou automatique (Pro) |
 | **[Protection Auto Prepend File](./features/auto-prepend-protection.md)** | Journalise les accès directs aux fichiers PHP et bloque les attaques | Configuration (Pro) |
 | **[Contrôle d'accès](./features/access-control.md)** | Restreint l'accès au back-office aux IP en liste blanche | Configuration |
 | **[Double authentification](./features/two-factor-authentication.md)** | Demande aux employés un code à usage unique fourni par une application d'authentification | Manuel, par employé |

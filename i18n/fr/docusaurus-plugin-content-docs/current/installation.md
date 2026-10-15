@@ -154,7 +154,7 @@ Pour une protection complète, activez la protection Auto Prepend File :
 
 Vérifiez si votre installation contient des vulnérabilités connues :
 
-1. Allez dans **Modules > Sentinel > Security Scanner**
+1. Allez dans **Modules > Sentinel > Scanner de sécurité**
 2. Cliquez sur **Lancer un scan**
 3. Consultez le rapport et corrigez les vulnérabilités détectées
 
