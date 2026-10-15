@@ -63,7 +63,7 @@ To run an integrity check from the back-office:
 2. Go to **Modules > Sentinel > Integrity Check**
 3. Click the **Run Check** button
 
-To run the Integrity Check every day, schedule it in the **Automatic scans** card of the **Security Scanner** page (see [Automatic scans](./vulnerability-scanner.md#automatic-scans)). Saving that schedule requires the **Edit** permission on the Security Scanner tab.
+To run the Integrity Check every day, schedule it in the **Automatic scans** card of the **Security Scanner** page (see [Automatic scans](./vulnerability-scanner.md#automatic-scans)). Saving that schedule requires the **Edit** permission on the Security Scanner tab. Its report is sent to the [Alert recipients](./vulnerability-scanner.md#alert-recipients) set on the same page.
 
 ### Via Command Line
 
