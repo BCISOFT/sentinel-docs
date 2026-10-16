@@ -98,18 +98,29 @@ test('the scanner pages describe the automatic scans in both languages', () => {
   assert.match(french, /Europe\/Paris/);
   assert.match(english, /once a day|every day|daily/i);
   assert.match(french, /une fois par jour|chaque jour|quotidien/i);
-  assert.match(english, /\*\*Run automatically\*\*[^.]*without (deleting|erasing)/);
-  assert.match(french, /\*\*Exécuter automatiquement\*\*[^.]*sans l'effacer/);
-  assert.match(english, /[Mm]ake sure \*\*Run automatically\*\* is ticked/);
-  assert.match(french, /[Vv]érifiez que la case \*\*Exécuter automatiquement\*\* est cochée/);
-  assert.doesNotMatch(english, /Leave \*\*Run automatically\*\*/);
-  assert.doesNotMatch(french, /Laissez \*\*Exécuter automatiquement\*\*/);
+  assert.match(english, /card sits on the Sentinel module's configuration page \(\*\*Modules > Module Manager > Sentinel > Configure\*\*\)/);
+  assert.match(french, /se trouve sur la page de configuration du module Sentinel \(\*\*Modules > Gestionnaire de modules > Sentinel > Configurer\*\*\)/);
+  assert.doesNotMatch(english, /\*\*View\*\* permission|Security Scanner\*\* (page|tab)|Security Scanner tab|below the scan results/);
+  assert.doesNotMatch(french, /droit \*\*Voir\*\*|page \*\*Scanner de sécurité\*\*|onglet (\*\*)?Scanner de sécurité|sous les résultats du scan/);
+  assert.match(english, /\*\*Enable\*\*[^.]*without (deleting|erasing)/);
+  assert.match(french, /\*\*Activer\*\*[^.]*sans l'effacer/);
+  assert.match(english, /[Mm]ake sure \*\*Enable\*\* is switched on/);
+  assert.match(french, /[Vv]érifiez que l'interrupteur \*\*Activer\*\* est activé/);
+  assert.match(english, /badge \*\*Enabled\*\* or \*\*Disabled\*\*/);
+  assert.match(french, /badge \*\*Activé\*\* ou \*\*Désactivé\*\*/);
+  assert.doesNotMatch(english, /Run automatically|tick/i);
+  assert.doesNotMatch(french, /Exécuter automatiquement|coch/i);
   assert.match(english, /between 0 and 23[^.]*between 0 and 59/);
   assert.match(french, /entre 0 et 23 ou si la minute n'est pas comprise entre 0 et 59/);
-  assert.match(english, /\*\*Edit\*\* permission[^.]*Security Scanner[^.]*Integrity Check/);
-  assert.match(french, /droit \*\*Modifier\*\*[^.]*Scanner de sécurité[^.]*Vérification d'intégrité/);
-  assert.match(english, /\*\*Upgrade to Pro\*\*/);
-  assert.match(french, /\*\*Passer en Pro\*\*/);
+  assert.match(english, /[Oo]nly an employee who can configure the Sentinel module[^:]*\*\*Integrity Check\*\* schedule: a SuperAdmin, or a profile with the \*\*Edit\*\* permission on \*\*Module Manager\*\* and the \*\*Configure\*\* permission on the Sentinel module, both set in \*\*Advanced Parameters > Team > Permissions\*\*/);
+  assert.match(french, /[Ss]eul un employé qui peut configurer le module Sentinel[^:]*\*\*Vérification d'intégrité\*\* : un SuperAdmin, ou un profil qui a le droit \*\*Modifier\*\* sur \*\*Gestionnaire de modules\*\* et le droit \*\*Configurer\*\* sur le module Sentinel, tous deux réglés dans \*\*Paramètres avancés > Équipe > Permissions\*\*/);
+  assert.match(english, /PrestaShop 1\.7 and 8, any other employee cannot open the configuration page/);
+  assert.match(french, /PrestaShop 1\.7 et 8, tout autre employé ne peut pas ouvrir la page de configuration/);
+  assert.match(english, /PrestaShop 9, the page opens but[^.]*cards only show \*\*You need the permission to configure this module to see these settings\.\*\*/);
+  assert.match(french, /PrestaShop 9, la page s'ouvre mais[^.]*affichent seulement \*\*Vous devez avoir le droit de configurer ce module pour voir ces réglages\.\*\*/);
+  assert.match(english, /both rows with a padlock, \*\*Available with Sentinel Pro\*\* and an \*\*Upgrade to Pro\*\* button/);
+  assert.match(french, /deux lignes avec un cadenas, \*\*Disponible avec Sentinel Pro\*\* et un bouton \*\*Passer à Pro\*\*/);
+  assert.doesNotMatch(french, /Passer en Pro/);
   assert.doesNotMatch(english, /conver/i);
   assert.doesNotMatch(french, /conver/i);
 });
@@ -121,6 +132,8 @@ test('the scanner pages describe the alert recipients in both languages', () => 
   const french = sectionOf(join(frenchDir, 'features/vulnerability-scanner.md'), '## Destinataires des alertes {#alert-recipients}');
   assert.ok(englishPage.indexOf('{#automatic-scans}') < englishPage.indexOf('{#alert-recipients}') && englishPage.indexOf('{#alert-recipients}') < englishPage.indexOf('## Scan History'), 'EN: {#alert-recipients} is not between {#automatic-scans} and ## Scan History');
   assert.ok(frenchPage.indexOf('{#automatic-scans}') < frenchPage.indexOf('{#alert-recipients}') && frenchPage.indexOf('{#alert-recipients}') < frenchPage.indexOf('## Historique des scans'), 'FR: {#alert-recipients} is not between {#automatic-scans} and ## Historique des scans');
+  assert.match(english, /card follows the \*\*Automatic scans\*\* card on the Sentinel module's configuration page/);
+  assert.match(french, /suit la carte \*\*Analyses automatiques\*\* sur la page de configuration du module Sentinel/);
   assert.match(english, /report of each/);
   assert.match(french, /rapport de chaque analyse/);
   assert.match(english, /separated by commas/);
@@ -131,10 +144,16 @@ test('the scanner pages describe the alert recipients in both languages', () => 
   assert.match(french, /pas valides?[^.]*rien n'est enregistré|rien n'est enregistré[^.]*pas valides?/i);
   assert.match(english, /[Ee]mpty the field[^.]*remove/);
   assert.match(french, /[Vv]idez le champ[^.]*retir/);
-  assert.match(english, /\*\*Edit\*\* permission/);
-  assert.match(french, /droit \*\*Modifier\*\*/);
-  assert.match(english, /\*\*Upgrade to Pro\*\*/);
-  assert.match(french, /\*\*Passer en Pro\*\*/);
+  assert.match(english, /recipients could not be loaded[^.]*no form/);
+  assert.match(french, /destinataires n'ont pas pu être chargés[^.]*aucun formulaire/);
+  assert.match(english, /also the case when the automatic scans could not be loaded/);
+  assert.match(french, /aussi le cas quand les analyses automatiques n'ont pas pu être chargées/);
+  assert.match(english, /same employees as the \[automatic scans\]\(#automatic-scans\)[^.]*configure the Sentinel module/);
+  assert.match(french, /mêmes employés que les \[analyses automatiques\]\(#automatic-scans\)[^.]*configurer le module Sentinel/);
+  assert.match(english, /\*\*Available with Sentinel Pro\*\* and an \*\*Upgrade to Pro\*\* button/);
+  assert.match(french, /\*\*Disponible avec Sentinel Pro\*\* et un bouton \*\*Passer à Pro\*\*/);
+  assert.doesNotMatch(english, /padlock|\btab\b/i);
+  assert.doesNotMatch(french, /cadenas|onglet/i);
   assert.doesNotMatch(english, /manual/i);
   assert.doesNotMatch(french, /manuel/i);
 });
@@ -148,6 +167,12 @@ test('the Integrity Check and intro pages point to the automatic scans', () => {
   assert.match(frenchCheck, /\]\(\.\/vulnerability-scanner\.md#automatic-scans\)/);
   assert.match(englishCheck, /\]\(\.\/vulnerability-scanner\.md#alert-recipients\)/);
   assert.match(frenchCheck, /\]\(\.\/vulnerability-scanner\.md#alert-recipients\)/);
+  assert.match(englishCheck, /\*\*Automatic scans\*\* card of the Sentinel module's configuration page \(\*\*Modules > Module Manager > Sentinel > Configure\*\*/);
+  assert.match(frenchCheck, /carte \*\*Analyses automatiques\*\* de la page de configuration du module Sentinel \(\*\*Modules > Gestionnaire de modules > Sentinel > Configurer\*\*/);
+  assert.match(englishCheck, /a SuperAdmin, or a profile with the \*\*Edit\*\* permission on \*\*Module Manager\*\* and the \*\*Configure\*\* permission on the Sentinel module/);
+  assert.match(frenchCheck, /un SuperAdmin, ou un profil qui a le droit \*\*Modifier\*\* sur \*\*Gestionnaire de modules\*\* et le droit \*\*Configurer\*\* sur le module Sentinel/);
+  assert.doesNotMatch(englishCheck, /Security Scanner\*\* page|Security Scanner tab|on the same page/);
+  assert.doesNotMatch(frenchCheck, /page \*\*Scanner de sécurité\*\*|onglet Scanner de sécurité|sur la même page/);
   assert.doesNotMatch(englishIntro, /Manual scanning|\| Manual via BO +\||Manual via BO \(Pro\)/);
   assert.doesNotMatch(frenchIntro, /Analyse manuelle des|\| Manuel via BO +\||Manuel via BO \(Pro\)/);
   assert.doesNotMatch(englishCheck + englishIntro + readFileSync(join(englishDir, 'features/vulnerability-scanner.md'), 'utf8'), /(?<!Module )manager/i);
@@ -163,6 +188,11 @@ function pagesMatching(dir, pattern) {
 test('no page says the scan schedule or alert recipients are set only elsewhere', () => {
   assert.deepEqual(pagesMatching(englishDir, /only (in|from|through) (the )?(manager|Sentinel (account|dashboard|space))/i), []);
   assert.deepEqual(pagesMatching(frenchDir, /(seulement|uniquement) (dans|depuis|via) (le |l['’]|votre )?(manager|espace|compte|tableau de bord)/i), []);
+});
+
+test('no page places the automatic scans or alert recipients on the Security Scanner page', () => {
+  assert.deepEqual(pagesMatching(englishDir, /\*\*Security Scanner\*\* page|Security Scanner tab|\*\*Run automatically\*\*|on the same page/), []);
+  assert.deepEqual(pagesMatching(frenchDir, /page \*\*Scanner de sécurité\*\*|onglet (\*\*)?Scanner de sécurité|\*\*Exécuter automatiquement\*\*|Passer en Pro|sur la même page/), []);
 });
 
 test('the French pages name the tab Scanner de sécurité in the scanner menu path', () => {

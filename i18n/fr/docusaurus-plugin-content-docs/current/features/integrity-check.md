@@ -63,7 +63,7 @@ Pour lancer une vérification d'intégrité depuis le back-office :
 2. Allez dans **Modules > Sentinel > Vérification d'intégrité**
 3. Cliquez sur le bouton **Lancer la vérification**
 
-Pour exécuter la vérification d'intégrité chaque jour, planifiez-la dans la carte **Analyses automatiques** de la page **Scanner de sécurité** (voir [Analyses automatiques](./vulnerability-scanner.md#automatic-scans)). L'enregistrement de cette planification demande le droit **Modifier** sur l'onglet Scanner de sécurité. Son rapport est envoyé aux [Destinataires des alertes](./vulnerability-scanner.md#alert-recipients) choisis sur la même page.
+Pour exécuter la vérification d'intégrité chaque jour, planifiez-la dans la carte **Analyses automatiques** de la page de configuration du module Sentinel (**Modules > Gestionnaire de modules > Sentinel > Configurer** ; voir [Analyses automatiques](./vulnerability-scanner.md#automatic-scans)). Seul un employé qui peut configurer le module Sentinel voit et modifie cette planification : un SuperAdmin, ou un profil qui a le droit **Modifier** sur **Gestionnaire de modules** et le droit **Configurer** sur le module Sentinel. Son rapport est envoyé aux [Destinataires des alertes](./vulnerability-scanner.md#alert-recipients) choisis dans la carte suivante.
 
 ### Via la ligne de commande
 
