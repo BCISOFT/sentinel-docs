@@ -8,11 +8,11 @@ sidebar_position: 5
 File integrity check is available with the **Pro license**. [Get your Pro license](https://bcisoft.fr/securite) to access this feature.
 :::
 
-Sentinel's file integrity check verifies that your PrestaShop core files and module files have not been modified or compromised.
+Sentinel's file integrity check verifies that your PrestaShop core files, module files and theme files have not been modified or compromised. Its results are grouped in three sections: **Core**, **Modules** and **Themes**.
 
 ## How it works
 
-1. **File scanning**: Sentinel scans all files in your PrestaShop installation and installed modules
+1. **File scanning**: Sentinel scans all files in your PrestaShop installation, its themes and installed modules
 2. **Content normalization**: Before hashing, each file's content is normalized to eliminate non-significant whitespace differences (UTF-8 BOM, line endings, indentation). This prevents false positives caused by differences between your installed files and the reference sources.
 3. **Hash comparison**: Normalized file hashes (MD5) are compared against official versions via the Sentinel API
 4. **Difference detection**: Any modified, added, or deleted files are identified
@@ -61,7 +61,7 @@ To run an integrity check from the back-office:
 
 1. Log in to your PrestaShop back-office
 2. Go to **Modules > Sentinel > Integrity Check**
-3. Click the **Run Check** button
+3. Click the **Check Integrity** button
 
 To run the Integrity Check every day, schedule it in the **Automatic scans** card of the Sentinel module's configuration page (**Modules > Module Manager > Sentinel > Configure**; see [Automatic scans](./vulnerability-scanner.md#automatic-scans)). Only an employee who can configure the Sentinel module sees and changes that schedule: a SuperAdmin, or a profile with the **Edit** permission on **Module Manager** and the **Configure** permission on the Sentinel module. Its report is sent to the [Alert recipients](./vulnerability-scanner.md#alert-recipients) set in the next card.
 
@@ -69,7 +69,7 @@ To run the Integrity Check every day, schedule it in the **Automatic scans** car
 
 You can also run integrity checks from the command line, which is useful for automation or when the back-office is unavailable.
 
-**Check all files (core + modules):**
+**Check all files (core + themes + modules):**
 
 ```bash
 php bin/console sentinel:integrity
@@ -80,6 +80,16 @@ php bin/console sentinel:integrity
 ```bash
 php bin/console sentinel:integrity --type=core
 ```
+
+With `--type=core`, the theme directories stay in the core files and are checked with them.
+
+**Check themes only:**
+
+```bash
+php bin/console sentinel:integrity --type=themes
+```
+
+Your PrestaShop theme is verified and your custom themes are listed as not verified. Like the other checks, it uses one check of your quota.
 
 **Check modules only:**
 
@@ -93,11 +103,21 @@ php bin/console sentinel:integrity --type=modules
 php bin/console sentinel:integrity --json
 ```
 
+**Show the history of the checks:**
+
+```bash
+php bin/console sentinel:integrity --history
+```
+
+The history shows the number of issues of each check in the **Core Issues**, **Module Issues** and **Theme Issues** columns.
+
 The command displays results in a format similar to the back-office:
 
 - **Core Files**: Shows issues with PrestaShop core files
 - **Modules Files**: Shows issues with module files
 - **Unchecked Modules**: Lists third-party modules that cannot be verified
+- **Themes Files**: Shows the themes checked and the issues with their files
+- **Unchecked Themes**: Lists custom themes, which are not verified
 
 ## What is checked
 
@@ -117,6 +137,19 @@ For each installed module, Sentinel checks:
 Modules without a version number in their configuration are also checked. Sentinel uses file signatures to identify potential modifications.
 :::
 
+### Theme Files
+
+A theme is a directory of `themes/` that contains a `config/theme.yml` file. Its version is read from the `version:` line of that file.
+
+- **PrestaShop theme**: `classic`, and also `hummingbird` from PrestaShop 9, is verified against the official files of your PrestaShop version in the **Themes** section. Its files no longer count in Core.
+- **Custom theme**: any other theme, including a child theme of `classic`, is not in the Sentinel repository and is not verified. It is listed under **Unchecked Themes** with the reason **Custom theme**, and none of its files appear in Core. To have it verified, submit it to Sentinel (see **Submit a custom theme** below).
+- **Not a theme**: `themes/_libraries`, a directory whose name contains a dot and a directory without `config/theme.yml` are not themes: their files stay in Core.
+- **Cache**: the `assets/cache` directory of each theme is ignored.
+
+:::info Themes not checked and Unchecked Themes
+**Themes not checked** means that this check covered no theme, for example an older check opened from the history: nothing was checked in the Themes section. **Unchecked Themes** lists the custom themes found by a check that covered the themes.
+:::
+
 ## Understanding Results
 
 ### File Status
@@ -126,6 +159,8 @@ Modules without a version number in their configuration are also checked. Sentin
 | ⚠️ **Modified** | File content differs from original     | Review changes       |
 | 🆕 **Unknown**  | File doesn't exist in official version | Verify if legitimate |
 | ❌ **Missing**  | Official file is missing               | Reinstall file       |
+
+These statuses apply to the files of the Core, Modules and Themes sections alike.
 
 ## Diff Viewer
 
@@ -171,6 +206,8 @@ You can upload the official ZIP of the module directly in the diff viewer:
 
 This allows you to view diffs for **any module** — whether it's verified by Sentinel (known hashes, but no sources) or unchecked (not in the repository at all).
 
+The ZIP fallback does not apply to themes. For a file of a theme you submitted, the diff viewer shows **Official source not available**: Sentinel only keeps the fingerprints of its files.
+
 ## Compare with ZIP
 
 For third-party or paid modules where Sentinel does not have the original source files, you can compare your installed module against an official ZIP archive.
@@ -189,6 +226,40 @@ For third-party or paid modules where Sentinel does not have the original source
 The JavaScript keeps a reference to the uploaded ZIP file in memory, so you don't need to re-upload when viewing individual file diffs.
 :::
 
+## Submit a custom theme
+
+A custom theme is not in the Sentinel repository, so its files are not verified. You can submit its current state to Sentinel: it becomes the reference of your shop for this theme, and its files are verified from the next check.
+
+### How to Submit
+
+1. Run an integrity check — your custom themes appear in the **Unchecked Themes** section, with their version and the reason **Custom theme**
+2. Click the **Submit to Sentinel** button on the row of the theme. The button is not shown for a PrestaShop theme, which Sentinel already verifies
+3. The **Submit a theme to Sentinel** modal opens with the name of the theme and its **Installed version**
+4. If needed, choose the **Directories to exclude** and **Extensions to exclude**: nothing is selected beforehand
+5. Read the warning, then click **Submit to Sentinel** to send the fingerprints of the theme files
+6. The row now shows **Submitted, verified at the next check**. No check is started automatically: the theme stays in the list until you run one
+7. At the next check, the theme is verified in the **Themes** section, and a file modified since the submission is reported there
+
+:::warning Submit only a theme you trust
+The current state of this theme becomes the reference of your next checks. If its files were already altered by someone else, a theme already compromised would be accepted as it is: submit it only if you trust its current files.
+:::
+
+### Scope
+
+- The reference is private to your shop: another shop with the same theme still sees it as not verified.
+- A submission does not use a check of your quota.
+- Submitting a theme requires the Pro plan and the **Edit** permission on the Sentinel **Integrity Check** tab. An employee who only has the **View** permission sees the button, but the submission is refused.
+- A theme is submitted from the back-office: the command line does not offer it.
+
+### If the submission is refused
+
+The modal stays open with your exclusions, so you can correct them and try again. The messages you may see:
+
+- **`name` is a theme of PrestaShop: Sentinel already verifies it against the official files.** — this theme does not need to be submitted.
+- **This theme has no version: add a version: line to its config/theme.yml file, then submit it again.** — add a `version:` line to the `config/theme.yml` file of the theme, then submit it again.
+- **Every file of this theme is excluded: there is nothing to submit.** — remove some exclusions.
+- **The theme is too large to be submitted to Sentinel.** — excluding the directories or extensions you do not need to check reduces what is sent.
+
 ## Export Results
 
 You can export integrity check results in three formats: **CSV**, **JSON**, and **TXT**.
@@ -197,9 +268,9 @@ You can export integrity check results in three formats: **CSV**, **JSON**, and 
 
 After completing an integrity check or viewing a check from history, an **Export Results** dropdown button appears in the results area. Click it and select the desired format:
 
-- **CSV**: Semicolon-separated file with columns for Section, Path, Status, and Details. Includes core mismatches, module mismatches, and unchecked modules.
-- **JSON**: Structured data including check metadata, core results, and module results with all mismatches and unchecked modules.
-- **TXT**: Human-readable text report organized by section (Core Files, Modules Files, Unchecked Modules).
+- **CSV**: Semicolon-separated file with columns for Section, Path, Status, and Details. Includes core mismatches, module mismatches, unchecked modules, theme mismatches in `themes` rows and custom themes in `unchecked theme` rows. When the themes were not checked, a `themes` row says **Themes not checked**.
+- **JSON**: Structured data including check metadata, core results, module results and theme results with all mismatches, unchecked modules and unchecked themes. `themes_status` is `checked` or `not checked`.
+- **TXT**: Human-readable text report organized by section (Core Files, Modules Files, Unchecked Modules, Themes Files, Unchecked Themes).
 
 The file is downloaded immediately by your browser.
 
@@ -236,7 +307,7 @@ The file follows the same conventions as `.gitignore`:
 - `!keep.log` — re-include a previously ignored file
 - A trailing `/` restricts the rule to directories
 
-Rules are evaluated in order; the last matching rule wins. The `.sentinelignore` rules apply to both **core** and **module** integrity scans.
+Rules are evaluated in order; the last matching rule wins. The `.sentinelignore` rules apply to the **core**, **module** and **theme** integrity checks.
 
 ### Default rules
 
@@ -255,6 +326,10 @@ Large installations may take several minutes. Factors affecting speed:
 ### Some modules show as "Unknown"
 
 Modules not available on PrestaShop Addons cannot be verified against an official version. Sentinel will still check for suspicious patterns.
+
+### A theme shows as not verified
+
+A theme listed under **Unchecked Themes** is a custom theme: Sentinel has no reference for it. Submit it (see **Submit a custom theme**) to have its files verified from the next check. If its `config/theme.yml` file has no `version:` line, add one before submitting it.
 
 ---
 

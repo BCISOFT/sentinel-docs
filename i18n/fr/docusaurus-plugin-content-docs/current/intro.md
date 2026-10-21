@@ -19,7 +19,7 @@ Sentinel est un outil de surveillance, détection et analyse des menaces et vuln
 - **Contrôle d'accès** : Restreint l'accès au back-office à une liste blanche d'adresses IP
 - **Logs complets** : Enregistre tous les événements de sécurité avec contexte détaillé pour analyse forensique
 - **Scanner de vulnérabilités** : Analyse manuelle ou automatique quotidienne *(Pro)* des vulnérabilités connues dans les modules et le core PrestaShop
-- **Vérification d'intégrité des fichiers** *(Pro)* : Vérifie que les fichiers du core PrestaShop et des modules n'ont pas été altérés
+- **Vérification d'intégrité des fichiers** *(Pro)* : Vérifie que les fichiers du core PrestaShop, des thèmes et des modules n'ont pas été altérés
 - **Protection Auto Prepend File** *(Pro)* : Journalise les accès directs aux fichiers PHP contournant PrestaShop, et bloque ceux qui portent une attaque connue
 - **Log des échecs de connexion** : Détecte les tentatives de connexion échouées au back-office
 - **Log des requêtes POST/PUT/PATCH/DELETE** : Enregistre toutes les requêtes de modification avec leur payload
@@ -56,7 +56,7 @@ Sentinel protège contre un large éventail d'attaques web courantes :
 
 ### Vérification d'intégrité des fichiers
 
-1. **Scan des fichiers** : Tous les fichiers du core et des modules sont scannés et hashés
+1. **Scan des fichiers** : Tous les fichiers du core, des thèmes et des modules sont scannés et hashés
 2. **Comparaison officielle** : Les empreintes sont comparées aux versions officielles PrestaShop et des modules
 3. **Détection des modifications** : Tout fichier altéré, ajouté ou manquant est signalé
 

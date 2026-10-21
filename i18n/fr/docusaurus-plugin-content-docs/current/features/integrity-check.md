@@ -8,11 +8,11 @@ sidebar_position: 5
 La vérification d'intégrité des fichiers est disponible avec la **licence Pro**. [Obtenez votre licence Pro](https://bcisoft.fr/securite) pour accéder à cette fonctionnalité.
 :::
 
-La vérification d'intégrité de Sentinel vérifie que vos fichiers PrestaShop et vos fichiers de modules n'ont pas été modifiés ou compromis.
+La vérification d'intégrité de Sentinel vérifie que vos fichiers PrestaShop, vos fichiers de modules et vos fichiers de thèmes n'ont pas été modifiés ou compromis. Ses résultats sont regroupés en trois sections : **Core**, **Modules** et **Thèmes**.
 
 ## Comment ça fonctionne
 
-1. **Scan des fichiers** : Sentinel analyse tous les fichiers de votre installation PrestaShop et des modules installés
+1. **Scan des fichiers** : Sentinel analyse tous les fichiers de votre installation PrestaShop, de ses thèmes et des modules installés
 2. **Normalisation du contenu** : Avant le calcul du hash, le contenu de chaque fichier est normalisé pour éliminer les différences de whitespace non significatives (BOM UTF-8, fins de ligne, indentation). Cela évite les faux positifs causés par des différences entre vos fichiers installés et les sources de référence.
 3. **Comparaison des hash** : Les empreintes normalisées des fichiers (MD5) sont comparées aux versions officielles via l'API Sentinel
 4. **Détection des différences** : Tout fichier modifié, ajouté ou supprimé est identifié
@@ -61,7 +61,7 @@ Pour lancer une vérification d'intégrité depuis le back-office :
 
 1. Connectez-vous à votre back-office PrestaShop
 2. Allez dans **Modules > Sentinel > Vérification d'intégrité**
-3. Cliquez sur le bouton **Lancer la vérification**
+3. Cliquez sur le bouton **Vérifier l'intégrité**
 
 Pour exécuter la vérification d'intégrité chaque jour, planifiez-la dans la carte **Analyses automatiques** de la page de configuration du module Sentinel (**Modules > Gestionnaire de modules > Sentinel > Configurer** ; voir [Analyses automatiques](./vulnerability-scanner.md#automatic-scans)). Seul un employé qui peut configurer le module Sentinel voit et modifie cette planification : un SuperAdmin, ou un profil qui a le droit **Modifier** sur **Gestionnaire de modules** et le droit **Configurer** sur le module Sentinel. Son rapport est envoyé aux [Destinataires des alertes](./vulnerability-scanner.md#alert-recipients) choisis dans la carte suivante.
 
@@ -69,7 +69,7 @@ Pour exécuter la vérification d'intégrité chaque jour, planifiez-la dans la 
 
 Vous pouvez également lancer des vérifications d'intégrité depuis la ligne de commande, ce qui est utile pour l'automatisation ou lorsque le back-office n'est pas disponible.
 
-**Vérifier tous les fichiers (core + modules) :**
+**Vérifier tous les fichiers (core + thèmes + modules) :**
 
 ```bash
 php bin/console sentinel:integrity
@@ -80,6 +80,16 @@ php bin/console sentinel:integrity
 ```bash
 php bin/console sentinel:integrity --type=core
 ```
+
+Avec `--type=core`, les dossiers de thèmes restent dans les fichiers du core et sont vérifiés avec eux.
+
+**Vérifier uniquement les thèmes :**
+
+```bash
+php bin/console sentinel:integrity --type=themes
+```
+
+Votre thème PrestaShop est vérifié et vos thèmes personnalisés sont listés comme non vérifiés. Comme les autres vérifications, elle consomme un passage de votre quota.
 
 **Vérifier uniquement les modules :**
 
@@ -93,11 +103,21 @@ php bin/console sentinel:integrity --type=modules
 php bin/console sentinel:integrity --json
 ```
 
+**Afficher l'historique des vérifications :**
+
+```bash
+php bin/console sentinel:integrity --history
+```
+
+L'historique donne le nombre de problèmes de chaque vérification dans les colonnes **Core Issues**, **Module Issues** et **Theme Issues**.
+
 La commande affiche les résultats dans un format similaire au back-office :
 
 - **Core Files** : Affiche les problèmes avec les fichiers du core PrestaShop
 - **Modules Files** : Affiche les problèmes avec les fichiers des modules
 - **Unchecked Modules** : Liste les modules tiers qui ne peuvent pas être vérifiés
+- **Themes Files** : Affiche les thèmes contrôlés et les problèmes avec leurs fichiers
+- **Unchecked Themes** : Liste les thèmes personnalisés, qui ne sont pas vérifiés
 
 ## Ce qui est vérifié
 
@@ -117,6 +137,19 @@ Pour chaque module installé, Sentinel vérifie :
 Les modules sans numéro de version dans leur configuration sont également vérifiés. Sentinel utilise des signatures de fichiers pour identifier les modifications potentielles.
 :::
 
+### Fichiers Thèmes
+
+Un thème est un dossier de `themes/` qui contient un fichier `config/theme.yml`. Sa version est lue sur la ligne `version:` de ce fichier.
+
+- **Thème de PrestaShop** : `classic`, ainsi que `hummingbird` à partir de PrestaShop 9, est vérifié avec les fichiers officiels de votre version de PrestaShop dans la section **Thèmes**. Ses fichiers ne comptent plus dans Core.
+- **Thème personnalisé** : tout autre thème, y compris un thème enfant de `classic`, n'est pas dans le dépôt Sentinel et n'est pas vérifié. Il figure dans **Thèmes non vérifiés** avec la raison **Thème personnalisé**, et aucun de ses fichiers n'apparaît dans Core. Pour le faire vérifier, soumettez-le à Sentinel (voir **Soumettre un thème personnalisé** plus bas).
+- **Pas un thème** : `themes/_libraries`, un dossier dont le nom contient un point et un dossier sans `config/theme.yml` ne sont pas des thèmes : leurs fichiers restent dans Core.
+- **Cache** : le dossier `assets/cache` de chaque thème est ignoré.
+
+:::info Thèmes non contrôlés et Thèmes non vérifiés
+**Thèmes non contrôlés** signifie que ce contrôle n'a couvert aucun thème, par exemple un ancien contrôle ouvert depuis l'historique : rien n'a été contrôlé dans la section Thèmes. **Thèmes non vérifiés** liste les thèmes personnalisés trouvés par un contrôle qui a couvert les thèmes.
+:::
+
 ## Comprendre les résultats
 
 ### Statut des fichiers
@@ -126,6 +159,8 @@ Les modules sans numéro de version dans leur configuration sont également vér
 | ⚠️ **Modifié**  | Le contenu du fichier diffère de l'original        | Examiner les modifications |
 | 🆕 **Inconnu**  | Le fichier n'existe pas dans la version officielle | Vérifier si légitime       |
 | ❌ **Manquant** | Un fichier officiel est manquant                   | Réinstaller le fichier     |
+
+Ces statuts valent aussi bien pour les fichiers des sections Core, Modules et Thèmes.
 
 ## Visualiseur de diff
 
@@ -164,12 +199,14 @@ Lorsque vous consultez le diff d'un fichier de module et que l'API Sentinel ne d
 
 Vous pouvez uploader le ZIP officiel du module directement dans le visualiseur de diff :
 
-1. Cliquez sur **Voir le Diff** sur un fichier de module avec une différence
+1. Cliquez sur **Voir le diff** sur un fichier de module avec une différence
 2. Si les sources ne sont pas disponibles, le message d'erreur s'affiche avec une zone "Comparer à partir d'un fichier ZIP"
 3. Déposez ou sélectionnez le ZIP officiel du module
 4. Sentinel extrait le fichier du ZIP, lit votre fichier local, et affiche le diff
 
 Cela vous permet de visualiser les diffs pour **n'importe quel module** — qu'il soit vérifié par Sentinel (hash connus, mais pas de sources) ou non vérifié (absent du référentiel).
+
+Le fallback ZIP ne s'applique pas aux thèmes. Pour un fichier d'un thème que vous avez soumis, le visualiseur de diff affiche **Source officielle non disponible** : Sentinel ne conserve que les empreintes de ses fichiers.
 
 ## Comparer avec un ZIP
 
@@ -189,6 +226,40 @@ Pour les modules tiers ou payants dont Sentinel ne dispose pas des fichiers sour
 Le JavaScript garde une référence au fichier ZIP uploadé en mémoire, vous n'avez donc pas besoin de re-uploader lors de la consultation des diffs fichier par fichier.
 :::
 
+## Soumettre un thème personnalisé
+
+Un thème personnalisé n'est pas dans le dépôt Sentinel : ses fichiers ne sont donc pas vérifiés. Vous pouvez soumettre son état actuel à Sentinel : il devient la référence de votre boutique pour ce thème, et ses fichiers sont vérifiés à partir du contrôle suivant.
+
+### Comment soumettre
+
+1. Lancez une vérification d'intégrité — vos thèmes personnalisés apparaissent dans la section **Thèmes non vérifiés**, avec leur version et la raison **Thème personnalisé**
+2. Cliquez sur le bouton **Soumettre à Sentinel** sur la ligne du thème. Le bouton n'apparaît pas pour un thème de PrestaShop, que Sentinel vérifie déjà
+3. La modale **Soumettre un thème à Sentinel** s'ouvre avec le nom du thème et sa **Version installée**
+4. Si besoin, choisissez les **Répertoires à exclure** et les **Extensions à exclure** : rien n'est coché d'avance
+5. Lisez l'avertissement, puis cliquez sur **Soumettre à Sentinel** pour envoyer les empreintes des fichiers du thème
+6. La ligne affiche alors **Soumis, vérifié au prochain contrôle**. Aucun contrôle n'est lancé automatiquement : le thème reste dans la liste jusqu'à ce que vous en lanciez un
+7. Au contrôle suivant, le thème est vérifié dans la section **Thèmes**, et un fichier modifié depuis la soumission y est signalé
+
+:::warning Ne soumettez qu'un thème de confiance
+L'état actuel de ce thème devient la référence de vos prochaines vérifications. Si ses fichiers ont déjà été modifiés par un tiers, un thème déjà compromis serait accepté tel quel : ne le soumettez que si vous avez confiance dans ses fichiers actuels.
+:::
+
+### Portée
+
+- La référence est privée à votre boutique : une autre boutique qui a le même thème le voit toujours non vérifié.
+- Une soumission ne consomme pas de passage de votre quota.
+- Soumettre un thème demande l'offre Pro et la permission **Modifier** sur l'onglet **Vérification d'intégrité** de Sentinel. Un employé qui n'a que la permission **Voir** voit le bouton, mais sa soumission est refusée.
+- Un thème se soumet depuis le back-office : la ligne de commande ne le propose pas.
+
+### Si la soumission est refusée
+
+La modale reste ouverte avec vos exclusions : vous pouvez les corriger et réessayer. Les messages que vous pouvez rencontrer :
+
+- **`nom` est un thème de PrestaShop : Sentinel le vérifie déjà avec les fichiers officiels.** — ce thème n'a pas besoin d'être soumis.
+- **Ce thème n'a pas de version : ajoutez une ligne version: à son fichier config/theme.yml, puis soumettez-le à nouveau.** — ajoutez une ligne `version:` au fichier `config/theme.yml` du thème, puis soumettez-le à nouveau.
+- **Tous les fichiers de ce thème sont exclus : il n'y a rien à soumettre.** — retirez des exclusions.
+- **Le thème est trop volumineux pour être soumis à Sentinel.** — exclure les répertoires ou extensions que vous n'avez pas besoin de contrôler réduit ce qui est envoyé.
+
 ## Exporter les résultats
 
 Vous pouvez exporter les résultats d'une vérification d'intégrité dans trois formats : **CSV**, **JSON** et **TXT**.
@@ -197,9 +268,9 @@ Vous pouvez exporter les résultats d'une vérification d'intégrité dans trois
 
 Après avoir effectué une vérification d'intégrité ou consulté une vérification depuis l'historique, un bouton déroulant **Exporter les résultats** apparaît dans la zone des résultats. Cliquez dessus et sélectionnez le format souhaité :
 
-- **CSV** : Fichier séparé par des points-virgules avec les colonnes Section, Chemin, Statut et Détails. Inclut les anomalies core, les anomalies modules et les modules non vérifiés.
-- **JSON** : Données structurées incluant les métadonnées de la vérification, les résultats core et les résultats modules avec toutes les anomalies et les modules non vérifiés.
-- **TXT** : Rapport texte lisible organisé par section (Fichiers Core, Fichiers Modules, Modules non vérifiés).
+- **CSV** : Fichier séparé par des points-virgules avec les colonnes Section, Chemin, Statut et Détails. Inclut les anomalies core, les anomalies modules, les modules non vérifiés, les anomalies thèmes en lignes `themes` et les thèmes personnalisés en lignes `unchecked theme`. Quand les thèmes n'ont pas été contrôlés, une ligne `themes` indique **Themes not checked**.
+- **JSON** : Données structurées incluant les métadonnées de la vérification, les résultats core, modules et thèmes avec toutes les anomalies, les modules non vérifiés et les thèmes non vérifiés. `themes_status` vaut `checked` ou `not checked`.
+- **TXT** : Rapport texte lisible organisé par section, sous les titres anglais de l'export (Core Files, Modules Files, Unchecked Modules, Themes Files, Unchecked Themes).
 
 Le fichier est téléchargé immédiatement par votre navigateur.
 
@@ -236,7 +307,7 @@ Le fichier respecte les mêmes conventions que `.gitignore` :
 - `!keep.log` — réintègre un fichier précédemment ignoré
 - Un `/` final restreint la règle aux répertoires
 
-Les règles sont évaluées dans l'ordre ; la dernière règle correspondante l'emporte. Les règles de `.sentinelignore` s'appliquent aux scans **core** ET **modules**.
+Les règles sont évaluées dans l'ordre ; la dernière règle correspondante l'emporte. Les règles de `.sentinelignore` s'appliquent aux contrôles **core**, **modules** et **thèmes**.
 
 ### Règles par défaut
 
@@ -255,6 +326,10 @@ Les grandes installations peuvent prendre plusieurs minutes. Facteurs affectant 
 ### Certains modules affichent "Inconnu"
 
 Les modules non disponibles sur PrestaShop Addons ne peuvent pas être vérifiés par rapport à une version officielle. Sentinel vérifiera quand même les patterns suspects.
+
+### Un thème apparaît comme non vérifié
+
+Un thème listé dans **Thèmes non vérifiés** est un thème personnalisé : Sentinel n'en a aucune référence. Soumettez-le (voir **Soumettre un thème personnalisé**) pour que ses fichiers soient vérifiés à partir du contrôle suivant. Si son fichier `config/theme.yml` n'a pas de ligne `version:`, ajoutez-en une avant de le soumettre.
 
 ---
 
