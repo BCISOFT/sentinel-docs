@@ -147,7 +147,7 @@ Un thème est un dossier de `themes/` qui contient un fichier `config/theme.yml`
 - **Cache** : le dossier `assets/cache` de chaque thème est ignoré.
 
 :::info Thèmes non contrôlés et Thèmes non vérifiés
-**Thèmes non contrôlés** signifie que ce contrôle n'a couvert aucun thème, par exemple un ancien contrôle ouvert depuis l'historique : rien n'a été contrôlé dans la section Thèmes. **Thèmes non vérifiés** liste les thèmes personnalisés trouvés par un contrôle qui a couvert les thèmes.
+**Thèmes non contrôlés** signifie qu'aucun thème n'a été contrôlé dans la section Thèmes : par exemple un ancien contrôle ouvert depuis l'historique, ou une boutique dont tous les thèmes sont personnalisés et pas encore soumis. **Thèmes non vérifiés** liste les thèmes personnalisés trouvés par le contrôle : les deux peuvent donc s'afficher ensemble.
 :::
 
 ## Comprendre les résultats
@@ -253,10 +253,13 @@ L'état actuel de ce thème devient la référence de vos prochaines vérificati
 
 ### Si la soumission est refusée
 
-La modale reste ouverte avec vos exclusions : vous pouvez les corriger et réessayer. Les messages que vous pouvez rencontrer :
+À l'ouverture de la modale, Sentinel vérifie d'abord que le thème peut être soumis. Sinon, la modale affiche le message sans exclusions ni bouton d'envoi :
 
 - **`nom` est un thème de PrestaShop : Sentinel le vérifie déjà avec les fichiers officiels.** — ce thème n'a pas besoin d'être soumis.
-- **Ce thème n'a pas de version : ajoutez une ligne version: à son fichier config/theme.yml, puis soumettez-le à nouveau.** — ajoutez une ligne `version:` au fichier `config/theme.yml` du thème, puis soumettez-le à nouveau.
+- **Ce thème n'a pas de version : ajoutez une ligne version: à son fichier config/theme.yml, puis soumettez-le à nouveau.** — ajoutez une ligne `version:` au fichier `config/theme.yml` du thème, puis fermez la modale et rouvrez-la.
+
+Quand vous cliquez sur **Soumettre à Sentinel**, la soumission peut encore être refusée. La modale reste alors ouverte avec vos exclusions, pour que vous puissiez les corriger et réessayer :
+
 - **Tous les fichiers de ce thème sont exclus : il n'y a rien à soumettre.** — retirez des exclusions.
 - **Le thème est trop volumineux pour être soumis à Sentinel.** — exclure les répertoires ou extensions que vous n'avez pas besoin de contrôler réduit ce qui est envoyé.
 

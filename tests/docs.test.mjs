@@ -242,8 +242,10 @@ test('the Integrity Check pages describe the Themes section in both languages', 
   assert.match(frenchThemes, /`themes\/_libraries`, un dossier dont le nom contient un point et un dossier sans `config\/theme\.yml`[^.]*restent dans Core/);
   assert.match(englishThemes, /`assets\/cache` directory of each theme is ignored/);
   assert.match(frenchThemes, /dossier `assets\/cache` de chaque thème est ignoré/);
-  assert.match(englishThemes, /\*\*Themes not checked\*\* means that this check covered no theme[^.]*nothing was checked in the Themes section\. \*\*Unchecked Themes\*\* lists the custom themes/);
-  assert.match(frenchThemes, /\*\*Thèmes non contrôlés\*\* signifie que ce contrôle n'a couvert aucun thème[^.]*rien n'a été contrôlé dans la section Thèmes\. \*\*Thèmes non vérifiés\*\* liste les thèmes personnalisés/);
+  assert.match(englishThemes, /\*\*Themes not checked\*\* means that no theme was checked in the Themes section/);
+  assert.match(frenchThemes, /\*\*Thèmes non contrôlés\*\* signifie qu'aucun thème n'a été contrôlé dans la section Thèmes/);
+  assert.match(englishThemes, /\*\*Unchecked Themes\*\* lists the custom themes found by the check: both can therefore appear together/);
+  assert.match(frenchThemes, /\*\*Thèmes non vérifiés\*\* liste les thèmes personnalisés trouvés par le contrôle : les deux peuvent donc s'afficher ensemble/);
   assert.doesNotMatch(englishPage + frenchPage, /\b(?!classic\b|hummingbird\b)\w+` is (also )?a (native|PrestaShop) theme/);
   assert.match(englishCli, /--type=themes\n/);
   assert.match(frenchCli, /--type=themes\n/);
@@ -297,8 +299,10 @@ test('the Integrity Check pages describe the submission of a custom theme in bot
   assert.match(french, /ne consomme pas de passage de votre quota/);
   assert.match(english, /requires the Pro plan and the \*\*Edit\*\* permission on the Sentinel \*\*Integrity Check\*\* tab/);
   assert.match(french, /demande l'offre Pro et la permission \*\*Modifier\*\* sur l'onglet \*\*Vérification d'intégrité\*\* de Sentinel/);
-  assert.match(english, /modal stays open with your exclusions/);
-  assert.match(french, /modale reste ouverte avec vos exclusions/);
+  assert.match(english, /\nWhen the modal opens[^\n]*without exclusions or submit button[^\n]*\n\n- \*\*`name` is a theme of PrestaShop[^\n]*\n- \*\*This theme has no version[^\n]*then close the modal and open it again\.\n/);
+  assert.match(french, /\nÀ l'ouverture de la modale[^\n]*sans exclusions ni bouton d'envoi[^\n]*\n\n- \*\*`nom` est un thème de PrestaShop[^\n]*\n- \*\*Ce thème n'a pas de version[^\n]*puis fermez la modale et rouvrez-la\.\n/);
+  assert.match(english, /\nWhen you click \*\*Submit to Sentinel\*\*[^\n]*The modal then stays open with your exclusions[^\n]*\n\n- \*\*Every file of this theme is excluded[^\n]*\n- \*\*The theme is too large/);
+  assert.match(french, /\nQuand vous cliquez sur \*\*Soumettre à Sentinel\*\*[^\n]*La modale reste alors ouverte avec vos exclusions[^\n]*\n\n- \*\*Tous les fichiers de ce thème sont exclus[^\n]*\n- \*\*Le thème est trop volumineux/);
   assert.match(english, /\*\*`name` is a theme of PrestaShop: Sentinel already verifies it against the official files\.\*\*/);
   assert.match(french, /\*\*`nom` est un thème de PrestaShop : Sentinel le vérifie déjà avec les fichiers officiels\.\*\*/);
   assert.match(english, /\*\*This theme has no version: add a version: line to its config\/theme\.yml file, then submit it again\.\*\*/);

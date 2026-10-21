@@ -147,7 +147,7 @@ A theme is a directory of `themes/` that contains a `config/theme.yml` file. Its
 - **Cache**: the `assets/cache` directory of each theme is ignored.
 
 :::info Themes not checked and Unchecked Themes
-**Themes not checked** means that this check covered no theme, for example an older check opened from the history: nothing was checked in the Themes section. **Unchecked Themes** lists the custom themes found by a check that covered the themes.
+**Themes not checked** means that no theme was checked in the Themes section: for example an older check opened from the history, or a shop whose themes are all custom and not yet submitted. **Unchecked Themes** lists the custom themes found by the check: both can therefore appear together.
 :::
 
 ## Understanding Results
@@ -253,10 +253,13 @@ The current state of this theme becomes the reference of your next checks. If it
 
 ### If the submission is refused
 
-The modal stays open with your exclusions, so you can correct them and try again. The messages you may see:
+When the modal opens, Sentinel first checks that the theme can be submitted. If it cannot, the modal shows the message without exclusions or submit button:
 
 - **`name` is a theme of PrestaShop: Sentinel already verifies it against the official files.** — this theme does not need to be submitted.
-- **This theme has no version: add a version: line to its config/theme.yml file, then submit it again.** — add a `version:` line to the `config/theme.yml` file of the theme, then submit it again.
+- **This theme has no version: add a version: line to its config/theme.yml file, then submit it again.** — add a `version:` line to the `config/theme.yml` file of the theme, then close the modal and open it again.
+
+When you click **Submit to Sentinel**, the submission may still be refused. The modal then stays open with your exclusions, so you can correct them and try again:
+
 - **Every file of this theme is excluded: there is nothing to submit.** — remove some exclusions.
 - **The theme is too large to be submitted to Sentinel.** — excluding the directories or extensions you do not need to check reduces what is sent.
 
