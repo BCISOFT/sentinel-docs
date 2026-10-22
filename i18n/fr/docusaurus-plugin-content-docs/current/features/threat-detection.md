@@ -12,7 +12,7 @@ Sentinel détecte et bloque automatiquement les requêtes malveillantes en utili
 
 ## Comment ça fonctionne
 
-1. **Analyse des requêtes** : Chaque requête HTTP est analysée avant d'atteindre PrestaShop — chaîne de requête, corps brut, champs de formulaire (y compris les envois `multipart/form-data`) et noms des fichiers téléversés. Le percent-encoding est d'abord défait, de sorte qu'encoder un caractère ne permet pas de dissimuler une charge.
+1. **Analyse des requêtes** : Chaque requête HTTP est analysée avant d'atteindre PrestaShop — chaîne de requête, corps brut, champs de formulaire (y compris les envois `multipart/form-data`) et noms des fichiers téléversés. Le percent-encoding est d'abord défait, de sorte qu'encoder un caractère ne permet pas de dissimuler une charge. Les jetons de sécurité que PrestaShop ajoute à ses liens et à ses formulaires ne sont pas comparés aux signatures lorsqu'ils ont exactement la forme que PrestaShop leur donne, afin qu'un jeton tiré au hasard ne fasse plus refuser une page ou un formulaire ; toute autre valeur de ces paramètres est analysée comme d'habitude, et les signatures qui les visent s'appliquent toujours.
 2. **Correspondance de motifs** : La requête est comparée aux signatures de menaces connues téléchargées depuis l'API Sentinel
 3. **Blocage instantané** : Si un motif malveillant est détecté, la requête est bloquée avec HTTP 403
 4. **Journalisation** : Toutes les attaques détectées sont enregistrées avec les détails (IP, URI, motif correspondant)

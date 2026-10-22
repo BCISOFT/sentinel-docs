@@ -12,7 +12,7 @@ Sentinel detects and blocks malicious requests automatically using signature-bas
 
 ## How it works
 
-1. **Request Analysis**: Every HTTP request is analyzed before reaching PrestaShop — query string, raw body, form fields (including `multipart/form-data` submissions) and uploaded file names. Percent-encoding is undone first, so encoding a character does not hide a payload.
+1. **Request Analysis**: Every HTTP request is analyzed before reaching PrestaShop — query string, raw body, form fields (including `multipart/form-data` submissions) and uploaded file names. Percent-encoding is undone first, so encoding a character does not hide a payload. The security tokens that PrestaShop adds to its links and forms are not compared with the signatures when they have exactly the shape PrestaShop gives them, so that a random token no longer gets a page or a form refused by chance; any other value of these parameters is analyzed as usual, and the signatures that target them still apply.
 2. **Pattern Matching**: The request is compared against known threat signatures downloaded from the Sentinel API
 3. **Instant Blocking**: If a malicious pattern is detected, the request is blocked with HTTP 403
 4. **Logging**: All detected attacks are logged with details (IP, URI, pattern matched)

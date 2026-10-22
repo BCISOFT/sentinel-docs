@@ -259,6 +259,8 @@ test('the Integrity Check pages describe the Themes section in both languages', 
   assert.match(frenchCli, /- \*\*Themes Files\*\*[^\n]*\n- \*\*Unchecked Themes\*\*/);
   assert.match(englishCli, /\*\*Core Issues\*\*, \*\*Module Issues\*\* and \*\*Theme Issues\*\*/);
   assert.match(frenchCli, /\*\*Core Issues\*\*, \*\*Module Issues\*\* et \*\*Theme Issues\*\*/);
+  assert.match(englishCli, /its column says so instead of a green `0`: `2 not checked`, or `3 \(2 not checked\)` when the section also has issues; the \*\*Total\*\* column then turns yellow, while still counting the issues only\. With `--history --json`, each check also carries a `failures` object/);
+  assert.match(frenchCli, /sa colonne le dit au lieu d'un `0` vert : `2 not checked`, ou `3 \(2 not checked\)` quand la section a aussi des problèmes ; la colonne \*\*Total\*\* passe alors en jaune, tout en ne comptant que les problèmes\. Avec `--history --json`, chaque vérification porte aussi un objet `failures`/);
   assert.doesNotMatch(englishCli + frenchCli, /submi|soum/i);
   assert.match(englishPage, /These statuses apply to the files of the Core, Modules and Themes sections alike/);
   assert.match(frenchPage, /Ces statuts valent aussi bien pour les fichiers des sections Core, Modules et Thèmes/);
@@ -347,16 +349,22 @@ test('the Integrity Check pages say secret files are never served, however they 
   assert.match(french, /les fichiers `\.env` et `\.env\.\*`, `app\/config\/` et `var\/` à la racine de la boutique/);
   assert.match(english, /`config\/settings\*\.php` \(also in a copy of the shop or in the `config\/` directory of a module\)/);
   assert.match(french, /`config\/settings\*\.php` \(y compris dans une copie de la boutique ou dans le dossier `config\/` d'un module\)/);
+  assert.match(english, /\), a file whose name contains `settings\.inc` in a `config\/` directory or one of its subdirectories, such as `config\/old_settings\.inc\.php` or `config\/sav\/settings\.inc\.php`, `parameters\.php`/);
+  assert.match(french, /\), un fichier dont le nom contient `settings\.inc` dans un dossier `config\/` ou l'un de ses sous-dossiers, comme `config\/old_settings\.inc\.php` ou `config\/sav\/settings\.inc\.php`, `parameters\.php`/);
+  assert.match(english, /`\.htpasswd` files, `\.sql`, `\.mysql` and `\.log` files, and the archives left at the root of the shop \(for example `\.zip`, `\.tar`, `\.tar\.gz`, `\.tgz`, `\.7z` or `\.rar`\)\./);
+  assert.match(french, /les fichiers `\.htpasswd`, les fichiers `\.sql`, `\.mysql` et `\.log`, ainsi que les archives laissées à la racine de la boutique \(par exemple `\.zip`, `\.tar`, `\.tar\.gz`, `\.tgz`, `\.7z` ou `\.rar`\)\./);
   assert.match(english, /`parameters\.php`, `parameters\.yml` and `parameters\.yaml`, `appParameters\.php`, any `var\/cache\/` directory/);
   assert.match(french, /`parameters\.php`, `parameters\.yml` et `parameters\.yaml`, `appParameters\.php`, tout dossier `var\/cache\/`/);
   assert.match(english, /`\.git\/`, `\.htpasswd` files/);
   assert.match(french, /`\.git\/`, les fichiers `\.htpasswd`/);
   assert.match(english, /however the requested path is written \(`\.\/`, a doubled `\/`\), through a symbolic link placed in the shop[^.]*judged by its real place in the shop/);
   assert.match(french, /quelle que soit l'écriture du chemin demandé \(`\.\/`, `\/` doublé\), à travers un lien symbolique placé dans la boutique[^.]*jugé sur sa place réelle dans la boutique/);
-  assert.match(english, /and so are the backup copies and database dumps whose names Sentinel recognises, compressed or not, for example `config\/settings\.inc\.php\.bak`, `parameters\.yml~`, `dump\.sql`, `dump\.sql\.gz` or `error\.log\.old`/);
-  assert.match(french, /de même que les copies de sauvegarde et les dumps de base de données dont Sentinel reconnaît le nom, compressés ou non, par exemple `config\/settings\.inc\.php\.bak`, `parameters\.yml~`, `dump\.sql`, `dump\.sql\.gz` ou `error\.log\.old`/);
+  assert.match(english, /and so are the backup copies and database dumps whose names Sentinel recognises, compressed or not, for example `config\/settings\.inc\.php\.bak`, `parameters\.yml~`, `parameters_old\.php`, `dump\.sql`, `dump\.sql\.gz`, `db\.mysql` or `error\.log\.old`\. The viewer then shows/);
+  assert.match(french, /de même que les copies de sauvegarde et les dumps de base de données dont Sentinel reconnaît le nom, compressés ou non, par exemple `config\/settings\.inc\.php\.bak`, `parameters\.yml~`, `parameters_old\.php`, `dump\.sql`, `dump\.sql\.gz`, `db\.mysql` ou `error\.log\.old`\. Le visualiseur affiche alors/);
   assert.match(english, /Keep no other copy of these files and no database dump in your shop directory\./);
   assert.match(french, /Ne gardez aucune autre copie de ces fichiers ni aucun dump de base de données dans le répertoire de votre boutique\./);
+  assert.match(english, /Keep no archive of the shop there either: archives are only refused at the root of the shop, and one stored in another folder, such as `preprod\/` or the folder of a module or a theme, stays readable\./);
+  assert.match(french, /N'y gardez pas non plus d'archive de la boutique : les archives ne sont refusées qu'à la racine de la boutique, et une archive rangée dans un autre dossier, comme `preprod\/` ou le dossier d'un module ou d'un thème, reste lisible\./);
   assert.doesNotMatch(english, /\btheir backup copies|backup copies and database dumps(?! whose names Sentinel recognises)|(?<!config\/)settings\.inc\.php\.bak/);
   assert.doesNotMatch(french, /\bleurs copies de sauvegarde|copies de sauvegarde et les dumps de base de données(?! dont Sentinel reconnaît le nom)|(?<!config\/)settings\.inc\.php\.bak/);
   assert.match(english, /The viewer then shows \*\*Failed to load file content\*\*/);
@@ -387,6 +395,8 @@ test('the Integrity Check pages say which binary files are previewed and which a
 });
 
 test('the Integrity Check pages name the folders and themes that could not be checked', () => {
+  const englishPage = readFileSync(englishCheckFile, 'utf8');
+  const frenchPage = readFileSync(frenchCheckFile, 'utf8');
   const english = admonitionOf(englishCheckFile, ':::warning Could not be checked');
   const french = admonitionOf(frenchCheckFile, ":::warning N'a pas pu être contrôlé");
   const englishCli = sectionOf(englishCheckFile, '### Via Command Line');
@@ -407,10 +417,27 @@ test('the Integrity Check pages name the folders and themes that could not be ch
   assert.match(french, /listés dans le détail d'un contrôle rouvert depuis l'historique[^.]*apparaissent comme `modules` sous \*\*N'a pas pu être contrôlé\*\*[^.]*`php bin\/console sentinel:integrity --details=<check_id>`/);
   assert.match(english, /last 100 checks that have one/);
   assert.match(french, /100 derniers contrôles qui en ont une/);
-  assert.match(english, /CSV, JSON and TXT exports do not contain it/);
-  assert.match(french, /exports CSV, JSON et TXT ne la contiennent pas/);
+  assert.doesNotMatch(english, /exports do not contain it|before relying on an export/);
+  assert.doesNotMatch(french, /exports CSV, JSON et TXT ne la contiennent pas|avant de vous fier à un export/);
+  assert.match(english, /In the \*\*Check History\*\* list of the back office, a section with such folders or themes never shows \*\*OK\*\*: it shows a \*\*N not checked\*\* badge, after the \*\*N issue\(s\)\*\* badge when the section also has issues; hover it to read their names, up to ten\./);
+  assert.match(french, /Dans la liste \*\*Historique des vérifications\*\* du back-office, une section qui a de tels dossiers ou thèmes n'affiche jamais \*\*OK\*\* : elle affiche un badge \*\*N non contrôlé\(s\)\*\*, après le badge \*\*N problème\(s\)\*\* quand la section a aussi des problèmes ; survolez-le pour lire leurs noms, dix au plus\./);
+  assert.match(english, /The \*\*Last Integrity Check\*\* card of the Sentinel dashboard marks the section the same way, and also shows, with \*\*Not checked\*\*, a Core or Modules section that was not recorded but has such folders\./);
+  assert.match(french, /La carte \*\*Dernière vérification d'intégrité\*\* du tableau de bord de Sentinel marque la section de la même façon, et affiche aussi, avec \*\*Non contrôlé\*\*, une section Core ou Modules qui n'a pas été enregistrée mais a de tels dossiers\./);
+  assert.match(english, /The Sentinel widget of the PrestaShop dashboard adds a \*\*Could not be checked\*\* line with their number\. The CSV, JSON and TXT exports name them under their section \(see \*\*Export Results\*\* below\)\./);
+  assert.match(french, /Le widget Sentinel du tableau de bord de PrestaShop ajoute une ligne \*\*N'a pas pu être contrôlé\*\* avec leur nombre\. Les exports CSV, JSON et TXT les nomment sous leur section \(voir \*\*Exporter les résultats\*\* plus bas\)\./);
+  assert.doesNotMatch(english, /first ten/);
+  assert.doesNotMatch(french, /dix premiers/);
   assert.doesNotMatch(english, /reopened[^.]*\*\*Modules not checked\*\*|OK column|No issues found/);
   assert.doesNotMatch(french, /rouvert[^.]*\*\*Modules non contrôlés\*\*|colonne OK|No issues found/);
+  assert.match(englishPage, /- \*\*CSV\*\*[^\n]*Each folder or theme that could not be checked is a row of its section with the status `not checked` and \*\*Could not be checked\*\* in Details\.\n/);
+  assert.match(frenchPage, /- \*\*CSV\*\* : Fichier séparé par des points-virgules, avec les colonnes nommées en anglais comme dans l'export : Section, Path, Status et Details\.[^\n]*Chaque dossier ou thème qui n'a pas pu être contrôlé forme une ligne de sa section avec le statut `not checked` et \*\*Could not be checked\*\* dans la colonne Details\.\n/);
+  assert.doesNotMatch(frenchPage, /Chemin, Statut et Détails/);
+  assert.match(englishPage, /- \*\*JSON\*\*[^\n]*When at least one folder or theme could not be checked, a `failures` object lists them by section \(`core`, `modules`, `themes`\)\.\n/);
+  assert.match(frenchPage, /- \*\*JSON\*\*[^\n]*Quand au moins un dossier ou un thème n'a pas pu être contrôlé, un objet `failures` les liste par section \(`core`, `modules`, `themes`\)\.\n/);
+  assert.match(englishPage, /- \*\*TXT\*\*[^\n]*Each folder or theme that could not be checked is listed as `Could not be checked: <name>` in its section, which then never says its files are intact, and the report also ends with `No issues found in the checked files\.` when no issue is found\.\n/);
+  assert.match(frenchPage, /- \*\*TXT\*\*[^\n]*Chaque dossier ou thème qui n'a pas pu être contrôlé est listé `Could not be checked: <nom>` dans sa section, qui ne dit alors jamais que ses fichiers sont intacts, et le rapport se termine aussi par `No issues found in the checked files\.` si aucun problème n'est trouvé\.\n/);
+  assert.match(englishPage, /\n\nThe exports name the folders and themes that could not be checked for the checks whose list Sentinel kept \(see \*\*Could not be checked\*\* above\)\.\n/);
+  assert.match(frenchPage, /\n\nLes exports nomment les dossiers et thèmes qui n'ont pas pu être contrôlés pour les contrôles dont Sentinel a conservé la liste \(voir \*\*N'a pas pu être contrôlé\*\* plus haut\)\.\n/);
   assert.match(englishCli, /sentinel:integrity --details=<check_id>\n```\n\n`<check_id>` is a value of the \*\*Check ID\*\* column of the history\. In each section, the details name the folders and themes that could not be checked/);
   assert.match(frenchCli, /sentinel:integrity --details=<check_id>\n```\n\n`<check_id>` est une valeur de la colonne \*\*Check ID\*\* de l'historique\. Dans chaque section, le détail nomme les dossiers et les thèmes qui n'ont pas pu être contrôlés/);
   assert.doesNotMatch(englishCli + frenchCli, /No issues found|Integrity check complete/);
@@ -435,6 +462,20 @@ test('the Integrity Check pages say where Themes not checked is shown', () => {
   assert.match(frenchCli, /- \*\*Themes Files\*\* : Affiche les thèmes contrôlés, ou \*\*Themes not checked\*\*, et les problèmes avec leurs fichiers\n/);
   assert.match(englishPage, /\*\*TXT\*\*[^\n]*When the themes were not checked, the Themes Files section says `Themes not checked\.`[^\n]*ends with `No issues found in the checked files\.`/);
   assert.match(frenchPage, /\*\*TXT\*\*[^\n]*Quand les thèmes n'ont pas été contrôlés, la section Themes Files indique `Themes not checked\.`[^\n]*se termine par `No issues found in the checked files\.`/);
+});
+
+test('the Threat Detection pages say the security tokens of PrestaShop are not compared with the signatures', () => {
+  const englishFile = join(englishDir, 'features/threat-detection.md');
+  const frenchFile = join(frenchDir, 'features/threat-detection.md');
+  const english = paragraphWith(englishFile, '**Request Analysis**');
+  const french = paragraphWith(frenchFile, '**Analyse des requêtes**');
+  assert.match(english, /The security tokens that PrestaShop adds to its links and forms are not compared with the signatures when they have exactly the shape PrestaShop gives them, so that a random token no longer gets a page or a form refused by chance/);
+  assert.match(french, /Les jetons de sécurité que PrestaShop ajoute à ses liens et à ses formulaires ne sont pas comparés aux signatures lorsqu'ils ont exactement la forme que PrestaShop leur donne, afin qu'un jeton tiré au hasard ne fasse plus refuser une page ou un formulaire/);
+  assert.match(english, /any other value of these parameters is analyzed as usual, and the signatures that target them still apply\.$/);
+  assert.match(french, /toute autre valeur de ces paramètres est analysée comme d'habitude, et les signatures qui les visent s'appliquent toujours\.$/);
+  assert.doesNotMatch(english, /back-office links|can no longer/);
+  assert.doesNotMatch(french, /liens du back-office|ne peut plus/);
+  assert.doesNotMatch(readFileSync(englishFile, 'utf8') + readFileSync(frenchFile, 'utf8'), /_token|`token`|base64|randomi|\b4[23]\b|\[A-Za-z/i);
 });
 
 test('the installation pages say who can change the settings of the configuration page', () => {
