@@ -164,6 +164,23 @@ Logs are automatically created in `/var/logs/sentinel-YYYY-MM-DD.log`
 
 See the [Security Logs](./features/security-logs.md) guide to learn how to analyze them.
 
+## Who Can Change the Settings {#who-can-change-the-settings}
+
+Only an employee who can configure the Sentinel module changes the settings of its configuration page (**Modules > Module Manager > Sentinel > Configure**): a SuperAdmin, or a profile with the **Edit** permission on **Module Manager** and the **Configure** permission on the Sentinel module, both set in **Advanced Parameters > Team > Permissions**. On PrestaShop 1.7 and 8, PrestaShop already requires these permissions before opening the page. On PrestaShop 9, an employee who only has read access to **Module Manager** can open the page, but sees it read-only.
+
+The settings concerned are:
+
+- associating a licence
+- the Auto Prepend automatic installation
+- the Integrity Check exclusions
+- downloading the threat detection signatures
+- refreshing the subscription
+- turning threat detection on or off
+
+The read-only page still shows the plan, the licence, the state of the protections, the Auto Prepend instructions and the Integrity Check exclusions, without any button, link, switch or form to change them, and with the notice **You need the permission to configure this module to change these settings.** If that employee sends a change anyway, nothing is changed and the page says **Your account is not allowed to change these settings. Nothing was changed: ask the shop administrator.** For a licence association, the message is **Your account is not allowed to associate a licence with this shop. Nothing was saved: ask the shop administrator to associate the licence again from this page.**
+
+The trusted proxy declaration and the [Automatic scans](./features/vulnerability-scanner.md#automatic-scans) and [Alert recipients](./features/vulnerability-scanner.md#alert-recipients) cards already followed the same rule.
+
 ## Next Steps
 
 Now that Sentinel is installed, learn more about:

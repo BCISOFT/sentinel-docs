@@ -164,6 +164,23 @@ Les logs sont automatiquement créés dans `/var/logs/sentinel-YYYY-MM-DD.log`
 
 Consultez le guide [Logs de sécurité](./features/security-logs.md) pour apprendre à les analyser.
 
+## Qui peut modifier les réglages {#who-can-change-the-settings}
+
+Seul un employé qui peut configurer le module Sentinel modifie les réglages de sa page de configuration (**Modules > Gestionnaire de modules > Sentinel > Configurer**) : un SuperAdmin, ou un profil qui a le droit **Modifier** sur **Gestionnaire de modules** et le droit **Configurer** sur le module Sentinel, tous deux réglés dans **Paramètres avancés > Équipe > Permissions**. Sous PrestaShop 1.7 et 8, PrestaShop exige déjà ces droits avant d'ouvrir la page. Sous PrestaShop 9, un employé qui n'a que la lecture sur **Gestionnaire de modules** peut ouvrir la page, mais la voit en lecture seule.
+
+Les réglages concernés sont :
+
+- l'association d'une licence
+- l'installation automatique d'Auto Prepend
+- les exclusions de la Vérification d'intégrité
+- le téléchargement des signatures de détection des menaces
+- le rafraîchissement de l'abonnement
+- l'activation ou la désactivation de la détection des menaces
+
+La page en lecture seule affiche toujours l'offre, la licence, l'état des protections, les instructions Auto Prepend et les exclusions de la Vérification d'intégrité, sans aucun bouton, lien, interrupteur ni formulaire pour les modifier, et avec la mention **Vous devez avoir le droit de configurer ce module pour modifier ces réglages.** Si cet employé envoie quand même une modification, rien n'est changé et la page indique **Votre compte n'est pas autorisé à modifier ces réglages. Rien n'a été modifié : demandez à l'administrateur de la boutique.** Pour une association de licence, le message est **Votre compte n'est pas autorisé à associer une licence à cette boutique. Rien n'a été enregistré : demandez à l'administrateur de la boutique de refaire l'association de la licence depuis cette page.**
+
+La déclaration des proxys de confiance et les cartes [Analyses automatiques](./features/vulnerability-scanner.md#automatic-scans) et [Destinataires des alertes](./features/vulnerability-scanner.md#alert-recipients) suivaient déjà la même règle.
+
 ## Prochaines étapes
 
 Maintenant que Sentinel est installé, apprenez-en plus sur :

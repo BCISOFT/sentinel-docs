@@ -92,6 +92,8 @@ Les tentatives bloquées apparaissent dans les Journaux de sécurité, onglet de
 1. Allez dans **Modules > Sentinel > Configuration**
 2. Cliquez sur **Tenter l'installation automatique**
 
+Seul un employé qui peut configurer le module Sentinel voit ce bouton et peut lancer l'installation ; sous PrestaShop 9, les autres employés voient la page en lecture seule. Voir [Qui peut modifier les réglages](../installation.md#who-can-change-the-settings).
+
 Sentinel déroule les étapes suivantes :
 
 1. **Il recherche un `auto_prepend_file` existant.** La valeur PHP effective est consultée en premier, ce qui couvre aussi un `php.ini` système, un pool PHP-FPM et un `.htaccess` parent. Les fichiers à la racine de la boutique sont ensuite analysés. Si un autre prepend est déjà déclaré, **Sentinel s'arrête là et n'écrit rien** : le remplacer désactiverait la protection à laquelle il appartient.

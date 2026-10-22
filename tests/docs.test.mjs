@@ -436,3 +436,27 @@ test('the Integrity Check pages say where Themes not checked is shown', () => {
   assert.match(englishPage, /\*\*TXT\*\*[^\n]*When the themes were not checked, the Themes Files section says `Themes not checked\.`[^\n]*ends with `No issues found in the checked files\.`/);
   assert.match(frenchPage, /\*\*TXT\*\*[^\n]*Quand les thèmes n'ont pas été contrôlés, la section Themes Files indique `Themes not checked\.`[^\n]*se termine par `No issues found in the checked files\.`/);
 });
+
+test('the installation pages say who can change the settings of the configuration page', () => {
+  const english = sectionOf(join(englishDir, 'installation.md'), '## Who Can Change the Settings {#who-can-change-the-settings}');
+  const french = sectionOf(join(frenchDir, 'installation.md'), '## Qui peut modifier les réglages {#who-can-change-the-settings}');
+  const englishPrepend = paragraphWith(join(englishDir, 'features/auto-prepend-protection.md'), 'sees this button');
+  const frenchPrepend = paragraphWith(join(frenchDir, 'features/auto-prepend-protection.md'), 'voit ce bouton');
+  assert.match(english, /SuperAdmin, or a profile with the \*\*Edit\*\* permission on \*\*Module Manager\*\* and the \*\*Configure\*\* permission on the Sentinel module, both set in \*\*Advanced Parameters > Team > Permissions\*\*/);
+  assert.match(french, /SuperAdmin, ou un profil qui a le droit \*\*Modifier\*\* sur \*\*Gestionnaire de modules\*\* et le droit \*\*Configurer\*\* sur le module Sentinel, tous deux réglés dans \*\*Paramètres avancés > Équipe > Permissions\*\*/);
+  assert.match(english, /PrestaShop 1\.7 and 8, PrestaShop already requires these permissions before opening the page/);
+  assert.match(french, /PrestaShop 1\.7 et 8, PrestaShop exige déjà ces droits avant d'ouvrir la page/);
+  assert.match(english, /PrestaShop 9, an employee who only has read access to \*\*Module Manager\*\* can open the page, but sees it read-only/);
+  assert.match(french, /PrestaShop 9, un employé qui n'a que la lecture sur \*\*Gestionnaire de modules\*\* peut ouvrir la page, mais la voit en lecture seule/);
+  assert.match(english, /licence\n- the Auto Prepend automatic installation\n- the Integrity Check exclusions\n- downloading the threat detection signatures\n- refreshing the subscription\n- turning threat detection on or off\n/);
+  assert.match(french, /licence\n- l'installation automatique d'Auto Prepend\n- les exclusions de la Vérification d'intégrité\n- le téléchargement des signatures de détection des menaces\n- le rafraîchissement de l'abonnement\n- l'activation ou la désactivation de la détection des menaces\n/);
+  assert.match(english, /without any button, link, switch or form to change them, and with the notice \*\*You need the permission to configure this module to change these settings\.\*\*/);
+  assert.match(french, /sans aucun bouton, lien, interrupteur ni formulaire pour les modifier, et avec la mention \*\*Vous devez avoir le droit de configurer ce module pour modifier ces réglages\.\*\*/);
+  assert.match(english, /nothing is changed and the page says \*\*Your account is not allowed to change these settings\. Nothing was changed: ask the shop administrator\.\*\*/);
+  assert.match(french, /rien n'est changé et la page indique \*\*Votre compte n'est pas autorisé à modifier ces réglages\. Rien n'a été modifié : demandez à l'administrateur de la boutique\.\*\*/);
+  assert.match(english, /\*\*Your account is not allowed to associate a licence with this shop\. Nothing was saved: ask the shop administrator to associate the licence again from this page\.\*\*/);
+  assert.match(french, /\*\*Votre compte n'est pas autorisé à associer une licence à cette boutique\. Rien n'a été enregistré : demandez à l'administrateur de la boutique de refaire l'association de la licence depuis cette page\.\*\*/);
+  assert.match(englishPrepend, /PrestaShop 9, the other employees see the page read-only\. See \[Who Can Change the Settings\]\(\.\.\/installation\.md#who-can-change-the-settings\)/);
+  assert.match(frenchPrepend, /PrestaShop 9, les autres employés voient la page en lecture seule\. Voir \[Qui peut modifier les réglages\]\(\.\.\/installation\.md#who-can-change-the-settings\)/);
+  assert.doesNotMatch(english + french + englishPrepend + frenchPrepend, /sentinelignore|ADMINMODULESSF|SENTINEL_|can_configure|getContent/);
+});

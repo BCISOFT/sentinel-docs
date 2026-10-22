@@ -92,6 +92,8 @@ Blocked attempts appear in the Security Logs, in the file logs tab, marked *Bloc
 1. Go to **Modules > Sentinel > Configuration**
 2. Click **Try Automatic Installation**
 
+Only an employee who can configure the Sentinel module sees this button and can run the installation; on PrestaShop 9, the other employees see the page read-only. See [Who Can Change the Settings](../installation.md#who-can-change-the-settings).
+
 Sentinel goes through the following steps:
 
 1. **It looks for an existing `auto_prepend_file`.** The effective PHP value is checked first, which also covers a system `php.ini`, a PHP-FPM pool and a parent `.htaccess`. The files at the root of your shop are then scanned. If another prepend is already declared, **Sentinel stops there and writes nothing**: replacing it would disable whatever protection it belongs to.
