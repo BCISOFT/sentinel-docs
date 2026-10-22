@@ -111,12 +111,20 @@ php bin/console sentinel:integrity --history
 
 L'historique donne le nombre de problèmes de chaque vérification dans les colonnes **Core Issues**, **Module Issues** et **Theme Issues**.
 
+**Afficher le détail d'une vérification de l'historique :**
+
+```bash
+php bin/console sentinel:integrity --details=<check_id>
+```
+
+`<check_id>` est une valeur de la colonne **Check ID** de l'historique. Dans chaque section, le détail nomme les dossiers et les thèmes qui n'ont pas pu être contrôlés (voir **N'a pas pu être contrôlé** plus bas).
+
 La commande affiche les résultats dans un format similaire au back-office :
 
 - **Core Files** : Affiche les problèmes avec les fichiers du core PrestaShop
 - **Modules Files** : Affiche les problèmes avec les fichiers des modules
 - **Unchecked Modules** : Liste les modules tiers qui ne peuvent pas être vérifiés
-- **Themes Files** : Affiche les thèmes contrôlés et les problèmes avec leurs fichiers
+- **Themes Files** : Affiche les thèmes contrôlés, ou **Themes not checked**, et les problèmes avec leurs fichiers
 - **Unchecked Themes** : Liste les thèmes personnalisés, qui ne sont pas vérifiés
 
 ## Ce qui est vérifié
@@ -147,7 +155,13 @@ Un thème est un dossier de `themes/` qui contient un fichier `config/theme.yml`
 - **Cache** : le dossier `assets/cache` de chaque thème est ignoré.
 
 :::info Thèmes non contrôlés et Thèmes non vérifiés
-**Thèmes non contrôlés** signifie qu'aucun thème n'a été contrôlé dans la section Thèmes : par exemple un ancien contrôle ouvert depuis l'historique, ou une boutique dont tous les thèmes sont personnalisés et pas encore soumis. **Thèmes non vérifiés** liste les thèmes personnalisés trouvés par le contrôle : les deux peuvent donc s'afficher ensemble.
+**Thèmes non contrôlés** signifie qu'aucun thème n'a été contrôlé dans la section Thèmes : par exemple un ancien contrôle ouvert depuis l'historique, une boutique dont tous les thèmes sont personnalisés et pas encore soumis, ou des thèmes qui n'ont pas pu être contrôlés (voir **N'a pas pu être contrôlé** plus bas). **Thèmes non vérifiés** liste les thèmes personnalisés trouvés par le contrôle : les deux peuvent donc s'afficher ensemble. **Thèmes non contrôlés** s'affiche dans les résultats du contrôle et dans le détail d'un contrôle rouvert depuis l'historique ; la ligne de commande et les trois exports le disent en anglais (**Themes not checked**, ou `not checked` dans le JSON).
+:::
+
+:::warning N'a pas pu être contrôlé
+Dans le back-office, un dossier de Core ou de Modules, ou un thème, qui n'a pas pu être contrôlé — par exemple après une erreur pendant sa lecture ou son envoi au service Sentinel — est listé sous **N'a pas pu être contrôlé** dans sa section : le chemin du dossier (`/` pour la racine de la boutique), `modules/<nom>` ou l'un de ses dossiers pour un module, ou le nom du thème. Dans les résultats, cette section ne dit jamais que ses fichiers sont intacts, même quand elle ne compte aucun problème. Un thème qui n'a pas pu être contrôlé ne figure pas parmi les **Thèmes contrôlés :**. Quand les modules n'ont pas pu être contrôlés du tout, la section Modules du contrôle que vous venez de lancer indique **Modules non contrôlés**.
+
+Les mêmes dossiers et thèmes sont listés dans le détail d'un contrôle rouvert depuis l'historique — les modules qui n'ont pas pu être contrôlés du tout y apparaissent comme `modules` sous **N'a pas pu être contrôlé** — et par `php bin/console sentinel:integrity --details=<check_id>`. Sentinel conserve cette liste pour les 100 derniers contrôles qui en ont une ; un contrôle lancé avant que le module ne la conserve n'en affiche aucune. Les exports CSV, JSON et TXT ne la contiennent pas : consultez les résultats à l'écran avant de vous fier à un export.
 :::
 
 ## Comprendre les résultats
@@ -182,7 +196,7 @@ Chaque fichier dans les résultats dispose d'un bouton **Voir le diff** ou **Voi
 4. Le visualiseur de diff affiche les numéros de ligne, les en-têtes de hunk (`@@ ... @@`), et les statistiques (lignes ajoutées/supprimées)
 
 :::note
-Le visualiseur de diff ne fonctionne que pour les fichiers texte. Les fichiers binaires (images, polices, etc.) afficheront un message "Fichier binaire" au lieu d'un diff.
+Le visualiseur de diff n'affiche un diff que pour les fichiers texte. Dans le visualiseur, un fichier est binaire quand ses 8 premiers Ko contiennent un octet nul, quelle que soit son extension : un fichier SVG, HTML ou XML est en général du texte et s'affiche en source. Pour un fichier binaire, le visualiseur montre les panneaux **Fichier original** et **Fichier local**, selon ce qui existe, avec la **Taille**, le **Type** et les 256 premiers octets en hexadécimal. Seules les images PNG, JPEG, GIF et WebP sont prévisualisées, avec un bouton **Ouvrir dans un nouvel onglet** ; tout autre fichier binaire est téléchargé à la place, avec un bouton **Télécharger** et la note **Ce type de fichier est téléchargé au lieu d'être affiché.** Dans la comparaison avec un ZIP, un fichier binaire montre sa taille, son type et ses premiers octets, sans aperçu ni téléchargement.
 :::
 
 :::warning Restrictions d'accès
@@ -190,7 +204,9 @@ La consultation du contenu des fichiers exige la permission **Voir** sur l'ongle
 
 Le visualiseur ne peut atteindre que des fichiers situés dans le répertoire de votre boutique. Tout chemin qui se résout en dehors est rejeté, y compris via un lien symbolique : la vérification porte sur le chemin réel sur le disque et non sur le chemin demandé, de sorte qu'un lien au nom anodin ne permet pas de sortir.
 
-Les fichiers contenant des identifiants ou des secrets ne sont jamais servis non plus, quel que soit le résultat du contrôle d'intégrité : `app/config/`, `config/settings*.php`, tout `parameters.php` / `parameters.yml`, les fichiers `.env`, `var/`, les répertoires de sauvegarde, `.git/`, ainsi que les fichiers `.sql` et `.log`.
+Les fichiers contenant des identifiants ou des secrets ne sont jamais servis non plus, quel que soit le résultat du contrôle d'intégrité — ni leur source dans le visualiseur, ni leur contenu brut : les fichiers `.env` et `.env.*`, `app/config/` et `var/` à la racine de la boutique, `config/settings*.php` (y compris dans une copie de la boutique ou dans le dossier `config/` d'un module), `parameters.php`, `parameters.yml` et `parameters.yaml`, `appParameters.php`, tout dossier `var/cache/`, les dossiers `backup/` et `backups/`, `.git/`, les fichiers `.htpasswd`, ainsi que les fichiers `.sql` et `.log`.
+
+Ils sont refusés quelle que soit l'écriture du chemin demandé (`./`, `/` doublé), à travers un lien symbolique placé dans la boutique — le fichier est jugé sur sa place réelle dans la boutique, et non sur le nom du lien —, de même que leurs copies de sauvegarde et les dumps de base de données, compressés ou non, par exemple `settings.inc.php.bak`, `parameters.yml~`, `dump.sql`, `dump.sql.gz` ou `error.log.old`. Le visualiseur affiche alors **Impossible de charger le contenu du fichier**. Quand vous comparez un fichier de module avec un ZIP, le fichier est jugé comme un fichier de la boutique (`modules/<nom>/<chemin>`) et refusé de même, pour sa version du ZIP comme pour votre fichier local.
 :::
 
 ### Fallback ZIP pour les modules
@@ -273,7 +289,7 @@ Après avoir effectué une vérification d'intégrité ou consulté une vérific
 
 - **CSV** : Fichier séparé par des points-virgules avec les colonnes Section, Chemin, Statut et Détails. Inclut les anomalies core, les anomalies modules, les modules non vérifiés, les anomalies thèmes en lignes `themes` et les thèmes personnalisés en lignes `unchecked theme`. Quand les thèmes n'ont pas été contrôlés, une ligne `themes` indique **Themes not checked**.
 - **JSON** : Données structurées incluant les métadonnées de la vérification, les résultats core, modules et thèmes avec toutes les anomalies, les modules non vérifiés et les thèmes non vérifiés. `themes_status` vaut `checked` ou `not checked`.
-- **TXT** : Rapport texte lisible organisé par section, sous les titres anglais de l'export (Core Files, Modules Files, Unchecked Modules, Themes Files, Unchecked Themes).
+- **TXT** : Rapport texte lisible organisé par section, sous les titres anglais de l'export (Core Files, Modules Files, Unchecked Modules, Themes Files, Unchecked Themes). Quand les thèmes n'ont pas été contrôlés, la section Themes Files indique `Themes not checked.` et, si aucun problème n'est trouvé, le rapport se termine par `No issues found in the checked files.`
 
 Le fichier est téléchargé immédiatement par votre navigateur.
 
@@ -333,6 +349,10 @@ Les modules non disponibles sur PrestaShop Addons ne peuvent pas être vérifié
 ### Un thème apparaît comme non vérifié
 
 Un thème listé dans **Thèmes non vérifiés** est un thème personnalisé : Sentinel n'en a aucune référence. Soumettez-le (voir **Soumettre un thème personnalisé**) pour que ses fichiers soient vérifiés à partir du contrôle suivant. Si son fichier `config/theme.yml` n'a pas de ligne `version:`, ajoutez-en une avant de le soumettre.
+
+### Un dossier ou un thème n'a pas pu être contrôlé
+
+Un nom listé sous **N'a pas pu être contrôlé**, ou une section Modules qui indique **Modules non contrôlés**, n'a pas été entièrement vérifié par ce contrôle : un fichier modifié peut ne pas être signalé. Relancez le contrôle. Quand vous le lancez en ligne de commande, un thème qui n'a pas pu être contrôlé est nommé avec la raison.
 
 ---
 

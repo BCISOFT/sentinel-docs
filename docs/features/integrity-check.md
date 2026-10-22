@@ -111,12 +111,20 @@ php bin/console sentinel:integrity --history
 
 The history shows the number of issues of each check in the **Core Issues**, **Module Issues** and **Theme Issues** columns.
 
+**Show the details of a check from the history:**
+
+```bash
+php bin/console sentinel:integrity --details=<check_id>
+```
+
+`<check_id>` is a value of the **Check ID** column of the history. In each section, the details name the folders and themes that could not be checked (see **Could not be checked** below).
+
 The command displays results in a format similar to the back-office:
 
 - **Core Files**: Shows issues with PrestaShop core files
 - **Modules Files**: Shows issues with module files
 - **Unchecked Modules**: Lists third-party modules that cannot be verified
-- **Themes Files**: Shows the themes checked and the issues with their files
+- **Themes Files**: Shows the themes checked, or **Themes not checked**, and the issues with their files
 - **Unchecked Themes**: Lists custom themes, which are not verified
 
 ## What is checked
@@ -147,7 +155,13 @@ A theme is a directory of `themes/` that contains a `config/theme.yml` file. Its
 - **Cache**: the `assets/cache` directory of each theme is ignored.
 
 :::info Themes not checked and Unchecked Themes
-**Themes not checked** means that no theme was checked in the Themes section: for example an older check opened from the history, or a shop whose themes are all custom and not yet submitted. **Unchecked Themes** lists the custom themes found by the check: both can therefore appear together.
+**Themes not checked** means that no theme was checked in the Themes section: for example an older check opened from the history, a shop whose themes are all custom and not yet submitted, or themes that could not be checked (see **Could not be checked** below). **Unchecked Themes** lists the custom themes found by the check: both can therefore appear together. **Themes not checked** is shown in the results of the check, in the details of a check reopened from the history, by the command line and in the three exports (`not checked` in the JSON).
+:::
+
+:::warning Could not be checked
+In the back office, a folder of Core or Modules, or a theme, that could not be checked — for example after an error while it was read or sent to the Sentinel service — is listed under **Could not be checked** in its section: the path of the folder (`/` for the root of the shop), `modules/<name>` or one of its folders for a module, or the name of the theme. In the results, that section never says its files are intact, even when it counts no issue. A theme that could not be checked is not counted among the **Themes checked:**. When the modules could not be checked at all, the Modules section of the check you have just run says **Modules not checked**.
+
+The same folders and themes are listed in the details of a check reopened from the history — there, modules that could not be checked at all appear as `modules` under **Could not be checked** — and by `php bin/console sentinel:integrity --details=<check_id>`. Sentinel keeps this list for the last 100 checks that have one; a check run before the module kept it shows none. The CSV, JSON and TXT exports do not contain it: read the results on screen before relying on an export.
 :::
 
 ## Understanding Results
@@ -182,7 +196,7 @@ Each file in the results has a **View Diff** or **View File** button:
 4. The diff viewer shows line numbers, hunk headers (`@@ ... @@`), and statistics (lines added/removed)
 
 :::note
-The diff viewer works for text files only. Binary files (images, fonts, etc.) will show a "Binary file" message instead of a diff.
+The diff viewer shows a diff for text files only. In the viewer, a file is binary when its first 8 KB hold a null byte, whatever its extension: an SVG, HTML or XML file is usually text and is shown as source. For a binary file, the viewer shows the **Original File** and **Local File** panels, as available, with the **Size**, the **Type** and the first 256 bytes in hexadecimal. Only PNG, JPEG, GIF and WebP images are previewed, with an **Open in new tab** button; any other binary file is downloaded instead, with a **Download** button and the note **This type of file is downloaded instead of being displayed.** When you compare with a ZIP, a binary file shows its size, type and first bytes, without preview or download.
 :::
 
 :::warning Access restrictions
@@ -190,7 +204,9 @@ Viewing file contents requires the **View** permission on the Sentinel Integrity
 
 The viewer can only reach files inside your shop directory. Any path resolving outside it is rejected, including through a symbolic link — resolution is checked against the real path on disk, not against the requested path, so a link with an innocent-looking name cannot escape.
 
-Files holding credentials or secrets are never served either, whatever the integrity check reported: `app/config/`, `config/settings*.php`, any `parameters.php` / `parameters.yml`, `.env` files, `var/`, backup directories, `.git/`, and `.sql` / `.log` files.
+Files holding credentials or secrets are never served either, whatever the integrity check reported — neither their source in the viewer nor their raw content: `.env` and `.env.*` files, `app/config/` and `var/` at the root of the shop, `config/settings*.php` (also in a copy of the shop or in the `config/` directory of a module), `parameters.php`, `parameters.yml` and `parameters.yaml`, `appParameters.php`, any `var/cache/` directory, `backup/` and `backups/` directories, `.git/`, `.htpasswd` files, and `.sql` / `.log` files.
+
+They are refused however the requested path is written (`./`, a doubled `/`), through a symbolic link placed in the shop — the file is judged by its real place in the shop, not by the name of the link — and so are their backup copies and database dumps, compressed or not, for example `settings.inc.php.bak`, `parameters.yml~`, `dump.sql`, `dump.sql.gz` or `error.log.old`. The viewer then shows **Failed to load file content**. When you compare a module file with a ZIP, the file is judged as a file of the shop (`modules/<name>/<path>`) and refused the same way, both its version in the ZIP and your local file.
 :::
 
 ### ZIP Fallback for Modules
@@ -273,7 +289,7 @@ After completing an integrity check or viewing a check from history, an **Export
 
 - **CSV**: Semicolon-separated file with columns for Section, Path, Status, and Details. Includes core mismatches, module mismatches, unchecked modules, theme mismatches in `themes` rows and custom themes in `unchecked theme` rows. When the themes were not checked, a `themes` row says **Themes not checked**.
 - **JSON**: Structured data including check metadata, core results, module results and theme results with all mismatches, unchecked modules and unchecked themes. `themes_status` is `checked` or `not checked`.
-- **TXT**: Human-readable text report organized by section (Core Files, Modules Files, Unchecked Modules, Themes Files, Unchecked Themes).
+- **TXT**: Human-readable text report organized by section (Core Files, Modules Files, Unchecked Modules, Themes Files, Unchecked Themes). When the themes were not checked, the Themes Files section says `Themes not checked.` and, if no issue is found, the report ends with `No issues found in the checked files.`
 
 The file is downloaded immediately by your browser.
 
@@ -333,6 +349,10 @@ Modules not available on PrestaShop Addons cannot be verified against an officia
 ### A theme shows as not verified
 
 A theme listed under **Unchecked Themes** is a custom theme: Sentinel has no reference for it. Submit it (see **Submit a custom theme**) to have its files verified from the next check. If its `config/theme.yml` file has no `version:` line, add one before submitting it.
+
+### A folder or a theme could not be checked
+
+A name listed under **Could not be checked**, or a Modules section that says **Modules not checked**, was not fully verified by this check: a modified file may not be reported. Run the check again. When you run it from the command line, a theme that could not be checked is named with the reason.
 
 ---
 

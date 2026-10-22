@@ -329,3 +329,106 @@ test('the Integrity Check pages use the labels of the module', () => {
   assert.match(frenchPage, /\*\*TXT\*\*[^\n]*\(Core Files, Modules Files, Unchecked Modules, Themes Files, Unchecked Themes\)/);
   assert.doesNotMatch(frenchPage, /Fichiers Core|Fichiers Modules|Modules non vérifiés\)/);
 });
+
+function admonitionOf(file, opening) {
+  const page = readFileSync(file, 'utf8');
+  const start = page.indexOf(opening);
+  if (start < 0) return '';
+  const end = page.indexOf('\n:::', start + opening.length);
+  return page.slice(start, end < 0 ? undefined : end);
+}
+
+test('the Integrity Check pages say secret files are never served, however they are reached', () => {
+  const english = admonitionOf(englishCheckFile, ':::warning Access restrictions');
+  const french = admonitionOf(frenchCheckFile, ":::warning Restrictions d'accès");
+  assert.match(english, /never served either[^.]*neither their source in the viewer nor their raw content/);
+  assert.match(french, /jamais servis non plus[^.]*ni leur source dans le visualiseur, ni leur contenu brut/);
+  assert.match(english, /`\.env` and `\.env\.\*` files, `app\/config\/` and `var\/` at the root of the shop/);
+  assert.match(french, /les fichiers `\.env` et `\.env\.\*`, `app\/config\/` et `var\/` à la racine de la boutique/);
+  assert.match(english, /`config\/settings\*\.php` \(also in a copy of the shop or in the `config\/` directory of a module\)/);
+  assert.match(french, /`config\/settings\*\.php` \(y compris dans une copie de la boutique ou dans le dossier `config\/` d'un module\)/);
+  assert.match(english, /`parameters\.php`, `parameters\.yml` and `parameters\.yaml`, `appParameters\.php`, any `var\/cache\/` directory/);
+  assert.match(french, /`parameters\.php`, `parameters\.yml` et `parameters\.yaml`, `appParameters\.php`, tout dossier `var\/cache\/`/);
+  assert.match(english, /`\.git\/`, `\.htpasswd` files/);
+  assert.match(french, /`\.git\/`, les fichiers `\.htpasswd`/);
+  assert.match(english, /however the requested path is written \(`\.\/`, a doubled `\/`\), through a symbolic link placed in the shop[^.]*judged by its real place in the shop/);
+  assert.match(french, /quelle que soit l'écriture du chemin demandé \(`\.\/`, `\/` doublé\), à travers un lien symbolique placé dans la boutique[^.]*jugé sur sa place réelle dans la boutique/);
+  assert.match(english, /backup copies and database dumps, compressed or not, for example `settings\.inc\.php\.bak`, `parameters\.yml~`, `dump\.sql`, `dump\.sql\.gz` or `error\.log\.old`/);
+  assert.match(french, /copies de sauvegarde et les dumps de base de données, compressés ou non, par exemple `settings\.inc\.php\.bak`, `parameters\.yml~`, `dump\.sql`, `dump\.sql\.gz` ou `error\.log\.old`/);
+  assert.match(english, /The viewer then shows \*\*Failed to load file content\*\*/);
+  assert.match(french, /Le visualiseur affiche alors \*\*Impossible de charger le contenu du fichier\*\*/);
+  assert.match(english, /compare a module file with a ZIP, the file is judged as a file of the shop \(`modules\/<name>\/<path>`\) and refused the same way, both its version in the ZIP and your local file/);
+  assert.match(french, /comparez un fichier de module avec un ZIP, le fichier est jugé comme un fichier de la boutique \(`modules\/<nom>\/<chemin>`\) et refusé de même, pour sa version du ZIP comme pour votre fichier local/);
+  assert.doesNotMatch(english, /backslash|\b(any|every|all) (backup|cop(y|ies)|archives?|dumps?)\b/i);
+  assert.doesNotMatch(french, /antislash|barre oblique inverse|\b(toute?s?|chaque) (les )?(sauvegardes?|copies?|archives?|dumps?)\b/i);
+});
+
+test('the Integrity Check pages say which binary files are previewed and which are downloaded', () => {
+  const english = paragraphWith(englishCheckFile, ':::note\nThe diff viewer');
+  const french = paragraphWith(frenchCheckFile, ':::note\nLe visualiseur de diff');
+  assert.match(english, /a file is binary when its first 8 KB hold a null byte, whatever its extension: an SVG, HTML or XML file is usually text and is shown as source/);
+  assert.match(french, /un fichier est binaire quand ses 8 premiers Ko contiennent un octet nul, quelle que soit son extension : un fichier SVG, HTML ou XML est en général du texte et s'affiche en source/);
+  assert.match(english, /the \*\*Original File\*\* and \*\*Local File\*\* panels[^.]*the \*\*Size\*\*, the \*\*Type\*\* and the first 256 bytes in hexadecimal/);
+  assert.match(french, /les panneaux \*\*Fichier original\*\* et \*\*Fichier local\*\*[^.]*la \*\*Taille\*\*, le \*\*Type\*\* et les 256 premiers octets en hexadécimal/);
+  assert.match(english, /Only PNG, JPEG, GIF and WebP images are previewed, with an \*\*Open in new tab\*\* button/);
+  assert.match(french, /Seules les images PNG, JPEG, GIF et WebP sont prévisualisées, avec un bouton \*\*Ouvrir dans un nouvel onglet\*\*/);
+  assert.match(english, /any other binary file is downloaded instead, with a \*\*Download\*\* button and the note \*\*This type of file is downloaded instead of being displayed\.\*\*/);
+  assert.match(french, /tout autre fichier binaire est téléchargé à la place, avec un bouton \*\*Télécharger\*\* et la note \*\*Ce type de fichier est téléchargé au lieu d'être affiché\.\*\*/);
+  assert.match(english, /compare with a ZIP, a binary file shows its size, type and first bytes, without preview or download/);
+  assert.match(french, /comparaison avec un ZIP, un fichier binaire montre sa taille, son type et ses premiers octets, sans aperçu ni téléchargement/);
+  assert.doesNotMatch(english, /SVG[^.]*download/i);
+  assert.doesNotMatch(french, /SVG[^.]*télécharg/i);
+  assert.doesNotMatch(readFileSync(englishCheckFile, 'utf8'), /"Binary file"|\*\*Binary file\*\*/);
+  assert.doesNotMatch(readFileSync(frenchCheckFile, 'utf8'), /"Fichier binaire"|\*\*Fichier binaire\*\*/);
+});
+
+test('the Integrity Check pages name the folders and themes that could not be checked', () => {
+  const english = admonitionOf(englishCheckFile, ':::warning Could not be checked');
+  const french = admonitionOf(frenchCheckFile, ":::warning N'a pas pu être contrôlé");
+  const englishCli = sectionOf(englishCheckFile, '### Via Command Line');
+  const frenchCli = sectionOf(frenchCheckFile, '### Via la ligne de commande');
+  const englishHelp = sectionOf(englishCheckFile, '## Troubleshooting');
+  const frenchHelp = sectionOf(frenchCheckFile, '## Résolution des problèmes');
+  assert.ok(sectionOf(englishCheckFile, '### Theme Files').includes(':::warning Could not be checked'), 'EN: the Could not be checked box is not in ### Theme Files');
+  assert.ok(sectionOf(frenchCheckFile, '### Fichiers Thèmes').includes(":::warning N'a pas pu être contrôlé"), "FR: the N'a pas pu être contrôlé box is not in ### Fichiers Thèmes");
+  assert.match(english, /a folder of Core or Modules, or a theme, that could not be checked[^.]*is listed under \*\*Could not be checked\*\* in its section: the path of the folder \(`\/` for the root of the shop\), `modules\/<name>` or one of its folders for a module, or the name of the theme/);
+  assert.match(french, /un dossier de Core ou de Modules, ou un thème, qui n'a pas pu être contrôlé[^.]*est listé sous \*\*N'a pas pu être contrôlé\*\* dans sa section : le chemin du dossier \(`\/` pour la racine de la boutique\), `modules\/<nom>` ou l'un de ses dossiers pour un module, ou le nom du thème/);
+  assert.match(english, /never says its files are intact, even when it counts no issue/);
+  assert.match(french, /ne dit jamais que ses fichiers sont intacts, même quand elle ne compte aucun problème/);
+  assert.match(english, /not counted among the \*\*Themes checked:\*\*/);
+  assert.match(french, /ne figure pas parmi les \*\*Thèmes contrôlés :\*\*/);
+  assert.match(english, /Modules section of the check you have just run says \*\*Modules not checked\*\*/);
+  assert.match(french, /section Modules du contrôle que vous venez de lancer indique \*\*Modules non contrôlés\*\*/);
+  assert.match(english, /listed in the details of a check reopened from the history[^.]*appear as `modules` under \*\*Could not be checked\*\*[^.]*`php bin\/console sentinel:integrity --details=<check_id>`/);
+  assert.match(french, /listés dans le détail d'un contrôle rouvert depuis l'historique[^.]*apparaissent comme `modules` sous \*\*N'a pas pu être contrôlé\*\*[^.]*`php bin\/console sentinel:integrity --details=<check_id>`/);
+  assert.match(english, /last 100 checks that have one/);
+  assert.match(french, /100 derniers contrôles qui en ont une/);
+  assert.match(english, /CSV, JSON and TXT exports do not contain it/);
+  assert.match(french, /exports CSV, JSON et TXT ne la contiennent pas/);
+  assert.doesNotMatch(english, /reopened[^.]*\*\*Modules not checked\*\*|OK column|No issues found/);
+  assert.doesNotMatch(french, /rouvert[^.]*\*\*Modules non contrôlés\*\*|colonne OK|No issues found/);
+  assert.match(englishCli, /sentinel:integrity --details=<check_id>\n```\n\n`<check_id>` is a value of the \*\*Check ID\*\* column of the history\. In each section, the details name the folders and themes that could not be checked/);
+  assert.match(frenchCli, /sentinel:integrity --details=<check_id>\n```\n\n`<check_id>` est une valeur de la colonne \*\*Check ID\*\* de l'historique\. Dans chaque section, le détail nomme les dossiers et les thèmes qui n'ont pas pu être contrôlés/);
+  assert.doesNotMatch(englishCli + frenchCli, /No issues found|Integrity check complete/);
+  assert.match(englishHelp, /### A folder or a theme could not be checked\n\n[^\n]*\*\*Could not be checked\*\*[^\n]*\*\*Modules not checked\*\*[^\n]*Run the check again/);
+  assert.match(frenchHelp, /### Un dossier ou un thème n'a pas pu être contrôlé\n\n[^\n]*\*\*N'a pas pu être contrôlé\*\*[^\n]*\*\*Modules non contrôlés\*\*[^\n]*Relancez le contrôle/);
+  assert.match(englishHelp, /from the command line, a theme that could not be checked is named with the reason/);
+  assert.match(frenchHelp, /en ligne de commande, un thème qui n'a pas pu être contrôlé est nommé avec la raison/);
+});
+
+test('the Integrity Check pages say where Themes not checked is shown', () => {
+  const englishPage = readFileSync(englishCheckFile, 'utf8');
+  const frenchPage = readFileSync(frenchCheckFile, 'utf8');
+  const englishThemes = sectionOf(englishCheckFile, '### Theme Files');
+  const frenchThemes = sectionOf(frenchCheckFile, '### Fichiers Thèmes');
+  const englishCli = sectionOf(englishCheckFile, '### Via Command Line');
+  const frenchCli = sectionOf(frenchCheckFile, '### Via la ligne de commande');
+  assert.match(englishThemes, /or themes that could not be checked \(see \*\*Could not be checked\*\* below\)/);
+  assert.match(frenchThemes, /ou des thèmes qui n'ont pas pu être contrôlés \(voir \*\*N'a pas pu être contrôlé\*\* plus bas\)/);
+  assert.match(englishThemes, /\*\*Themes not checked\*\* is shown in the results of the check, in the details of a check reopened from the history, by the command line and in the three exports/);
+  assert.match(frenchThemes, /\*\*Thèmes non contrôlés\*\* s'affiche dans les résultats du contrôle et dans le détail d'un contrôle rouvert depuis l'historique ; la ligne de commande et les trois exports le disent en anglais \(\*\*Themes not checked\*\*, ou `not checked` dans le JSON\)/);
+  assert.match(englishCli, /- \*\*Themes Files\*\*: Shows the themes checked, or \*\*Themes not checked\*\*, and the issues with their files\n/);
+  assert.match(frenchCli, /- \*\*Themes Files\*\* : Affiche les thèmes contrôlés, ou \*\*Themes not checked\*\*, et les problèmes avec leurs fichiers\n/);
+  assert.match(englishPage, /\*\*TXT\*\*[^\n]*When the themes were not checked, the Themes Files section says `Themes not checked\.`[^\n]*ends with `No issues found in the checked files\.`/);
+  assert.match(frenchPage, /\*\*TXT\*\*[^\n]*Quand les thèmes n'ont pas été contrôlés, la section Themes Files indique `Themes not checked\.`[^\n]*se termine par `No issues found in the checked files\.`/);
+});
