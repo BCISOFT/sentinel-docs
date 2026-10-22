@@ -353,8 +353,12 @@ test('the Integrity Check pages say secret files are never served, however they 
   assert.match(french, /`\.git\/`, les fichiers `\.htpasswd`/);
   assert.match(english, /however the requested path is written \(`\.\/`, a doubled `\/`\), through a symbolic link placed in the shop[^.]*judged by its real place in the shop/);
   assert.match(french, /quelle que soit l'écriture du chemin demandé \(`\.\/`, `\/` doublé\), à travers un lien symbolique placé dans la boutique[^.]*jugé sur sa place réelle dans la boutique/);
-  assert.match(english, /backup copies and database dumps, compressed or not, for example `settings\.inc\.php\.bak`, `parameters\.yml~`, `dump\.sql`, `dump\.sql\.gz` or `error\.log\.old`/);
-  assert.match(french, /copies de sauvegarde et les dumps de base de données, compressés ou non, par exemple `settings\.inc\.php\.bak`, `parameters\.yml~`, `dump\.sql`, `dump\.sql\.gz` ou `error\.log\.old`/);
+  assert.match(english, /and so are the backup copies and database dumps whose names Sentinel recognises, compressed or not, for example `config\/settings\.inc\.php\.bak`, `parameters\.yml~`, `dump\.sql`, `dump\.sql\.gz` or `error\.log\.old`/);
+  assert.match(french, /de même que les copies de sauvegarde et les dumps de base de données dont Sentinel reconnaît le nom, compressés ou non, par exemple `config\/settings\.inc\.php\.bak`, `parameters\.yml~`, `dump\.sql`, `dump\.sql\.gz` ou `error\.log\.old`/);
+  assert.match(english, /Keep no other copy of these files and no database dump in your shop directory\./);
+  assert.match(french, /Ne gardez aucune autre copie de ces fichiers ni aucun dump de base de données dans le répertoire de votre boutique\./);
+  assert.doesNotMatch(english, /\btheir backup copies|backup copies and database dumps(?! whose names Sentinel recognises)|(?<!config\/)settings\.inc\.php\.bak/);
+  assert.doesNotMatch(french, /\bleurs copies de sauvegarde|copies de sauvegarde et les dumps de base de données(?! dont Sentinel reconnaît le nom)|(?<!config\/)settings\.inc\.php\.bak/);
   assert.match(english, /The viewer then shows \*\*Failed to load file content\*\*/);
   assert.match(french, /Le visualiseur affiche alors \*\*Impossible de charger le contenu du fichier\*\*/);
   assert.match(english, /compare a module file with a ZIP, the file is judged as a file of the shop \(`modules\/<name>\/<path>`\) and refused the same way, both its version in the ZIP and your local file/);
